@@ -37,12 +37,21 @@ public class GameStateManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        
+    #if UNITY_EDITOR
+
+        if (EditorPrefs.GetString("activeScene") != null)
+        {
+            SceneManager.LoadScene(EditorPrefs.GetString("activeScene"), LoadSceneMode.Additive);
+        }
+        
+    #endif
     }
 
     private void Start()
     {
         //when we start the game, we first want to enter the main menu
-        GoToMainMenu(false);
+        //GoToMainMenu(false);
     }
 
     #endregion

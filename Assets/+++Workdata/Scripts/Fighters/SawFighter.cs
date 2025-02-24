@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,9 +14,12 @@ public class SawFighter : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     
     //public Variables
+    public bool inAttack = false;
+    public bool inBlock = false;
     
     //private Variables
     private float speed;
+    private bool pressedSpecial = false;
     private Vector2 moveInput;
     private Rigidbody rb;
     private Animator anim;
@@ -35,7 +38,16 @@ public class SawFighter : MonoBehaviour
 
     private void FixedUpdate()
     {
-        PlayerMovement();
+        if (!inAttack && !inBlock)
+        {
+            PlayerMovement();  
+        }
+
+        if (pressedSpecial && !inAttack)
+        {
+            anim.SetTrigger("Special");
+            inAttack = true;
+        }
     }
 
     private void LateUpdate()
@@ -54,7 +66,7 @@ public class SawFighter : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed && IsGrounded())
+        if (context.performed && IsGrounded() && !inAttack && !inBlock)
         {
             //rb.AddForce(new Vector2(rb.linearVelocity.x, jumpPower), ForceMode.Impulse);
             anim.SetBool("isJumping", true);
@@ -76,31 +88,50 @@ public class SawFighter : MonoBehaviour
 
     public void OnBlock(InputAction.CallbackContext context)
     {
-        if (context.performed && IsGrounded())
+        if (context.performed && IsGrounded() && !inAttack && !inBlock)
         {
             anim.SetTrigger("Block");
             anim.SetBool("isBlocking", true);
+            inBlock = true;
         }
 
-        if (context.canceled && IsGrounded())
+        if (context.canceled && IsGrounded() && !inAttack)
         {
             anim.SetBool("isBlocking", false);
+            inBlock = false;
         }
     }
 
     public void OnLightAttack(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !inAttack && !inBlock)
         {
             anim.SetTrigger("Jab");
+            inAttack = true;
         }
     }
 
     public void OnHeavyAttack(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !inAttack && !inBlock)
         {
             anim.SetTrigger("HeavyAttack");
+            inAttack = true;
+        }
+    }
+
+    public void OnSpecialAttack(InputAction.CallbackContext context)
+    {
+        if (context.performed && !pressedSpecial)
+        {
+            pressedSpecial = true;
+            StartCoroutine(ButtonBuffer());
+        }
+        
+        if (context.performed && !inAttack && !inBlock)
+        {
+            anim.SetTrigger("Special");
+            inAttack = true;
         }
     }
 
@@ -117,6 +148,12 @@ public class SawFighter : MonoBehaviour
 
     #region SawFighter Methods
 
+    private IEnumerator ButtonBuffer()
+    {
+        yield return new WaitForSeconds(0.3f);
+        pressedSpecial = false;
+    }
+    
     /// <summary>
     /// check if player is on the ground
     /// </summary>

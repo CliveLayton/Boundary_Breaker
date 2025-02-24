@@ -155,6 +155,15 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpecialAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""82a3d5c9-52a9-4c5d-9ddd-5d91584f8ce6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -375,6 +384,17 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""HeavyAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb545875-9fa3-4bd4-9faf-44249f86e245"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpecialAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -969,6 +989,7 @@ namespace UnityEngine.InputSystem
             m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
             m_Player_Block = m_Player.FindAction("Block", throwIfNotFound: true);
             m_Player_HeavyAttack = m_Player.FindAction("HeavyAttack", throwIfNotFound: true);
+            m_Player_SpecialAttack = m_Player.FindAction("SpecialAttack", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1069,6 +1090,7 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_Player_Sprint;
         private readonly InputAction m_Player_Block;
         private readonly InputAction m_Player_HeavyAttack;
+        private readonly InputAction m_Player_SpecialAttack;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -1108,6 +1130,10 @@ namespace UnityEngine.InputSystem
             /// Provides access to the underlying input action "Player/HeavyAttack".
             /// </summary>
             public InputAction @HeavyAttack => m_Wrapper.m_Player_HeavyAttack;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/SpecialAttack".
+            /// </summary>
+            public InputAction @SpecialAttack => m_Wrapper.m_Player_SpecialAttack;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1155,6 +1181,9 @@ namespace UnityEngine.InputSystem
                 @HeavyAttack.started += instance.OnHeavyAttack;
                 @HeavyAttack.performed += instance.OnHeavyAttack;
                 @HeavyAttack.canceled += instance.OnHeavyAttack;
+                @SpecialAttack.started += instance.OnSpecialAttack;
+                @SpecialAttack.performed += instance.OnSpecialAttack;
+                @SpecialAttack.canceled += instance.OnSpecialAttack;
             }
 
             /// <summary>
@@ -1187,6 +1216,9 @@ namespace UnityEngine.InputSystem
                 @HeavyAttack.started -= instance.OnHeavyAttack;
                 @HeavyAttack.performed -= instance.OnHeavyAttack;
                 @HeavyAttack.canceled -= instance.OnHeavyAttack;
+                @SpecialAttack.started -= instance.OnSpecialAttack;
+                @SpecialAttack.performed -= instance.OnSpecialAttack;
+                @SpecialAttack.canceled -= instance.OnSpecialAttack;
             }
 
             /// <summary>
@@ -1536,6 +1568,13 @@ namespace UnityEngine.InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnHeavyAttack(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SpecialAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSpecialAttack(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

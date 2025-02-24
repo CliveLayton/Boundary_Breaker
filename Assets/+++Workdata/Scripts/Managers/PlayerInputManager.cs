@@ -42,6 +42,8 @@ public class PlayerInputManager : MonoBehaviour
         gameInput.Player.Jab.performed += sawFighter.OnLightAttack;
 
         gameInput.Player.HeavyAttack.performed += sawFighter.OnHeavyAttack;
+
+        gameInput.Player.SpecialAttack.performed += sawFighter.OnSpecialAttack;
     }
 
     /// <summary>
@@ -66,6 +68,8 @@ public class PlayerInputManager : MonoBehaviour
         gameInput.Player.Jab.performed -= sawFighter.OnLightAttack;
 
         gameInput.Player.HeavyAttack.performed -= sawFighter.OnHeavyAttack;
+        
+        gameInput.Player.SpecialAttack.performed -= sawFighter.OnSpecialAttack;
     }
 
     #endregion

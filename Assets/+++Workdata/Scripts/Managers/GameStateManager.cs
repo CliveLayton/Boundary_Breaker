@@ -15,7 +15,7 @@ public class GameStateManager : MonoBehaviour
 
     public static GameStateManager instance;
 
-    public const string mainMenuSceneName = "Main Menu";
+    public const string mainMenuSceneName = "Main Menus";
     public const string fightingScene1 = "Gameplay";
 
     public enum GameState

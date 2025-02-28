@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,12 +13,30 @@ public class PlayerInputManager : MonoBehaviour
     #endregion
 
     #region Unity Methods
-
-    //We create a new ControllerMap
+    
     private void Awake()
     {
+        var characterControlsArray = FindObjectsByType<SawFighter>(FindObjectsSortMode.None);
+        var playerInput = GetComponent<PlayerInput>();
+        var index = playerInput.playerIndex;
+        sawFighter = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
+        
+        //We create a new ControllerMap and assign it to the right player
         gameInput = new GameInput();
-        sawFighter = GetComponent<SawFighter>();
+        
+        InputDevice joinedDevice = playerInput.devices.FirstOrDefault();
+
+        //if the joined device is a Keyboard or Mouse, assign both Keyboard & Mouse
+        if (joinedDevice is Keyboard || joinedDevice is Mouse)
+        {
+            gameInput.devices = new InputDevice[] { Keyboard.current, Mouse.current };
+            playerInput.SwitchCurrentControlScheme("Keyboard&Mouse", Keyboard.current, Mouse.current);
+        }
+        else
+        {
+            //Otherwise, keep the default device
+            gameInput.devices = new[] { joinedDevice };
+        }
     }
 
     /// <summary>

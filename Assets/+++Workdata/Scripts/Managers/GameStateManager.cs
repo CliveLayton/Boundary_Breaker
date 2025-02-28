@@ -39,7 +39,7 @@ public class GameStateManager : MonoBehaviour
         instance = this;
         
     #if UNITY_EDITOR
-
+    
         if (EditorPrefs.GetString("activeScene") != null)
         {
             SceneManager.LoadScene(EditorPrefs.GetString("activeScene"), LoadSceneMode.Additive);

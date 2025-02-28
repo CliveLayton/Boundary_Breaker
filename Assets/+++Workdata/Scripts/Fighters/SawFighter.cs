@@ -7,11 +7,16 @@ public class SawFighter : MonoBehaviour
     #region Variables
 
     //Inspector Variables
+    [Header("Player Index")] 
+    [SerializeField] private int playerIndex;
+    
     [Header("SawFighter Behavior Variables")] 
     [SerializeField] private float normalSpeed = 5f;
     [SerializeField] private float sprintSpeed = 10f;
-    [SerializeField] private float jumpPower = 5f;
+    //[SerializeField] private float jumpPower = 5f;
+    [SerializeField] private float rotationSpeed = 60f;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private GameObject opponent;
     
     //public Variables
     public bool inAttack = false;
@@ -20,6 +25,7 @@ public class SawFighter : MonoBehaviour
     //private Variables
     private float speed;
     private bool pressedSpecial = false;
+    private Quaternion targetRotation;
     private Vector2 moveInput;
     private Rigidbody rb;
     private Animator anim;
@@ -41,6 +47,11 @@ public class SawFighter : MonoBehaviour
         if (!inAttack && !inBlock)
         {
             PlayerMovement();  
+        }
+
+        if (!inAttack)
+        {
+            RotateToOpponent();
         }
 
         if (pressedSpecial && !inAttack)
@@ -138,6 +149,20 @@ public class SawFighter : MonoBehaviour
     #endregion
 
     #region Player Movement
+    
+    private void RotateToOpponent()
+    {
+        Vector3 direction = (opponent.transform.position - transform.position).normalized;
+
+        //ensure the rotation only happens on the Y-Axis
+        direction.y = 0;
+        
+        targetRotation = Quaternion.LookRotation(direction);
+
+        //rotate the visual of the player to opponent
+        anim.transform.rotation =
+            Quaternion.Slerp(anim.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
 
     private void PlayerMovement()
     {
@@ -148,6 +173,11 @@ public class SawFighter : MonoBehaviour
 
     #region SawFighter Methods
 
+    public int GetPlayerIndex()
+    {
+        return playerIndex;
+    }
+    
     private IEnumerator ButtonBuffer()
     {
         yield return new WaitForSeconds(0.3f);

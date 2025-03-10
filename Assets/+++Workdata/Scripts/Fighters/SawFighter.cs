@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
-public class SawFighter : MonoBehaviour
+public class SawFighter : MonoBehaviour, IDamageable
 {
     #region Variables
 
@@ -15,8 +18,11 @@ public class SawFighter : MonoBehaviour
     [SerializeField] private float sprintSpeed = 10f;
     //[SerializeField] private float jumpPower = 5f;
     [SerializeField] private float rotationSpeed = 60f;
+    [SerializeField] private float knockbackPower = 10f;
+    [SerializeField] private LayerMask whoToDamage;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private GameObject opponent;
+    [SerializeField] private CinemachineImpulseSource cmImpulse;
     
     //public Variables
     public bool inAttack = false;
@@ -25,6 +31,9 @@ public class SawFighter : MonoBehaviour
     //private Variables
     private float speed;
     private bool pressedSpecial = false;
+    private bool inHitStun = false;
+    private float hitStunDuration = 0f;
+    private bool canGetDamage = true;
     private Quaternion targetRotation;
     private Vector2 moveInput;
     private Rigidbody rb;
@@ -64,6 +73,18 @@ public class SawFighter : MonoBehaviour
     private void LateUpdate()
     {
         PlayerAnimations();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if ((whoToDamage.value & (1 << other.gameObject.layer)) > 0)
+        {
+            IDamageable iDamageable = other.gameObject.GetComponentInParent<IDamageable>();
+            if (iDamageable != null)
+            {
+                iDamageable.Damage(2, 0.2f, 0.05f);
+            }
+        }
     }
 
     #endregion
@@ -172,6 +193,97 @@ public class SawFighter : MonoBehaviour
     #endregion
 
     #region SawFighter Methods
+    
+    public void Damage(int damageAmount, float stunDuration, float hitStopDuration)
+    {
+        if (canGetDamage && !inHitStun)
+        {
+            anim.SetTrigger("HeavyHit");
+            canGetDamage = false;
+            inHitStun = true;
+            hitStunDuration = stunDuration;
+
+            rb.linearVelocity = Vector3.zero; //Reset movement
+
+            //Apply HitStop Before Knockback
+            StartCoroutine(HitStop(hitStopDuration));
+            
+            
+            
+            StartCoroutine(HitStunCoroutine());
+            StartCoroutine(WaitDamage());
+        }
+    }
+
+    private IEnumerator HitStop(float duration)
+    {
+        Time.timeScale = 0f; //freeze game time
+        cmImpulse.GenerateImpulse();
+        yield return new WaitForSecondsRealtime(duration); // wait for real-world time
+        Time.timeScale = 1f; //resume game time
+    }
+
+    private IEnumerator HitStunCoroutine()
+    {
+        float timer = 0f;
+        
+        //Disable movement
+        SawFighter playerController = GetComponent<SawFighter>();
+        if (playerController != null)
+        {
+            playerController.enabled = false;
+        }
+
+        Vector3 originalPosition = transform.localPosition;
+
+        while (timer < hitStunDuration)
+        {
+            //shake effect
+            float shakeAmount = 0.05f;
+            transform.localPosition = originalPosition + new Vector3(Random.Range(-shakeAmount, shakeAmount),
+                Random.Range(-shakeAmount, shakeAmount), 0);
+            
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localPosition = originalPosition; // reset position
+        
+        //Enable movement after hit stun ends
+        if (playerController != null)
+        {
+            playerController.enabled = true;
+        }
+
+        inHitStun = false;
+        
+        //knockback
+        Vector3 directionToOpponent = (opponent.transform.position - this.transform.position).normalized;
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce(new Vector2(knockbackPower * -directionToOpponent.x, knockbackPower * 0.06f), ForceMode.Impulse);
+        StartCoroutine(KnockbackDecay());
+    }
+    
+    IEnumerator KnockbackDecay()
+    {
+        float decayTime = 0.3f; // Time to stop knockback
+        float elapsedTime = 0f;
+
+        while (elapsedTime < decayTime)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        inAttack = false;
+    }
+
+    private IEnumerator WaitDamage()
+    {
+        yield return null;
+        canGetDamage = true;
+    }
 
     public int GetPlayerIndex()
     {
@@ -201,8 +313,16 @@ public class SawFighter : MonoBehaviour
 
     private void PlayerAnimations()
     {
+        Debug.Log(anim.transform.rotation.y);
         anim.SetBool("isGrounded", IsGrounded());
-        anim.SetFloat("speed", rb.linearVelocity.x);
+        if (anim.transform.forward.x > 0)
+        {
+            anim.SetFloat("speed", rb.linearVelocity.x);
+        }
+        else if(anim.transform.forward.x < 0)
+        {
+            anim.SetFloat("speed", -rb.linearVelocity.x);
+        }
         anim.SetBool("isJumping", false);
 
         if (rb.linearVelocity.y < 0)

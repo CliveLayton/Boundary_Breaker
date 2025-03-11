@@ -207,9 +207,7 @@ public class SawFighter : MonoBehaviour, IDamageable
 
             //Apply HitStop Before Knockback
             StartCoroutine(HitStop(hitStopDuration));
-            
-            
-            
+
             StartCoroutine(HitStunCoroutine());
             StartCoroutine(WaitDamage());
         }
@@ -307,19 +305,27 @@ public class SawFighter : MonoBehaviour, IDamageable
         return hitGround;
     }
 
+    /// <summary>
+    /// check if player is facing right
+    /// </summary>
+    /// <returns></returns>
+    private bool isFacingRight()
+    {
+        return anim.transform.forward.x > 0;
+    }
+
     #endregion
 
     #region Animation/Sound Methods
 
     private void PlayerAnimations()
     {
-        Debug.Log(anim.transform.rotation.y);
         anim.SetBool("isGrounded", IsGrounded());
-        if (anim.transform.forward.x > 0)
+        if (isFacingRight())
         {
             anim.SetFloat("speed", rb.linearVelocity.x);
         }
-        else if(anim.transform.forward.x < 0)
+        else if(!isFacingRight())
         {
             anim.SetFloat("speed", -rb.linearVelocity.x);
         }

@@ -1467,28 +1467,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4802481941037508756, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
   m_PrefabInstance: {fileID: 1856989678}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1717713122
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1717713120}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 0.3911886, y: 0.18716341, z: 0.13799101}
-  m_Center: {x: -0.23183355, y: 0.00053244433, z: 0.0075815693}
---- !u!114 &1717713124
+--- !u!114 &1717713126
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1497,10 +1476,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1717713120}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e125bfafca3cd7b4ca474ca6bdbdf4a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxColor: {r: 1, g: 0, b: 0, a: 0.5}
+  hitboxSize: {x: 0.23, y: 0.065, z: 0.08}
+  hitboxOffset: {x: -0.20626445, y: 0.009418962, z: -0.032131772}
+  useSphere: 0
+  radius: 0.5
+  drawSolid: 1
+  colliderColor: {r: 1, g: 0, b: 0, a: 1}
+  layerToCheck:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1001 &1778604160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2524,10 +2511,7 @@ PrefabInstance:
       addedObject: {fileID: 1995950769}
     - targetCorrespondingSourceObject: {fileID: 4802481941037508756, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1717713122}
-    - targetCorrespondingSourceObject: {fileID: 4802481941037508756, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1717713124}
+      addedObject: {fileID: 1717713126}
     - targetCorrespondingSourceObject: {fileID: 4457710007197381827, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1560058027}

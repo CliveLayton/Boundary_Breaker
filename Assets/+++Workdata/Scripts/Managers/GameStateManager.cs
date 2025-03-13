@@ -37,8 +37,10 @@ public class GameStateManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        
-    #if UNITY_EDITOR
+        //use "Screen.currentResolution.refreshRate" to check for the max refreshrate the monitor of the player has
+        Application.targetFrameRate = 60;
+
+#if UNITY_EDITOR
     
         if (EditorPrefs.GetString("activeScene") != null)
         {

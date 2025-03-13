@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
-public class SawFighter : MonoBehaviour, IDamageable
+public class SawFighter : MonoBehaviour, IDamageable, IHitboxResponder
 {
     #region Variables
 
@@ -23,7 +23,9 @@ public class SawFighter : MonoBehaviour, IDamageable
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private GameObject opponent;
     [SerializeField] private CinemachineImpulseSource cmImpulse;
-    
+    [SerializeField] private Hitbox hitboxArm;
+    [SerializeField] private Hitbox hitboxLeg;
+
     //public Variables
     public bool inAttack = false;
     public bool inBlock = false;
@@ -51,6 +53,19 @@ public class SawFighter : MonoBehaviour, IDamageable
         speed = normalSpeed;
     }
 
+    private void Update()
+    {
+        if (inAttack)
+        {
+            hitboxArm.StartCheckingCollision();
+            hitboxArm.HitBoxUpdate();
+        }
+        else
+        {
+            hitboxArm.StopCheckingCollision();
+        }
+    }
+
     private void FixedUpdate()
     {
         if (!inAttack && !inBlock)
@@ -75,17 +90,17 @@ public class SawFighter : MonoBehaviour, IDamageable
         PlayerAnimations();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if ((whoToDamage.value & (1 << other.gameObject.layer)) > 0)
-        {
-            IDamageable iDamageable = other.gameObject.GetComponentInParent<IDamageable>();
-            if (iDamageable != null)
-            {
-                iDamageable.Damage(2, 0.2f, 0.05f);
-            }
-        }
-    }
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if ((whoToDamage.value & (1 << other.gameObject.layer)) > 0)
+    //     {
+    //         IDamageable iDamageable = other.gameObject.GetComponentInParent<IDamageable>();
+    //         if (iDamageable != null)
+    //         {
+    //             iDamageable.Damage(2, 0.2f, 0.05f);
+    //         }
+    //     }
+    // }
 
     #endregion
 
@@ -138,6 +153,7 @@ public class SawFighter : MonoBehaviour, IDamageable
     {
         if (context.performed && !inAttack && !inBlock)
         {
+            hitboxArm.SetResponder(this);
             anim.SetTrigger("Jab");
             inAttack = true;
         }
@@ -147,6 +163,8 @@ public class SawFighter : MonoBehaviour, IDamageable
     {
         if (context.performed && !inAttack && !inBlock)
         {
+            hitboxArm.SetResponder(this);
+            hitboxArm.StartCheckingCollision();
             anim.SetTrigger("HeavyAttack");
             inAttack = true;
         }
@@ -193,6 +211,12 @@ public class SawFighter : MonoBehaviour, IDamageable
     #endregion
 
     #region SawFighter Methods
+    
+    public void CollisionedWith(Collider collider)
+    {
+        IDamageable iDamageable = collider.gameObject.GetComponentInParent<IDamageable>();
+        iDamageable?.Damage(2, 0.2f, 0.05f);
+    }
     
     public void Damage(int damageAmount, float stunDuration, float hitStopDuration)
     {

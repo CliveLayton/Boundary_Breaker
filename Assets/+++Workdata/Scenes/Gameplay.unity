@@ -256,6 +256,8 @@ MonoBehaviour:
     m_Bits: 8
   opponent: {fileID: 1999876968}
   cmImpulse: {fileID: 809412073}
+  hitboxArm: {fileID: 1717713126}
+  hitboxLeg: {fileID: 0}
   inAttack: 0
   inBlock: 0
 --- !u!54 &149267006
@@ -1482,12 +1484,14 @@ MonoBehaviour:
   hitboxSize: {x: 0.23, y: 0.065, z: 0.08}
   hitboxOffset: {x: -0.20626445, y: 0.009418962, z: -0.032131772}
   useSphere: 0
-  radius: 0.5
-  drawSolid: 1
-  colliderColor: {r: 1, g: 0, b: 0, a: 1}
+  radius: 0.3
+  colliderColor: {r: 0.57232696, g: 0.20697348, b: 0.20697348, a: 0.2}
   layerToCheck:
     serializedVersion: 2
     m_Bits: 128
+  inactiveColor: {r: 0.57232696, g: 0.20697348, b: 0.20697348, a: 0.2}
+  collisionOpenColor: {r: 0.6, g: 0.2, b: 0.2, a: 1}
+  collidingColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &1778604160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2057,6 +2061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22e5d9cc546a40b40baf1be81b0368f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitboxArm: {fileID: 0}
 --- !u!95 &1778604178
 Animator:
   serializedVersion: 7
@@ -2773,6 +2778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22e5d9cc546a40b40baf1be81b0368f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitboxArm: {fileID: 1717713126}
 --- !u!1 &1995950765 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2330165691919658630, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
@@ -2882,6 +2888,8 @@ MonoBehaviour:
     m_Bits: 8
   opponent: {fileID: 149267001}
   cmImpulse: {fileID: 809412073}
+  hitboxArm: {fileID: 1717713126}
+  hitboxLeg: {fileID: 0}
   inAttack: 0
   inBlock: 0
 --- !u!4 &1999876972

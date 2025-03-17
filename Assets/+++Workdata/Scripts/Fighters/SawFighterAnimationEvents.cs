@@ -6,7 +6,6 @@ public class SawFighterAnimationEvents : MonoBehaviour
     #region Variables
 
     private SawFighter sawFighter;
-    [SerializeField] private Hitbox hitboxArm;
 
     #endregion
 

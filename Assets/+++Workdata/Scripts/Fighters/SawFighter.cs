@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
-public class SawFighter : MonoBehaviour, IDamageable, IHitboxResponder
+public class SawFighter : MonoBehaviour, IDamageable
 {
     #region Variables
 
@@ -19,12 +19,11 @@ public class SawFighter : MonoBehaviour, IDamageable, IHitboxResponder
     //[SerializeField] private float jumpPower = 5f;
     [SerializeField] private float rotationSpeed = 60f;
     [SerializeField] private float knockbackPower = 10f;
-    [SerializeField] private LayerMask whoToDamage;
-    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private AttackSawFighter attack;
     [SerializeField] private GameObject opponent;
+    [SerializeField] private LayerMask groundLayer;
     [SerializeField] private CinemachineImpulseSource cmImpulse;
-    [SerializeField] private Hitbox hitboxArm;
-    [SerializeField] private Hitbox hitboxLeg;
+    
 
     //public Variables
     public bool inAttack = false;
@@ -42,6 +41,23 @@ public class SawFighter : MonoBehaviour, IDamageable, IHitboxResponder
     private Animator anim;
 
     #endregion
+    
+    enum CurrentMove
+    {
+        Attack1,
+        AttackLw1,
+        AttackS1,
+        AttackAir1,
+        Attack2,
+        AttackLw2,
+        AttackS2,
+        AttackAir2,
+        SpecialN,
+        SpecialLw,
+        SpecialS,
+        SpecialAir
+    }
+    
 
     #region Unity Methods
 
@@ -51,19 +67,6 @@ public class SawFighter : MonoBehaviour, IDamageable, IHitboxResponder
         anim = GetComponentInChildren<Animator>();
 
         speed = normalSpeed;
-    }
-
-    private void Update()
-    {
-        if (inAttack)
-        {
-            hitboxArm.StartCheckingCollision();
-            hitboxArm.HitBoxUpdate();
-        }
-        else
-        {
-            hitboxArm.StopCheckingCollision();
-        }
     }
 
     private void FixedUpdate()
@@ -153,7 +156,7 @@ public class SawFighter : MonoBehaviour, IDamageable, IHitboxResponder
     {
         if (context.performed && !inAttack && !inBlock)
         {
-            hitboxArm.SetResponder(this);
+            attack.SetMove((int)CurrentMove.Attack1);
             anim.SetTrigger("Jab");
             inAttack = true;
         }
@@ -163,8 +166,7 @@ public class SawFighter : MonoBehaviour, IDamageable, IHitboxResponder
     {
         if (context.performed && !inAttack && !inBlock)
         {
-            hitboxArm.SetResponder(this);
-            hitboxArm.StartCheckingCollision();
+            attack.SetMove((int)CurrentMove.Attack2);
             anim.SetTrigger("HeavyAttack");
             inAttack = true;
         }
@@ -180,6 +182,7 @@ public class SawFighter : MonoBehaviour, IDamageable, IHitboxResponder
         
         if (context.performed && !inAttack && !inBlock)
         {
+            attack.SetMove((int)CurrentMove.SpecialN);
             anim.SetTrigger("Special");
             inAttack = true;
         }
@@ -211,14 +214,8 @@ public class SawFighter : MonoBehaviour, IDamageable, IHitboxResponder
     #endregion
 
     #region SawFighter Methods
-    
-    public void CollisionedWith(Collider collider)
-    {
-        IDamageable iDamageable = collider.gameObject.GetComponentInParent<IDamageable>();
-        iDamageable?.Damage(2, 0.2f, 0.05f);
-    }
-    
-    public void Damage(int damageAmount, float stunDuration, float hitStopDuration)
+
+    public void Damage(float damageAmount, float stunDuration, float hitStopDuration)
     {
         if (canGetDamage && !inHitStun)
         {

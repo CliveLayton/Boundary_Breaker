@@ -1,4 +1,4 @@
 public interface IDamageable
 {
-    public void Damage(int damageAmount, float stunDuration, float hitStopDuration);
+    public void Damage(float damageAmount, float stunDuration, float hitStopDuration);
 }

@@ -1815,61 +1815,169 @@ MonoBehaviour:
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack1Lw
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack1S
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack1Air
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack2
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack2Lw
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack2S
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack2Air
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: SpecialN
     damage: 4
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 520591366}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: SpecialLw
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: SpecialS
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: SpecialAir
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1886472113}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
 --- !u!114 &1457486415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2667,61 +2775,169 @@ MonoBehaviour:
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 8
+      hitFrameEnd: 13
+      totalFrames: 25
+      animationFrameInfo:
+        animator: {fileID: 1921544285}
+        clip: {fileID: 7400000, guid: ed2bdf76beaa738408c6d650c28b614c, type: 2}
+        animatorStateName: Jab
+        layerNumber: 0
   - name: Attack1Lw
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack1S
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 1921544285}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack1Air
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack2
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 11
+      hitFrameEnd: 19
+      totalFrames: 30
+      animationFrameInfo:
+        animator: {fileID: 1921544285}
+        clip: {fileID: 7400000, guid: 0a8e0d39259865744b7a3a4dea25f475, type: 2}
+        animatorStateName: HeavyAttack
+        layerNumber: 0
   - name: Attack2Lw
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack2S
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: Attack2Air
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: SpecialN
     damage: 4
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 519125931}
+    frameChecker:
+      hitFrameStart: 8
+      hitFrameEnd: 10
+      totalFrames: 30
+      animationFrameInfo:
+        animator: {fileID: 1921544285}
+        clip: {fileID: 7400000, guid: 30bc441282f80a444abbef45bac73ba8, type: 2}
+        animatorStateName: Special
+        layerNumber: 0
   - name: SpecialLw
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: SpecialS
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
   - name: SpecialAir
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
     hitbox: {fileID: 1717713126}
+    frameChecker:
+      hitFrameStart: 0
+      hitFrameEnd: 0
+      totalFrames: 0
+      animationFrameInfo:
+        animator: {fileID: 0}
+        clip: {fileID: 0}
+        animatorStateName: 
+        layerNumber: 0
 --- !u!114 &2017848799
 MonoBehaviour:
   m_ObjectHideFlags: 0

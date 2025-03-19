@@ -6,7 +6,9 @@ public class AnimationFrameInfo
 {
     public Animator animator;
     public AnimationClip clip;
+    [Tooltip("Name of the animation state in the animator window")]
     public string animatorStateName;
+    [Tooltip("Number of the layer the animation plays in the animator")]
     public int layerNumber;
 
     private int totalFrames = 0;

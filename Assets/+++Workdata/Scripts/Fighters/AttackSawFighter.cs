@@ -64,4 +64,16 @@ public class AttackSawFighter : MonoBehaviour, IHitboxResponder, IFrameCheckHand
     {
         
     }
+
+    /// <summary>
+    /// get the frames of each animation assigned for the frame checkers
+    /// </summary>
+    [ContextMenu("Get Frames From Animations")]
+    private void GetAnimationFrames()
+    {
+        for (int i = 0; i < moves.Length; i++)
+        {
+            moves[i].frameChecker.GetTotalFrames(moves[i].frameChecker.animationFrameInfo);
+        }
+    }
 }

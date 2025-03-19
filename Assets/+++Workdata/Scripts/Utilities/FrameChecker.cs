@@ -59,4 +59,13 @@ public class FrameChecker
             lastFrame = true; // This is here so we don't skip the last frame
         }
     }
+    
+    public void GetTotalFrames(AnimationFrameInfo animationInfo)
+    {
+        if (animationInfo.clip != null)
+        {
+            animationInfo.Initialize();
+            totalFrames = animationInfo.TotalFrames();
+        }
+    }
 }

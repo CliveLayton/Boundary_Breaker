@@ -12,18 +12,23 @@ public class SawFighter : MonoBehaviour, IDamageable
     //Inspector Variables
     [Header("Player Index")] 
     [SerializeField] private int playerIndex;
-    
+
     [Header("SawFighter Behavior Variables")] 
+    [SerializeField] private float percentageCount = 0;
     [SerializeField] private float normalSpeed = 5f;
     [SerializeField] private float sprintSpeed = 10f;
-    //[SerializeField] private float jumpPower = 5f;
+    [SerializeField] private float jumpPower = 4f;
+    [SerializeField] private float fallMultiplier = 2f;
     [SerializeField] private float rotationSpeed = 60f;
-    [SerializeField] private float knockbackPower = 10f;
+    //[SerializeField] private float knockbackPower = 10f;
     [SerializeField] private AttackSawFighter attack;
     [SerializeField] private GameObject opponent;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private CinemachineImpulseSource cmImpulse;
-    
+
+    [Header("KnockBack Variables")]
+    [SerializeField] private float inputForce = 7.5f;
+    [SerializeField] private AnimationCurve knockBackForceCurve;
 
     //public Variables
     public bool inAttack = false;
@@ -31,10 +36,15 @@ public class SawFighter : MonoBehaviour, IDamageable
     
     //private Variables
     private float speed;
-    private bool pressedSpecial = false;
+    private float knockBackTime;
+    private Vector2 attackForce;
+    private bool isJumping = false;
+    private bool isJumpedPressed = false;
     private bool inHitStun = false;
     private float hitStunDuration = 0f;
     private bool canGetDamage = true;
+    private bool isBeingKnockedBack = false;
+    private bool getFixedKnockBack;
     private Quaternion targetRotation;
     private Vector2 moveInput;
     private Rigidbody rb;
@@ -71,21 +81,17 @@ public class SawFighter : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
-        if (!inAttack && !inBlock)
+        if (!inAttack && !inBlock && !isBeingKnockedBack)
         {
-            PlayerMovement();  
+            PlayerMovement(); 
+            HandleJump();
         }
 
         if (!inAttack)
         {
             RotateToOpponent();
         }
-
-        if (pressedSpecial && !inAttack)
-        {
-            anim.SetTrigger("Special");
-            inAttack = true;
-        }
+        
     }
 
     private void LateUpdate()
@@ -116,11 +122,12 @@ public class SawFighter : MonoBehaviour, IDamageable
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed && IsGrounded() && !inAttack && !inBlock)
-        {
-            //rb.AddForce(new Vector2(rb.linearVelocity.x, jumpPower), ForceMode.Impulse);
-            anim.SetBool("isJumping", true);
-        }
+        isJumpedPressed = context.ReadValueAsButton();
+        // if (context.performed && IsGrounded() && !inAttack && !inBlock)
+        // {
+        //     //rb.AddForce(new Vector2(rb.linearVelocity.x, jumpPower), ForceMode.Impulse);
+        //     anim.SetBool("isJumping", true);
+        // }
     }
 
     public void OnSprint(InputAction.CallbackContext context)
@@ -174,12 +181,6 @@ public class SawFighter : MonoBehaviour, IDamageable
 
     public void OnSpecialAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !pressedSpecial)
-        {
-            pressedSpecial = true;
-            StartCoroutine(ButtonBuffer());
-        }
-        
         if (context.performed && !inAttack && !inBlock)
         {
             attack.SetMove((int)CurrentMove.SpecialN);
@@ -208,14 +209,42 @@ public class SawFighter : MonoBehaviour, IDamageable
 
     private void PlayerMovement()
     {
-        rb.linearVelocity = new Vector3(moveInput.x * speed, rb.linearVelocity.y, rb.linearVelocity.z);
+        if (moveInput.x != 0)
+        {
+            rb.linearVelocity = new Vector3(moveInput.x * speed, rb.linearVelocity.y, rb.linearVelocity.z); 
+        }
+        
+    }
+
+    private void HandleJump()
+    {
+        if (!isJumping && IsGrounded() && isJumpedPressed)
+        {
+            isJumping = true;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+        }
+        else if (isJumping && IsGrounded() && !isJumpedPressed)
+        {
+            isJumping = false;
+        }
+
+        if (isJumping && !isJumpedPressed && rb.linearVelocity.y > 0)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+        }
+
+        if (rb.linearVelocity.y < 0)
+        {
+            rb.linearVelocity += Vector3.up * (fallMultiplier * Physics.gravity.y * Time.deltaTime);
+        }
+        
     }
 
     #endregion
 
     #region SawFighter Methods
 
-    public void Damage(float damageAmount, float stunDuration, float hitStopDuration)
+    public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, float knockBackTime, bool hasFixedKnockBack)
     {
         if (canGetDamage && !inHitStun)
         {
@@ -223,6 +252,10 @@ public class SawFighter : MonoBehaviour, IDamageable
             canGetDamage = false;
             inHitStun = true;
             hitStunDuration = stunDuration;
+            percentageCount += damageAmount;
+            this.knockBackTime = knockBackTime;
+            this.attackForce = attackForce;
+            getFixedKnockBack = hasFixedKnockBack;
 
             rb.linearVelocity = Vector3.zero; //Reset movement
 
@@ -279,11 +312,12 @@ public class SawFighter : MonoBehaviour, IDamageable
         //knockback
         Vector3 directionToOpponent = (opponent.transform.position - this.transform.position).normalized;
         rb.linearVelocity = Vector3.zero;
-        rb.AddForce(new Vector2(knockbackPower * -directionToOpponent.x, knockbackPower * 0.06f), ForceMode.Impulse);
-        StartCoroutine(KnockbackDecay());
+        StartCoroutine(KnockbackAction(-directionToOpponent, Vector2.up, moveInput.x));
+        //rb.AddForce(new Vector2(knockbackPower * -directionToOpponent.x, knockbackPower * 0.3f), ForceMode.Impulse);
+        //StartCoroutine(KnockbackDecay());
     }
     
-    IEnumerator KnockbackDecay()
+    private IEnumerator KnockbackDecay()
     {
         float decayTime = 0.3f; // Time to stop knockback
         float elapsedTime = 0f;
@@ -295,7 +329,60 @@ public class SawFighter : MonoBehaviour, IDamageable
             yield return null;
         }
 
+        isBeingKnockedBack = false;
         inAttack = false;
+    }
+
+    private IEnumerator KnockbackAction(Vector2 hitDirection, Vector2 constantForceDirection, float inputDirection)
+    {
+        isBeingKnockedBack = true;
+
+        Vector2 hitForce;
+        Vector2 constantKnockBackForce;
+        Vector2 knockBackForce;
+        Vector2 combinedForce;
+        
+        constantKnockBackForce = constantForceDirection * attackForce.y;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < knockBackTime)
+        {
+            //iterate the timer
+            elapsedTime += Time.fixedDeltaTime;
+            
+            //update hitForce
+            hitForce = hitDirection * (attackForce.x * knockBackForceCurve.Evaluate(elapsedTime));
+            
+            //combine hitForce and constantForce
+            knockBackForce = hitForce + constantKnockBackForce;
+            
+            //combine knockBackForce with Input Force
+            if (inputDirection != 0 && !getFixedKnockBack)
+            {
+                combinedForce = new Vector2(knockBackForce.x * (percentageCount * 0.35f),
+                    knockBackForce.y * (percentageCount * 0.15f)) + new Vector2(inputDirection * inputForce, 0f);
+            }
+            else if(!getFixedKnockBack)
+            {
+                combinedForce = new Vector2(knockBackForce.x * (percentageCount * 0.35f),
+                    knockBackForce.y * (percentageCount * 0.15f));
+            }
+            else if (inputDirection != 0 && getFixedKnockBack)
+            {
+                combinedForce = knockBackForce + new Vector2(inputDirection * inputForce, 0);
+            }
+            else
+            {
+                combinedForce = knockBackForce;
+            }
+            
+            //apply knockBack
+            rb.linearVelocity = combinedForce;
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        StartCoroutine(KnockbackDecay());
     }
 
     private IEnumerator WaitDamage()
@@ -308,20 +395,14 @@ public class SawFighter : MonoBehaviour, IDamageable
     {
         return playerIndex;
     }
-    
-    private IEnumerator ButtonBuffer()
-    {
-        yield return new WaitForSeconds(0.3f);
-        pressedSpecial = false;
-    }
-    
+
     /// <summary>
     /// check if player is on the ground
     /// </summary>
     /// <returns></returns>
     private bool IsGrounded()
     {
-        bool hitGround = Physics.Raycast(transform.position, Vector3.down, 0.7f, groundLayer);
+        bool hitGround = Physics.Raycast(transform.position, Vector3.down, 0.2f, groundLayer);
         
         return hitGround;
     }
@@ -354,12 +435,12 @@ public class SawFighter : MonoBehaviour, IDamageable
 
         if (rb.linearVelocity.y < 0)
         {
-            anim.SetBool("isFalling", true);
+            //anim.SetBool("isFalling", true);
             anim.SetBool("isJumping", false);
         }
         else
         {
-            anim.SetBool("isFalling", false);
+            //anim.SetBool("isFalling", false);
         }
     }
 

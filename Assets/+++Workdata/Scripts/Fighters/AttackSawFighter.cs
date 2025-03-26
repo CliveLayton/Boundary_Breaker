@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class AttackSawFighter : MonoBehaviour, IHitboxResponder, IFrameCheckHandler
@@ -8,6 +7,8 @@ public class AttackSawFighter : MonoBehaviour, IHitboxResponder, IFrameCheckHand
     private MovesSawFighter currentAttack;
 
     private SawFighter sawFighter;
+
+    private bool attackIsActive;
 
     private void Awake()
     {
@@ -20,49 +21,52 @@ public class AttackSawFighter : MonoBehaviour, IHitboxResponder, IFrameCheckHand
         {
             return;
         }
-        
-        if (sawFighter.inAttack)
+
+        if (attackIsActive)
         {
-            currentAttack.hitbox.StartCheckingCollision();
+            currentAttack.frameChecker.CheckFrames();
             currentAttack.hitbox.HitBoxUpdate();
-        }
-        else
-        {
-            currentAttack.hitbox.StopCheckingCollision();
-            currentAttack = null;
         }
     }
 
     public void CollisionedWith(Collider collider)
     {
         IDamageable iDamageable = collider.gameObject.GetComponentInParent<IDamageable>();
-        iDamageable?.Damage(currentAttack.damage, currentAttack.stunDuration, currentAttack.hitStopDuration);
+        iDamageable?.Damage(currentAttack.damage, currentAttack.stunDuration, currentAttack.hitStopDuration, 
+            currentAttack.attackForce, currentAttack.knockBackTime, currentAttack.hasFixedKnockBack);
     }
 
     public void SetMove(int moveNumber)
     {
         currentAttack = moves[moveNumber];
         currentAttack.hitbox.SetResponder(this);
+        currentAttack.frameChecker.Initialize(this);
+        attackIsActive = true;
     }
 
     public void OnHitFrameStart()
     {
-        
+        Debug.Log("start hitbox");
+        currentAttack.hitbox.StartCheckingCollision();
     }
 
     public void OnHitFrameEnd()
     {
-        
+        Debug.Log("end hitbox");
+        currentAttack.hitbox.StopCheckingCollision();
     }
 
     public void OnLastFrameStart()
     {
-        
+        Debug.Log("start last frame");
+        attackIsActive = false;
+        sawFighter.inAttack = false;
     }
 
     public void OnLastFrameEnd()
     {
-        
+        Debug.Log("end last frame");
+       
     }
 
     /// <summary>
@@ -73,7 +77,7 @@ public class AttackSawFighter : MonoBehaviour, IHitboxResponder, IFrameCheckHand
     {
         for (int i = 0; i < moves.Length; i++)
         {
-            moves[i].frameChecker.GetTotalFrames(moves[i].frameChecker.animationFrameInfo);
+            moves[i].frameChecker.GetTotalFrames();
         }
     }
 }

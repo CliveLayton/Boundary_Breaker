@@ -20,7 +20,7 @@ public class SawFighterAnimationEvents : MonoBehaviour
 
     #region SawFighter Animation Events Methods
 
-    public void EndAttack()
+    public void InIdle()
     {
         sawFighter.inAttack = false;
     }

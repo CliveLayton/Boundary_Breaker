@@ -48,7 +48,7 @@ public class AnimationFrameInfo
     public bool ItsOnLastFrame()
     {
         double percentage = animator.NormalizedTime(layerNumber);
-        return percentage > PercentageOnFrame(totalFrames - 1); //-1 to avoid transition problems because sometimes animations dont reach fully 100% of the animation
+        return percentage > PercentageOnFrame(totalFrames - 2); //-1 to avoid transition problems because sometimes animations dont reach fully 100% of the animation
     }
 
     public int TotalFrames()

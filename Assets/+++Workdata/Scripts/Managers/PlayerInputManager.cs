@@ -50,7 +50,8 @@ public class PlayerInputManager : MonoBehaviour
         gameInput.Player.Move.performed += sawFighter.OnMove;
         gameInput.Player.Move.canceled += sawFighter.OnMove;
 
-        gameInput.Player.Jump.performed += sawFighter.OnJump;
+        gameInput.Player.Jump.started += sawFighter.OnJump;
+        gameInput.Player.Jump.canceled += sawFighter.OnJump;
 
         gameInput.Player.Sprint.performed += sawFighter.OnSprint;
         gameInput.Player.Sprint.canceled += sawFighter.OnSprint;
@@ -75,8 +76,9 @@ public class PlayerInputManager : MonoBehaviour
         
         gameInput.Player.Move.performed -= sawFighter.OnMove;
         gameInput.Player.Move.canceled -= sawFighter.OnMove;
-
-        gameInput.Player.Jump.performed -= sawFighter.OnJump;
+        
+        gameInput.Player.Jump.started -= sawFighter.OnJump;
+        gameInput.Player.Jump.canceled -= sawFighter.OnJump;
 
         gameInput.Player.Sprint.performed -= sawFighter.OnSprint;
         gameInput.Player.Sprint.canceled -= sawFighter.OnSprint;

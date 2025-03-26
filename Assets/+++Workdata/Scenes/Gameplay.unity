@@ -233,16 +233,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerIndex: 0
+  percentageCount: 0
   normalSpeed: 3
   sprintSpeed: 10
+  jumpPower: 6
+  fallMultiplier: 2
   rotationSpeed: 60
-  knockbackPower: 20
   attack: {fileID: 1921544288}
   opponent: {fileID: 408626570}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   cmImpulse: {fileID: 809412073}
+  inputForce: 4.5
+  knockBackForceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.2
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   inAttack: 0
   inBlock: 0
 --- !u!54 &149267006
@@ -351,7 +378,7 @@ Transform:
   m_GameObject: {fileID: 203971265}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5415087, z: -11.008505}
+  m_LocalPosition: {x: 0.7390001, y: 1.5415087, z: -11.008505}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -491,16 +518,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerIndex: 1
+  percentageCount: 0
   normalSpeed: 3
   sprintSpeed: 10
+  jumpPower: 6
+  fallMultiplier: 2
   rotationSpeed: 60
-  knockbackPower: 20
   attack: {fileID: 1457486414}
   opponent: {fileID: 149267001}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   cmImpulse: {fileID: 809412073}
+  inputForce: 4.5
+  knockBackForceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.2
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   inAttack: 0
   inBlock: 0
 --- !u!4 &408626573
@@ -835,7 +889,7 @@ Transform:
   m_GameObject: {fileID: 809412068}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5038979, z: -9}
+  m_LocalPosition: {x: 0.44077563, y: 1.5038979, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1814,6 +1868,9 @@ MonoBehaviour:
     damage: 2
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -1828,6 +1885,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -1842,6 +1902,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -1856,6 +1919,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -1870,6 +1936,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -1884,6 +1953,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -1898,6 +1970,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -1912,6 +1987,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -1926,6 +2004,9 @@ MonoBehaviour:
     damage: 4
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 520591366}
     frameChecker:
       hitFrameStart: 0
@@ -1940,6 +2021,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -1954,6 +2038,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -1968,6 +2055,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1886472113}
     frameChecker:
       hitFrameStart: 0
@@ -2774,10 +2864,13 @@ MonoBehaviour:
     damage: 2
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 3, y: 1}
+    knockBackTime: 0.2
+    hasFixedKnockBack: 1
     hitbox: {fileID: 1717713126}
     frameChecker:
-      hitFrameStart: 8
-      hitFrameEnd: 13
+      hitFrameStart: 7
+      hitFrameEnd: 12
       totalFrames: 25
       animationFrameInfo:
         animator: {fileID: 1921544285}
@@ -2788,6 +2881,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1717713126}
     frameChecker:
       hitFrameStart: 0
@@ -2802,6 +2898,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1717713126}
     frameChecker:
       hitFrameStart: 0
@@ -2816,6 +2915,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1717713126}
     frameChecker:
       hitFrameStart: 0
@@ -2830,10 +2932,13 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 4, y: 2}
+    knockBackTime: 0.2
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1717713126}
     frameChecker:
-      hitFrameStart: 11
-      hitFrameEnd: 19
+      hitFrameStart: 10
+      hitFrameEnd: 17
       totalFrames: 30
       animationFrameInfo:
         animator: {fileID: 1921544285}
@@ -2844,6 +2949,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1717713126}
     frameChecker:
       hitFrameStart: 0
@@ -2858,6 +2966,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1717713126}
     frameChecker:
       hitFrameStart: 0
@@ -2872,6 +2983,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1717713126}
     frameChecker:
       hitFrameStart: 0
@@ -2886,10 +3000,13 @@ MonoBehaviour:
     damage: 4
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 519125931}
     frameChecker:
-      hitFrameStart: 8
-      hitFrameEnd: 10
+      hitFrameStart: 13
+      hitFrameEnd: 15
       totalFrames: 30
       animationFrameInfo:
         animator: {fileID: 1921544285}
@@ -2900,6 +3017,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1717713126}
     frameChecker:
       hitFrameStart: 0
@@ -2914,6 +3034,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1717713126}
     frameChecker:
       hitFrameStart: 0
@@ -2928,6 +3051,9 @@ MonoBehaviour:
     damage: 3
     stunDuration: 0.2
     hitStopDuration: 0.05
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 0
     hitbox: {fileID: 1717713126}
     frameChecker:
       hitFrameStart: 0
@@ -3008,7 +3134,7 @@ MonoBehaviour:
   - Object: {fileID: 149267002}
     Weight: 1
     Radius: 1
-  - Object: {fileID: 0}
+  - Object: {fileID: 408626573}
     Weight: 1
     Radius: 1
   m_LegacyTargets: []
@@ -3021,7 +3147,7 @@ Transform:
   m_GameObject: {fileID: 2133639561}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.556, z: 0}
+  m_LocalPosition: {x: 0.44077563, y: 0.556, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -49,7 +49,7 @@ public class FrameCheckerDrawer : PropertyDrawer
         string frames = "<b>" + totalFrames + "</b> frames";
         string startUp = "<color=green><b>" + (start - 1) + "</b> startup</color>";
         string active = "<color=red><b>" + (end - start + 1) + "</b> active</color>";
-        string recovery = "<color=blue><b>" + (totalFrames - end) + "</b> recovery</color>";
+        string recovery = "<color=yellow><b>" + (totalFrames - end) + "</b> recovery</color>";
         
         EditorGUI.LabelField(framesRect, frames + ": " + startUp + " | " + active + " | " + recovery, style);
         EditorGUI.LabelField(hitRect, "Hits in:  <b>" + start + "</b> to <b>" + end + "</b>", style);

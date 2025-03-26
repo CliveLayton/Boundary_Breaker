@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class FrameChecker
@@ -12,16 +13,31 @@ public class FrameChecker
     private bool checkedHitFrameStart;
     private bool checkedHitFrameEnd;
     private bool lastFrame;
+    private AnimationState animationState = AnimationState.Startup;
 
-    public void Initialize(IFrameCheckHandler frameCheck, AnimationFrameInfo animationInfo)
+    enum AnimationState
     {
-        animationInfo.Initialize();
+        Startup,
+        ActiveHit,
+        Recovery
+    }
+
+    /// <summary>
+    /// initialize the animationinfo to get all data for the check
+    /// </summary>
+    /// <param name="frameCheck"></param>
+    /// <param name="animationInfo"></param>
+    public void Initialize(IFrameCheckHandler frameCheck)
+    {
+        animationFrameInfo.Initialize();
         frameCheckHandler = frameCheck;
-        animationFrameInfo = animationInfo;
-        totalFrames = animationInfo.TotalFrames();
+        totalFrames = animationFrameInfo.TotalFrames();
         InitCheck();
     }
 
+    /// <summary>
+    /// reset all bools for the check
+    /// </summary>
     public void InitCheck()
     {
         checkedHitFrameStart = false;
@@ -29,43 +45,81 @@ public class FrameChecker
         lastFrame = false;
     }
 
+    /// <summary>
+    /// check the current state of the animation to get the hit frame window
+    /// </summary>
     public void CheckFrames()
     {
-        if (lastFrame)
-        {
-            lastFrame = false;
-            frameCheckHandler.OnLastFrameEnd();
-        }
 
         if (!animationFrameInfo.isActive())
         {
             return;
         }
-
-        if (!checkedHitFrameStart && animationFrameInfo.BiggerOrEqualThanFrame(hitFrameStart))
+        
+        switch (animationState)
         {
-            frameCheckHandler.OnHitFrameStart();
-            checkedHitFrameStart = true;
+            case AnimationState.Startup:
+                if (animationFrameInfo.BiggerOrEqualThanFrame(hitFrameStart))
+                {
+                    frameCheckHandler.OnHitFrameStart();
+                    animationState = AnimationState.ActiveHit;
+                }
+                break;
+            case AnimationState.ActiveHit:
+                if (animationFrameInfo.BiggerOrEqualThanFrame(hitFrameEnd))
+                {
+                    frameCheckHandler.OnHitFrameEnd();
+                    animationState = AnimationState.Recovery;
+                }
+                break;
+            case AnimationState.Recovery:
+                if (animationFrameInfo.ItsOnLastFrame())
+                {
+                    frameCheckHandler.OnLastFrameStart();
+                    animationState = AnimationState.Startup;
+                }
+                break;
         }
-        else if (!checkedHitFrameEnd && animationFrameInfo.BiggerOrEqualThanFrame(hitFrameEnd))
-        {
-            frameCheckHandler.OnHitFrameEnd();
-            checkedHitFrameEnd = true;
-        }
-
-        if (!lastFrame && animationFrameInfo.ItsOnLastFrame())
-        {
-            frameCheckHandler.OnLastFrameStart();
-            lastFrame = true; // This is here so we don't skip the last frame
-        }
+        
+        // if (lastFrame)
+        // {
+        //     lastFrame = false;
+        //     frameCheckHandler.OnLastFrameEnd();
+        // }
+        //
+        // if (!animationFrameInfo.isActive())
+        // {
+        //     return;
+        // }
+        //
+        // if (!checkedHitFrameStart && animationFrameInfo.BiggerOrEqualThanFrame(hitFrameStart))
+        // {
+        //     frameCheckHandler.OnHitFrameStart();
+        //     checkedHitFrameStart = true;
+        // }
+        // else if (!checkedHitFrameEnd && animationFrameInfo.BiggerOrEqualThanFrame(hitFrameEnd))
+        // {
+        //     frameCheckHandler.OnHitFrameEnd();
+        //     checkedHitFrameEnd = true;
+        // }
+        //
+        // if (!lastFrame && animationFrameInfo.ItsOnLastFrame())
+        // {
+        //     frameCheckHandler.OnLastFrameStart();
+        //     lastFrame = true; // This is here so we don't skip the last frame
+        // }
     }
     
-    public void GetTotalFrames(AnimationFrameInfo animationInfo)
+    /// <summary>
+    /// get the total frames of the animation
+    /// </summary>
+    /// <param name="animationInfo"></param>
+    public void GetTotalFrames()
     {
-        if (animationInfo.clip != null)
+        if (animationFrameInfo.clip != null)
         {
-            animationInfo.Initialize();
-            totalFrames = animationInfo.TotalFrames();
+            animationFrameInfo.Initialize();
+            totalFrames = animationFrameInfo.TotalFrames();
         }
     }
 }

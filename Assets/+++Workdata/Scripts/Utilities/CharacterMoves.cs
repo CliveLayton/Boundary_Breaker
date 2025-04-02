@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class MovesSawFighter
+public class CharacterMoves
 {
     public string name;
     [Min(0)] public float damage;
@@ -11,6 +11,8 @@ public class MovesSawFighter
     [Min(0)] public Vector2 attackForce;
     [Min(0)] public float knockBackTime;
     public bool hasFixedKnockBack;
-    public Hitbox hitbox;
+    public bool isComboPossible;
+    public bool getKnockBackToOpponent;
+    public Hitbox[] hitbox;
     public FrameChecker frameChecker;
 }

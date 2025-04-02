@@ -8,7 +8,7 @@ public class PlayerInputManager : MonoBehaviour
     #region Variables
 
     private GameInput gameInput;
-    private SawFighter sawFighter;
+    private PlayerController playerController;
 
     #endregion
 
@@ -16,10 +16,10 @@ public class PlayerInputManager : MonoBehaviour
     
     private void Awake()
     {
-        var characterControlsArray = FindObjectsByType<SawFighter>(FindObjectsSortMode.None);
+        var characterControlsArray = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
         var playerInput = GetComponent<PlayerInput>();
         var index = playerInput.playerIndex;
-        sawFighter = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
+        playerController = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
         
         //We create a new ControllerMap and assign it to the right player
         gameInput = new GameInput();
@@ -47,23 +47,23 @@ public class PlayerInputManager : MonoBehaviour
     {
         gameInput.Enable();
 
-        gameInput.Player.Move.performed += sawFighter.OnMove;
-        gameInput.Player.Move.canceled += sawFighter.OnMove;
+        gameInput.Player.Move.performed += playerController.OnMove;
+        gameInput.Player.Move.canceled += playerController.OnMove;
 
-        gameInput.Player.Jump.started += sawFighter.OnJump;
-        gameInput.Player.Jump.canceled += sawFighter.OnJump;
+        gameInput.Player.Jump.started += playerController.OnJump;
+        gameInput.Player.Jump.canceled += playerController.OnJump;
 
-        gameInput.Player.Sprint.performed += sawFighter.OnSprint;
-        gameInput.Player.Sprint.canceled += sawFighter.OnSprint;
+        gameInput.Player.Dash.performed += playerController.OnDash;
+        gameInput.Player.Dash.canceled += playerController.OnDash;
 
-        gameInput.Player.Block.performed += sawFighter.OnBlock;
-        gameInput.Player.Block.canceled += sawFighter.OnBlock;
+        gameInput.Player.Block.performed += playerController.OnBlock;
+        gameInput.Player.Block.canceled += playerController.OnBlock;
         
-        gameInput.Player.Jab.performed += sawFighter.OnLightAttack;
+        gameInput.Player.Jab.performed += playerController.OnLightAttack;
 
-        gameInput.Player.HeavyAttack.performed += sawFighter.OnHeavyAttack;
+        gameInput.Player.HeavyAttack.performed += playerController.OnHeavyAttack;
 
-        gameInput.Player.SpecialAttack.performed += sawFighter.OnSpecialAttack;
+        gameInput.Player.SpecialAttack.performed += playerController.OnSpecialAttack;
     }
 
     /// <summary>
@@ -74,23 +74,23 @@ public class PlayerInputManager : MonoBehaviour
     {
         gameInput.Disable();
         
-        gameInput.Player.Move.performed -= sawFighter.OnMove;
-        gameInput.Player.Move.canceled -= sawFighter.OnMove;
+        gameInput.Player.Move.performed -= playerController.OnMove;
+        gameInput.Player.Move.canceled -= playerController.OnMove;
         
-        gameInput.Player.Jump.started -= sawFighter.OnJump;
-        gameInput.Player.Jump.canceled -= sawFighter.OnJump;
+        gameInput.Player.Jump.started -= playerController.OnJump;
+        gameInput.Player.Jump.canceled -= playerController.OnJump;
 
-        gameInput.Player.Sprint.performed -= sawFighter.OnSprint;
-        gameInput.Player.Sprint.canceled -= sawFighter.OnSprint;
+        gameInput.Player.Dash.performed -= playerController.OnDash;
+        gameInput.Player.Dash.canceled -= playerController.OnDash;
         
-        gameInput.Player.Block.performed -= sawFighter.OnBlock;
-        gameInput.Player.Block.canceled -= sawFighter.OnBlock;
+        gameInput.Player.Block.performed -= playerController.OnBlock;
+        gameInput.Player.Block.canceled -= playerController.OnBlock;
         
-        gameInput.Player.Jab.performed -= sawFighter.OnLightAttack;
+        gameInput.Player.Jab.performed -= playerController.OnLightAttack;
 
-        gameInput.Player.HeavyAttack.performed -= sawFighter.OnHeavyAttack;
+        gameInput.Player.HeavyAttack.performed -= playerController.OnHeavyAttack;
         
-        gameInput.Player.SpecialAttack.performed -= sawFighter.OnSpecialAttack;
+        gameInput.Player.SpecialAttack.performed -= playerController.OnSpecialAttack;
     }
 
     #endregion

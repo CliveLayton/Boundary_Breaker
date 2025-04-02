@@ -10,9 +10,6 @@ public class FrameChecker
     public AnimationFrameInfo animationFrameInfo;
 
     private IFrameCheckHandler frameCheckHandler;
-    private bool checkedHitFrameStart;
-    private bool checkedHitFrameEnd;
-    private bool lastFrame;
     private AnimationState animationState = AnimationState.Startup;
 
     enum AnimationState
@@ -36,13 +33,11 @@ public class FrameChecker
     }
 
     /// <summary>
-    /// reset all bools for the check
+    /// reset state for the check
     /// </summary>
     public void InitCheck()
     {
-        checkedHitFrameStart = false;
-        checkedHitFrameEnd = false;
-        lastFrame = false;
+        animationState = AnimationState.Startup;
     }
 
     /// <summary>

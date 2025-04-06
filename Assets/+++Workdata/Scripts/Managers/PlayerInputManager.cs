@@ -8,7 +8,8 @@ public class PlayerInputManager : MonoBehaviour
     #region Variables
 
     private GameInput gameInput;
-    private PlayerController playerController;
+    //private PlayerController playerController;
+    private PlayerStateMachine playerStateMachine;
 
     #endregion
 
@@ -16,10 +17,12 @@ public class PlayerInputManager : MonoBehaviour
     
     private void Awake()
     {
-        var characterControlsArray = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
+        //var characterControlsArray = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
+        var characterControlsArray = FindObjectsByType<PlayerStateMachine>(FindObjectsSortMode.None);
         var playerInput = GetComponent<PlayerInput>();
         var index = playerInput.playerIndex;
-        playerController = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
+        //playerController = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
+        playerStateMachine = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
         
         //We create a new ControllerMap and assign it to the right player
         gameInput = new GameInput();
@@ -47,23 +50,41 @@ public class PlayerInputManager : MonoBehaviour
     {
         gameInput.Enable();
 
-        gameInput.Player.Move.performed += playerController.OnMove;
-        gameInput.Player.Move.canceled += playerController.OnMove;
-
-        gameInput.Player.Jump.started += playerController.OnJump;
-        gameInput.Player.Jump.canceled += playerController.OnJump;
-
-        gameInput.Player.Dash.performed += playerController.OnDash;
-        gameInput.Player.Dash.canceled += playerController.OnDash;
-
-        gameInput.Player.Block.performed += playerController.OnBlock;
-        gameInput.Player.Block.canceled += playerController.OnBlock;
+        // gameInput.Player.Move.performed += playerController.OnMove;
+        // gameInput.Player.Move.canceled += playerController.OnMove;
+        //
+        // gameInput.Player.Jump.started += playerController.OnJump;
+        // gameInput.Player.Jump.canceled += playerController.OnJump;
+        //
+        // gameInput.Player.Dash.performed += playerController.OnDash;
+        // gameInput.Player.Dash.canceled += playerController.OnDash;
+        //
+        // gameInput.Player.Block.performed += playerController.OnBlock;
+        // gameInput.Player.Block.canceled += playerController.OnBlock;
+        //
+        // gameInput.Player.Jab.performed += playerController.OnLightAttack;
+        //
+        // gameInput.Player.HeavyAttack.performed += playerController.OnHeavyAttack;
+        //
+        // gameInput.Player.SpecialAttack.performed += playerController.OnSpecialAttack;
         
-        gameInput.Player.Jab.performed += playerController.OnLightAttack;
+        gameInput.Player.Move.performed += playerStateMachine.OnMove;
+        gameInput.Player.Move.canceled += playerStateMachine.OnMove;
 
-        gameInput.Player.HeavyAttack.performed += playerController.OnHeavyAttack;
+        gameInput.Player.Jump.started += playerStateMachine.OnJump;
+        gameInput.Player.Jump.canceled += playerStateMachine.OnJump;
 
-        gameInput.Player.SpecialAttack.performed += playerController.OnSpecialAttack;
+        gameInput.Player.Dash.performed += playerStateMachine.OnDash;
+        gameInput.Player.Dash.canceled += playerStateMachine.OnDash;
+
+        gameInput.Player.Block.performed += playerStateMachine.OnBlock;
+        gameInput.Player.Block.canceled += playerStateMachine.OnBlock;
+        
+        gameInput.Player.Jab.performed += playerStateMachine.OnLightAttack;
+
+        gameInput.Player.HeavyAttack.performed += playerStateMachine.OnHeavyAttack;
+
+        gameInput.Player.SpecialAttack.performed += playerStateMachine.OnSpecialAttack;
     }
 
     /// <summary>
@@ -74,23 +95,41 @@ public class PlayerInputManager : MonoBehaviour
     {
         gameInput.Disable();
         
-        gameInput.Player.Move.performed -= playerController.OnMove;
-        gameInput.Player.Move.canceled -= playerController.OnMove;
+        // gameInput.Player.Move.performed -= playerController.OnMove;
+        // gameInput.Player.Move.canceled -= playerController.OnMove;
+        //
+        // gameInput.Player.Jump.started -= playerController.OnJump;
+        // gameInput.Player.Jump.canceled -= playerController.OnJump;
+        //
+        // gameInput.Player.Dash.performed -= playerController.OnDash;
+        // gameInput.Player.Dash.canceled -= playerController.OnDash;
+        //
+        // gameInput.Player.Block.performed -= playerController.OnBlock;
+        // gameInput.Player.Block.canceled -= playerController.OnBlock;
+        //
+        // gameInput.Player.Jab.performed -= playerController.OnLightAttack;
+        //
+        // gameInput.Player.HeavyAttack.performed -= playerController.OnHeavyAttack;
+        //
+        // gameInput.Player.SpecialAttack.performed -= playerController.OnSpecialAttack;
         
-        gameInput.Player.Jump.started -= playerController.OnJump;
-        gameInput.Player.Jump.canceled -= playerController.OnJump;
+        gameInput.Player.Move.performed -= playerStateMachine.OnMove;
+        gameInput.Player.Move.canceled -= playerStateMachine.OnMove;
 
-        gameInput.Player.Dash.performed -= playerController.OnDash;
-        gameInput.Player.Dash.canceled -= playerController.OnDash;
-        
-        gameInput.Player.Block.performed -= playerController.OnBlock;
-        gameInput.Player.Block.canceled -= playerController.OnBlock;
-        
-        gameInput.Player.Jab.performed -= playerController.OnLightAttack;
+        gameInput.Player.Jump.started -= playerStateMachine.OnJump;
+        gameInput.Player.Jump.canceled -= playerStateMachine.OnJump;
 
-        gameInput.Player.HeavyAttack.performed -= playerController.OnHeavyAttack;
+        gameInput.Player.Dash.performed -= playerStateMachine.OnDash;
+        gameInput.Player.Dash.canceled -= playerStateMachine.OnDash;
+
+        gameInput.Player.Block.performed -= playerStateMachine.OnBlock;
+        gameInput.Player.Block.canceled -= playerStateMachine.OnBlock;
         
-        gameInput.Player.SpecialAttack.performed -= playerController.OnSpecialAttack;
+        gameInput.Player.Jab.performed -= playerStateMachine.OnLightAttack;
+
+        gameInput.Player.HeavyAttack.performed -= playerStateMachine.OnHeavyAttack;
+
+        gameInput.Player.SpecialAttack.performed -= playerStateMachine.OnSpecialAttack;
     }
 
     #endregion

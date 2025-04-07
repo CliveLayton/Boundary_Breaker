@@ -10,7 +10,7 @@ public class PlayerIdleState : PlayerBaseState
     
     public override void EnterState()
     {
-        Debug.Log("Enter Idle");
+        
     }
 
     public override void UpdateState()
@@ -31,13 +31,17 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.MoveInput.x != 0 && !Ctx.IsDashing)
+        if (Ctx.MoveInput.x != 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
         {
             SwitchState(Factory.Walk());
         }
-        else if (Ctx.IsDashing)
+        else if (Ctx.IsDashing && !Ctx.IsAttacking)
         {
             SwitchState(Factory.Dash());
+        }
+        else if (Ctx.IsAttacking && !Ctx.IsDashing)
+        {
+            SwitchState(Factory.Attack());
         }
     }
 }

@@ -1,16 +1,15 @@
 using UnityEngine;
 
-public class PlayerJumpState : PlayerBaseState
+public class PlayerInAirState : PlayerBaseState
 {
-    public PlayerJumpState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
+    public PlayerInAirState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
-        InitializeSubState();
         IsRootState = true;
     }
     
     public override void EnterState()
     {
-        Debug.Log("Enter Jump");
+        InitializeSubState();
         Ctx.Rb.linearVelocity = new Vector2(Ctx.Rb.linearVelocity.x, Ctx.JumpPower);
     }
 
@@ -30,25 +29,33 @@ public class PlayerJumpState : PlayerBaseState
     
     public override void InitializeSubState()
     {
-        if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing)
+        if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
         {
             SetSubState(Factory.Idle());
         }
-        else if (Ctx.MoveInput.x != 0 && !Ctx.IsDashing)
+        else if (Ctx.MoveInput.x != 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
         {
             SetSubState(Factory.Walk());
         }
-        else
+        else if(Ctx.IsDashing && !Ctx.IsAttacking)
         {
             SetSubState(Factory.Dash());
+        }
+        else if (Ctx.IsAttacking && !Ctx.IsDashing)
+        {
+            SetSubState(Factory.Attack());
         }
     }
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.05f)
+        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.05f && !Ctx.InHitStun)
         {
             SwitchState(Factory.Grounded());
+        }
+        else if(Ctx.InHitStun)
+        {
+            SwitchState(Factory.Stunned());
         }
     }
     

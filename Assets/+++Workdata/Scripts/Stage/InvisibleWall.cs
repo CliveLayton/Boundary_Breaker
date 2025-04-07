@@ -15,10 +15,11 @@ public class InvisibleWall : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            PlayerController fighter = other.gameObject.GetComponent<PlayerController>();
+            //PlayerController fighter = other.gameObject.GetComponent<PlayerController>();
+            PlayerStateMachine fighter = other.gameObject.GetComponent<PlayerStateMachine>();
             IDamageable iDamageable = other.gameObject.GetComponent<IDamageable>();
 
-            if (fighter.combinedForce.magnitude > 20f && !isOnWall)
+            if (fighter.CombinedForce.magnitude > 20f && !isOnWall) //fighter.combinedForce.magnitude
             {
                 col.enabled = false;
                 isOnWall = true;

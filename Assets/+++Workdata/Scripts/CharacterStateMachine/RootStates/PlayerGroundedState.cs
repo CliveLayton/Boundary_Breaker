@@ -4,13 +4,12 @@ public class PlayerGroundedState : PlayerBaseState
 {
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
-        InitializeSubState();
         IsRootState = true;
     }
     
     public override void EnterState()
     {
-        Debug.Log("Enter Grounded");
+        InitializeSubState();
     }
 
     public override void UpdateState()
@@ -25,25 +24,33 @@ public class PlayerGroundedState : PlayerBaseState
     
     public override void InitializeSubState()
     {
-        if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing)
+        if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
         {
             SetSubState(Factory.Idle());
         }
-        else if (Ctx.MoveInput.x != 0 && !Ctx.IsDashing)
+        else if (Ctx.MoveInput.x != 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
         {
             SetSubState(Factory.Walk());
         }
-        else
+        else if(Ctx.IsDashing && !Ctx.IsAttacking)
         {
             SetSubState(Factory.Dash());
+        }
+        else if (Ctx.IsAttacking && !Ctx.IsDashing)
+        {
+            SetSubState(Factory.Attack());
         }
     }
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsJumpedPressed && !Ctx.RequireNewJumpPress)
+        if (Ctx.IsJumpedPressed && !Ctx.RequireNewJumpPress && !Ctx.InHitStun)
         {
-            SwitchState(Factory.Jump());
+            SwitchState(Factory.InAir());
+        }
+        else if(Ctx.InHitStun)
+        {
+            SwitchState(Factory.Stunned());
         }
     }
 }

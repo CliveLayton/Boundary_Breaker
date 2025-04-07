@@ -6,13 +6,16 @@ public class CharacterMoveSet : MonoBehaviour, IHitboxResponder, IFrameCheckHand
 
     private CharacterMoves currentMove;
 
-    private PlayerController playerController;
+    //private PlayerController playerController;
+
+    private PlayerStateMachine playerStateMachine;
 
     private bool attackIsActive;
 
     private void Awake()
     {
-        playerController = GetComponentInParent<PlayerController>();
+        //playerController = GetComponentInParent<PlayerController>();
+        playerStateMachine = GetComponentInParent<PlayerStateMachine>();
     }
 
     private void Update()
@@ -22,7 +25,7 @@ public class CharacterMoveSet : MonoBehaviour, IHitboxResponder, IFrameCheckHand
             return;
         }
 
-        if (attackIsActive)
+        if (playerStateMachine.IsAttacking)
         {
             currentMove.frameChecker.CheckFrames();
             for (int i = 0; i < currentMove.hitbox.Length; i++)
@@ -51,12 +54,11 @@ public class CharacterMoveSet : MonoBehaviour, IHitboxResponder, IFrameCheckHand
             currentMove.hitbox[i].SetResponder(this);
         }
         currentMove.frameChecker.Initialize(this);
-        attackIsActive = true;
+        //attackIsActive = true;
     }
 
     public void OnHitFrameStart()
     {
-        Debug.Log("start hitbox");
         for (int i = 0; i < currentMove.hitbox.Length; i++)
         {
             currentMove.hitbox[i].StartCheckingCollision();
@@ -70,7 +72,6 @@ public class CharacterMoveSet : MonoBehaviour, IHitboxResponder, IFrameCheckHand
             return;
         }
         
-        Debug.Log("end hitbox");
         for (int i = 0; i < currentMove.hitbox.Length; i++)
         {
             currentMove.hitbox[i].StopCheckingCollision();
@@ -79,15 +80,14 @@ public class CharacterMoveSet : MonoBehaviour, IHitboxResponder, IFrameCheckHand
 
     public void OnLastFrameStart()
     {
-        Debug.Log("start last frame");
-        attackIsActive = false;
-        playerController.inAttack = false;
+        //attackIsActive = false;
+        //playerController.inAttack = false;
+        playerStateMachine.IsAttacking = false;
     }
 
     public void OnLastFrameEnd()
     {
-        Debug.Log("end last frame");
-       
+
     }
 
     /// <summary>

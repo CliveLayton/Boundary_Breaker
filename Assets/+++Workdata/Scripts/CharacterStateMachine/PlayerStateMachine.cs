@@ -4,7 +4,7 @@ using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.InputSystem;
 
-public class PlayerStateMachine : MonoBehaviour
+public class PlayerStateMachine : MonoBehaviour, IDamageable
 {
     #region Variables
 
@@ -12,57 +12,61 @@ public class PlayerStateMachine : MonoBehaviour
     [Header("Player Index")] 
     [SerializeField] private int playerIndex;
 
-    [Header("SawFighter Behavior Variables")] 
-    [SerializeField] private float percentageCount = 0;
+    [Header("SawFighter Behavior Variables")]
     [SerializeField] private float rotationSpeed = 60f;
     //[SerializeField] private float knockbackPower = 10f;
-    [SerializeField] private CharacterMoveSet move;
-    [SerializeField] private GameObject opponent;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private CinemachineImpulseSource cmImpulse;
 
     [Header("KnockBack Variables")]
-    [SerializeField] private float inputForce = 7.5f;
-    [SerializeField] private AnimationCurve knockBackForceCurve;
 
     //public Variables
-    public bool inAttack = false;
     public bool inBlock = false;
 
     //private Variables
-    private float knockBackTime;
-    private Vector2 attackForce;
-    public Vector2 combinedForce;
-    private bool isJumping = false;
-    private bool inHitStun = false;
-    private float hitStunDuration = 0f;
-    private bool canGetDamage = true;
-    private bool isBeingKnockedBack = false;
     private bool canDash = true;
-    private bool getFixedKnockBack;
     private Quaternion targetRotation;
     private Animator anim;
     private PlayerStateFactory states;
     
     //getters and setters
+    [field: SerializeField] public float PercentageCount { get; private set; }
     [field: SerializeField] public float Speed { get; private set; }
     [field: SerializeField] public float SpeedChangeRate { get; private set; }
     [field: SerializeField] public float DashPower { get; private set; }
     [field: SerializeField] public float JumpPower { get; private set; }
     [field: SerializeField] public float FallMultiplier { get; private set; }
+    [field: SerializeField] public float InputForce { get; private set; }
+    [field: SerializeField] public AnimationCurve KnockBackForceCurve { get; private set; }
+    [field: SerializeField] public GameObject Opponent { get; private set; }
+    [field: SerializeField] public CharacterMoveSet Move { get; private set; }
+    [field: SerializeField] public CinemachineImpulseSource CmImpulse { get; private set; }
 
     public PlayerBaseState CurrentState { get; set; }
     public Rigidbody Rb { get; private set; }
+    public ECurrentMove CurrentMove { get; private set; }
     public  Vector2 MoveInput { get; private set; }
+    public float LastMovementX { get; set; }
     public bool IsJumpedPressed { get; private set; }
     public bool RequireNewJumpPress { get; set; }
     public bool IsDashing { get; set; }
-    public float LastMovementX { get; set; }
+    public bool IsAttacking { get; set; }
+    public  bool InHitStun { get; set; }
+    public bool CanGetDamage { get; set; } = true;
+    public float KnockBackTime { get; private set; }
+    public Vector2 AttackForce { get; private set; }
     
+    public Vector2 CombinedForce { get; set; }
+    public bool GetFixedKnockBack { get; private set; }
+    public float HitStunDuration { get; private set; }
+    public float HitStopDuration { get; private set; }
+    public bool IsComboPossible { get; private set; }
+    public bool GetKnockBackToOpponent { get; private set; }
+    public bool IsBeingKnockedBack { get; set; }
+
 
     #endregion
     
-    enum CurrentMove
+    public enum ECurrentMove
     {
         Attack1,
         AttackLw1,
@@ -98,7 +102,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!inAttack)
+        if (!IsAttacking)
         {
             RotateToOpponent();
         }
@@ -132,14 +136,14 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void OnBlock(InputAction.CallbackContext context)
     {
-        if (context.performed && !inAttack && !inBlock) //isgrounded
+        if (context.performed && !IsAttacking && !inBlock) //isgrounded
         {
             anim.SetTrigger("Block");
             anim.SetBool("isBlocking", true);
             inBlock = true;
         }
 
-        if (context.canceled  && !inAttack) //isgrounded
+        if (context.canceled  && !IsAttacking) //isgrounded
         {
             anim.SetBool("isBlocking", false);
             inBlock = false;
@@ -148,34 +152,31 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void OnLightAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !inAttack && !inBlock)
+        if (context.performed && !IsAttacking && !inBlock && !anim.IsInTransition(0))
         {
-            move.OnHitFrameEnd();
-            move.SetMove((int)CurrentMove.Attack1);
+            CurrentMove = ECurrentMove.Attack1;
             anim.SetTrigger("Jab");
-            inAttack = true;
+            IsAttacking = true;
         }
     }
 
     public void OnHeavyAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !inAttack && !inBlock)
+        if (context.performed && !IsAttacking && !inBlock && !anim.IsInTransition(0))
         {
-            move.OnHitFrameEnd();
-            move.SetMove((int)CurrentMove.Attack2);
+            CurrentMove = ECurrentMove.Attack2;
             anim.SetTrigger("HeavyAttack");
-            inAttack = true;
+            IsAttacking = true;
         }
     }
 
     public void OnSpecialAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !inAttack && !inBlock)
+        if (context.performed && !IsAttacking && !inBlock && !anim.IsInTransition(0))
         {
-            move.OnHitFrameEnd();
-            move.SetMove((int)CurrentMove.SpecialN);
+            CurrentMove = ECurrentMove.SpecialN;
             anim.SetTrigger("Special");
-            inAttack = true;
+            IsAttacking = true;
         }
     }
 
@@ -185,7 +186,7 @@ public class PlayerStateMachine : MonoBehaviour
     
     private void RotateToOpponent()
     {
-        Vector3 direction = (opponent.transform.position - transform.position).normalized;
+        Vector3 direction = (Opponent.transform.position - transform.position).normalized;
 
         //ensure the rotation only happens on the Y-Axis
         direction.y = 0;
@@ -201,24 +202,9 @@ public class PlayerStateMachine : MonoBehaviour
     {
         float currentSpeed = LastMovementX;
         
-        if (!inAttack && !inBlock)
+        if (!inBlock)
         {
             float targetSpeed = MoveInput.x == 0 ? 0 : Speed * MoveInput.x;
-
-            if (Mathf.Abs(currentSpeed - targetSpeed) > 0.05f)
-            {
-                currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, SpeedChangeRate * Time.deltaTime);
-            }
-            else
-            {
-                currentSpeed = targetSpeed;
-            }
-
-            Rb.linearVelocity = new Vector2(currentSpeed, Rb.linearVelocity.y);
-        }
-        else
-        {
-            float targetSpeed = 0;
 
             if (Mathf.Abs(currentSpeed - targetSpeed) > 0.05f)
             {
@@ -238,6 +224,28 @@ public class PlayerStateMachine : MonoBehaviour
     #endregion
 
     #region PlayerStateMachine Methods
+    
+    public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, 
+        float knockBackTime, bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent)
+    {
+        if (!InHitStun)
+        {
+            //anim.SetTrigger("HeavyHit");
+            //CanGetDamage = false;
+            InHitStun = true;
+            PercentageCount += damageAmount;
+            HitStunDuration = stunDuration;
+            HitStopDuration = hitStopDuration;
+            IsComboPossible = isComboPossible;
+            GetKnockBackToOpponent = getKnockBackToOpponent;
+            KnockBackTime = knockBackTime;
+            AttackForce = attackForce;
+            GetFixedKnockBack = hasFixedKnockBack;
+            
+            
+            //StartCoroutine(WaitDamage());
+        }
+    }
 
     private IEnumerator DashCooldown()
     {

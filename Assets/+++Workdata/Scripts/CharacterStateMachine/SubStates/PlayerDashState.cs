@@ -9,6 +9,7 @@ public class PlayerDashState : PlayerBaseState
     
     public override void EnterState()
     {
+        Debug.Log("Dash");
         Ctx.Rb.AddForce(new Vector2(Ctx.DashPower, 0), ForceMode.Impulse);
         Ctx.LastMovementX = Ctx.DashPower;
         Ctx.IsDashing = false;

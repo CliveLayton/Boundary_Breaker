@@ -9,6 +9,7 @@ public class PlayerGroundedState : PlayerBaseState
     
     public override void EnterState()
     {
+        Debug.Log("Enter Grounded");
         InitializeSubState();
     }
 
@@ -24,6 +25,7 @@ public class PlayerGroundedState : PlayerBaseState
     
     public override void InitializeSubState()
     {
+        Debug.Log("Enter InitSub Ground");
         if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
         {
             SetSubState(Factory.Idle());
@@ -44,7 +46,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsJumpedPressed && !Ctx.RequireNewJumpPress && !Ctx.InHitStun)
+        if (Ctx.IsJumpedPressed && !Ctx.RequireNewJumpPress && !Ctx.InHitStun && !Ctx.IsAttacking)
         {
             SwitchState(Factory.InAir());
         }

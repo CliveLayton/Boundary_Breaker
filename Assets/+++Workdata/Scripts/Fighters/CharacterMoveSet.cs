@@ -6,16 +6,13 @@ public class CharacterMoveSet : MonoBehaviour, IHitboxResponder, IFrameCheckHand
 
     private CharacterMoves currentMove;
 
-    //private PlayerController playerController;
-
-    private PlayerStateMachine playerStateMachine;
+    private PlayerController playerController;
 
     private bool attackIsActive;
 
     private void Awake()
     {
-        //playerController = GetComponentInParent<PlayerController>();
-        playerStateMachine = GetComponentInParent<PlayerStateMachine>();
+        playerController = GetComponentInParent<PlayerController>();
     }
 
     private void Update()
@@ -25,7 +22,7 @@ public class CharacterMoveSet : MonoBehaviour, IHitboxResponder, IFrameCheckHand
             return;
         }
 
-        if (playerStateMachine.IsAttacking)
+        if (attackIsActive)
         {
             currentMove.frameChecker.CheckFrames();
             for (int i = 0; i < currentMove.hitbox.Length; i++)
@@ -54,7 +51,7 @@ public class CharacterMoveSet : MonoBehaviour, IHitboxResponder, IFrameCheckHand
             currentMove.hitbox[i].SetResponder(this);
         }
         currentMove.frameChecker.Initialize(this);
-        //attackIsActive = true;
+        attackIsActive = true;
     }
 
     public void OnHitFrameStart()
@@ -80,9 +77,8 @@ public class CharacterMoveSet : MonoBehaviour, IHitboxResponder, IFrameCheckHand
 
     public void OnLastFrameStart()
     {
-        //attackIsActive = false;
-        //playerController.inAttack = false;
-        playerStateMachine.IsAttacking = false;
+        attackIsActive = false;
+        playerController.inAttack = false;
     }
 
     public void OnLastFrameEnd()

@@ -48,6 +48,7 @@ public class FrameChecker
 
         if (!animationFrameInfo.isActive())
         {
+            frameCheckHandler.OnLastFrameEnd();
             return;
         }
         

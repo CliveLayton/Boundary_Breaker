@@ -12,7 +12,6 @@ public class PlayerKnockBackState : PlayerBaseState
 
     public override void EnterState()
     {
-        Debug.Log("Enter KnockBack");
         Ctx.Rb.linearVelocity = Vector3.zero;
         Ctx.IsBeingKnockedBack = true;
         
@@ -34,6 +33,7 @@ public class PlayerKnockBackState : PlayerBaseState
 
     public override void ExitState()
     {
+        Ctx.IsAttacking = false;
         Ctx.IsBeingKnockedBack = false;
         Ctx.StopCoroutine(knockBackCoroutine);
     }
@@ -121,6 +121,5 @@ public class PlayerKnockBackState : PlayerBaseState
         }
 
         Ctx.IsBeingKnockedBack = false;
-        Ctx.IsAttacking = false;
     }
 }

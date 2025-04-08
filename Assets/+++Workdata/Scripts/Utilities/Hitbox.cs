@@ -85,15 +85,20 @@ public class Hitbox : MonoBehaviour
         {
             colliders = Physics.OverlapBox(hitboxBoxPosition, hitboxSize, transform.rotation, layerToCheck);
         }
+        
+        state = colliders.Length > 0 ? ColliderState.Colliding : ColliderState.Open;
+        
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            Collider acollider = colliders[i];
-            responder?.CollisionedWith(acollider);
-            Debug.Log("got a hit");
+            if (i == 0)
+            {
+                Collider acollider = colliders[i];
+                responder?.CollisionedWith(acollider);
+                Debug.Log("got a hit");
+            }
         }
         
-        state = colliders.Length > 0 ? ColliderState.Colliding : ColliderState.Open;
     }
 
     //set a responder to send collison messages to

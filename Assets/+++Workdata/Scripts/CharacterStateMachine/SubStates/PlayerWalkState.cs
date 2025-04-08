@@ -9,7 +9,28 @@ public class PlayerWalkState : PlayerBaseState
     
     public override void EnterState()
     {
-        
+        if (Ctx.IsFacingRight() && Ctx.IsGrounded())
+        {
+            if (Ctx.Rb.linearVelocity.x > 0)
+            {
+                Ctx.Anim.Play("Walk_Forward");
+            }
+            else
+            {
+                Ctx.Anim.Play("Walk_Back");
+            }
+        }
+        else if (!Ctx.IsFacingRight() && Ctx.IsGrounded())
+        {
+            if (Ctx.Rb.linearVelocity.x < 0)
+            {
+                Ctx.Anim.Play("Walk_Forward");
+            }
+            else
+            {
+                Ctx.Anim.Play("Walk_Back");
+            }
+        }
     }
 
     public override void UpdateState()

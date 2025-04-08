@@ -10,6 +10,8 @@ public class PlayerInAirState : PlayerBaseState
     public override void EnterState()
     {
         InitializeSubState();
+        Debug.Log("Enter Air");
+        Ctx.Anim.Play("Jump");
         Ctx.Rb.linearVelocity = new Vector2(Ctx.Rb.linearVelocity.x, Ctx.JumpPower);
     }
 
@@ -49,7 +51,7 @@ public class PlayerInAirState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.05f && !Ctx.InHitStun)
+        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.5f && !Ctx.InHitStun)
         {
             SwitchState(Factory.Grounded());
         }

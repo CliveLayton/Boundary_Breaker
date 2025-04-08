@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public abstract class PlayerBaseState
 {
     protected PlayerStateMachine Ctx { get; private set; }
@@ -27,6 +29,7 @@ public abstract class PlayerBaseState
         UpdateState();
         if (currentSubState != null)
         {
+            Debug.Log(currentSubState);
             currentSubState.UpdateStates();
         }
     }

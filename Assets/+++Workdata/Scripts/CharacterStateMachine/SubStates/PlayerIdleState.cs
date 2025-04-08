@@ -10,7 +10,11 @@ public class PlayerIdleState : PlayerBaseState
     
     public override void EnterState()
     {
-        
+        if (Ctx.IsGrounded())
+        {
+            Debug.Log("Enter Ground Idle");
+            Ctx.Anim.Play("Idle");
+        }
     }
 
     public override void UpdateState()

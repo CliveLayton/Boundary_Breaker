@@ -10,7 +10,6 @@ public class PlayerStunnedState : PlayerBaseState
 
     public override void EnterState()
     {
-        Debug.Log("Enter Stunned");
         Ctx.Rb.linearVelocity = Vector3.zero; //Reset movement
         //Apply HitStop Before Knockback
         Ctx.StartCoroutine(HitStop());

@@ -25,7 +25,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     //private Variables
     private bool canDash = true;
     private Quaternion targetRotation;
-    private Animator anim;
     private PlayerStateFactory states;
     
     //getters and setters
@@ -38,18 +37,18 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     [field: SerializeField] public float InputForce { get; private set; }
     [field: SerializeField] public AnimationCurve KnockBackForceCurve { get; private set; }
     [field: SerializeField] public GameObject Opponent { get; private set; }
-    [field: SerializeField] public CharacterMoveSet Move { get; private set; }
     [field: SerializeField] public CinemachineImpulseSource CmImpulse { get; private set; }
 
     public PlayerBaseState CurrentState { get; set; }
     public Rigidbody Rb { get; private set; }
+    public  Animator Anim { get; private set; }
     public ECurrentMove CurrentMove { get; private set; }
     public  Vector2 MoveInput { get; private set; }
     public float LastMovementX { get; set; }
     public bool IsJumpedPressed { get; private set; }
     public bool RequireNewJumpPress { get; set; }
     public bool IsDashing { get; set; }
-    public bool IsAttacking { get; set; }
+    [field: SerializeField] public bool IsAttacking { get; set; }
     public  bool InHitStun { get; set; }
     public bool CanGetDamage { get; set; } = true;
     public float KnockBackTime { get; private set; }
@@ -62,6 +61,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public bool IsComboPossible { get; private set; }
     public bool GetKnockBackToOpponent { get; private set; }
     public bool IsBeingKnockedBack { get; set; }
+    [field: SerializeField] public CharacterMoves[] Moves { get; private set; }
 
 
     #endregion
@@ -82,12 +82,28 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         SpecialAir
     }
 
+    #region ContextMenu Methods
+
+    /// <summary>
+    /// get the frames of each animation assigned for the frame checkers
+    /// </summary>
+    [ContextMenu("Get Frames From Animations")]
+    private void GetAnimationFrames()
+    {
+        for (int i = 0; i < Moves.Length; i++)
+        {
+            Moves[i].frameChecker.GetTotalFrames();
+        }
+    }
+
+    #endregion
+
     #region UnityMethods
 
     private void Awake()
     {
         Rb = GetComponent<Rigidbody>();
-        anim = GetComponentInChildren<Animator>();
+        Anim = GetComponentInChildren<Animator>();
         
         //setup states
         states = new PlayerStateFactory(this);
@@ -106,6 +122,11 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         {
             RotateToOpponent();
         }
+    }
+
+    private void LateUpdate()
+    {
+        PlayerAnimations();
     }
 
     #endregion
@@ -138,44 +159,44 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     {
         if (context.performed && !IsAttacking && !inBlock) //isgrounded
         {
-            anim.SetTrigger("Block");
-            anim.SetBool("isBlocking", true);
+            //Anim.SetTrigger("Block");
+            //Anim.SetBool("isBlocking", true);
             inBlock = true;
         }
 
         if (context.canceled  && !IsAttacking) //isgrounded
         {
-            anim.SetBool("isBlocking", false);
+            //Anim.SetBool("isBlocking", false);
             inBlock = false;
         }
     }
 
     public void OnLightAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsAttacking && !inBlock && !anim.IsInTransition(0))
+        if (context.performed && !IsAttacking && !inBlock && !Anim.IsInTransition(0)
+            && !InHitStun && !IsBeingKnockedBack)
         {
             CurrentMove = ECurrentMove.Attack1;
-            anim.SetTrigger("Jab");
             IsAttacking = true;
         }
     }
 
     public void OnHeavyAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsAttacking && !inBlock && !anim.IsInTransition(0))
+        if (context.performed && !IsAttacking && !inBlock && !Anim.IsInTransition(0) 
+            && !InHitStun  && !IsBeingKnockedBack)
         {
             CurrentMove = ECurrentMove.Attack2;
-            anim.SetTrigger("HeavyAttack");
             IsAttacking = true;
         }
     }
 
     public void OnSpecialAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsAttacking && !inBlock && !anim.IsInTransition(0))
+        if (context.performed && !IsAttacking && !inBlock && !Anim.IsInTransition(0) 
+            && !InHitStun  && !IsBeingKnockedBack)
         {
             CurrentMove = ECurrentMove.SpecialN;
-            anim.SetTrigger("Special");
             IsAttacking = true;
         }
     }
@@ -194,8 +215,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         targetRotation = Quaternion.LookRotation(direction);
 
         //rotate the visual of the player to opponent
-        anim.transform.rotation =
-            Quaternion.Slerp(anim.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        Anim.transform.rotation =
+            Quaternion.Slerp(Anim.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
     public void PlayerMovement()
@@ -230,7 +251,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     {
         if (!InHitStun)
         {
-            //anim.SetTrigger("HeavyHit");
+            Anim.SetTrigger("HeavyHit");
             //CanGetDamage = false;
             InHitStun = true;
             PercentageCount += damageAmount;
@@ -259,14 +280,54 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     /// <returns></returns>
     public bool IsGrounded()
     {
+        
         bool hitGround = Physics.Raycast(transform.position, Vector3.down, 0.1f, groundLayer);
         
         return hitGround;
     }
     
+    /// <summary>
+    /// check if player is facing right
+    /// </summary>
+    /// <returns></returns>
+    public bool IsFacingRight()
+    {
+        return Anim.transform.forward.x > 0;
+    }
+    
     public int GetPlayerIndex()
     {
         return playerIndex;
+    }
+
+    #endregion
+    
+    #region Animation/Sound Methods
+
+    private void PlayerAnimations()
+    {
+        //Anim.SetBool("isGrounded", IsGrounded());
+        
+        if (IsFacingRight())
+        {
+            Anim.SetFloat("speed", Rb.linearVelocity.x);
+        }
+        else if(!IsFacingRight())
+        {
+            Anim.SetFloat("speed", -Rb.linearVelocity.x);
+        }
+        
+        // Anim.SetBool("isJumping", false);
+        //
+        // if (Rb.linearVelocity.y < 0)
+        // {
+        //     //anim.SetBool("isFalling", true);
+        //     Anim.SetBool("isJumping", false);
+        // }
+        // else
+        // {
+        //     //anim.SetBool("isFalling", false);
+        // }
     }
 
     #endregion

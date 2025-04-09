@@ -29,7 +29,6 @@ public abstract class PlayerBaseState
         UpdateState();
         if (currentSubState != null)
         {
-            Debug.Log(currentSubState);
             currentSubState.UpdateStates();
         }
     }
@@ -45,7 +44,11 @@ public abstract class PlayerBaseState
         if (IsRootState)
         {
             //switch current state of context
-            Ctx.CurrentState = newState; 
+            Ctx.CurrentState = newState;
+            if (currentSubState != null)
+            {
+                currentSubState.EnterState();
+            }
         }
         else if (currentSuperState != null)
         {

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerStunnedState : PlayerBaseState
 {
+    private Coroutine hitStunCoroutine;
+    
     public PlayerStunnedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
         IsRootState = true;
@@ -11,13 +13,14 @@ public class PlayerStunnedState : PlayerBaseState
     public override void EnterState()
     {
         Ctx.Rb.linearVelocity = Vector3.zero; //Reset movement
+        Ctx.Anim.Play("HitReactionHeavy");
         //Apply HitStop Before Knockback
         Ctx.StartCoroutine(HitStop());
-        Ctx.StartCoroutine(HitStunCoroutine());
     }
 
     public override void UpdateState()
     {
+        Debug.Log("Stunned");
         CheckSwitchStates();
     }
 
@@ -31,6 +34,12 @@ public class PlayerStunnedState : PlayerBaseState
         if (!Ctx.InHitStun)
         {
             SwitchState(Factory.KnockBack());
+        }
+        else if (Ctx.InHitStun && Ctx.InComboHit)
+        {
+            Ctx.StopCoroutine(hitStunCoroutine);
+            Ctx.InComboHit = false;
+            SwitchState(Factory.Stunned());
         }
     }
 
@@ -46,11 +55,14 @@ public class PlayerStunnedState : PlayerBaseState
         if (Ctx.IsComboPossible)
         {
             opponentScript.IsAttacking = false;
+            opponentScript.CanCombo = true;
         }
         Ctx.CmImpulse.GenerateImpulse();
+        hitStunCoroutine = Ctx.StartCoroutine(HitStunCoroutine());
         yield return new WaitForSecondsRealtime(Ctx.HitStopDuration); // wait for real-world time
         if (Ctx.IsComboPossible)
         {
+            opponentScript.CanCombo = false;
             opponentScript.IsAttacking = true; 
         }
         Time.timeScale = 1f; //resume game time

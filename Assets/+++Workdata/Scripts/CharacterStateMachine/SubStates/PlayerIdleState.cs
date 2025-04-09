@@ -12,7 +12,6 @@ public class PlayerIdleState : PlayerBaseState
     {
         if (Ctx.IsGrounded())
         {
-            Debug.Log("Enter Ground Idle");
             Ctx.Anim.Play("Idle");
         }
     }

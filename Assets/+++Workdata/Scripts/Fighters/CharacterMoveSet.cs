@@ -40,7 +40,7 @@ public class CharacterMoveSet : MonoBehaviour, IHitboxResponder, IFrameCheckHand
         }
         IDamageable iDamageable = collider.gameObject.GetComponentInParent<IDamageable>();
         iDamageable?.Damage(currentMove.damage, currentMove.stunDuration, currentMove.hitStopDuration, 
-            currentMove.attackForce, currentMove.knockBackTime, currentMove.hasFixedKnockBack, currentMove.isComboPossible, currentMove.getKnockBackToOpponent);
+            currentMove.attackForce, currentMove.knockBackTime, currentMove.hasFixedKnockBack, currentMove.isComboPossible, currentMove.getKnockBackToOpponent, true);
     }
 
     public void SetMove(int moveNumber)

@@ -10,7 +10,6 @@ public class PlayerInAirState : PlayerBaseState
     public override void EnterState()
     {
         InitializeSubState();
-        Debug.Log("Enter Air");
         Ctx.Anim.Play("Jump");
         Ctx.Rb.linearVelocity = new Vector2(Ctx.Rb.linearVelocity.x, Ctx.JumpPower);
     }

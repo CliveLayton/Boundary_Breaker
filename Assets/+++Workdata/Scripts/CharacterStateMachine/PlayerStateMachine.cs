@@ -49,11 +49,12 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public bool RequireNewJumpPress { get; set; }
     public bool IsDashing { get; set; }
     [field: SerializeField] public bool IsAttacking { get; set; }
+    public bool CanCombo { get; set; }
     public  bool InHitStun { get; set; }
+    public bool InComboHit { get; set; }
     public bool CanGetDamage { get; set; } = true;
     public float KnockBackTime { get; private set; }
     public Vector2 AttackForce { get; private set; }
-    
     public Vector2 CombinedForce { get; set; }
     public bool GetFixedKnockBack { get; private set; }
     public float HitStunDuration { get; private set; }
@@ -247,11 +248,10 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     #region PlayerStateMachine Methods
     
     public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, 
-        float knockBackTime, bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent)
+        float knockBackTime, bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent, bool isPlayerAttack)
     {
         if (!InHitStun)
         {
-            Anim.SetTrigger("HeavyHit");
             //CanGetDamage = false;
             InHitStun = true;
             PercentageCount += damageAmount;
@@ -265,6 +265,18 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
             
             
             //StartCoroutine(WaitDamage());
+        }
+        else if (InHitStun && isPlayerAttack && !InComboHit)
+        {
+            InComboHit = true;
+            PercentageCount += damageAmount;
+            HitStunDuration = stunDuration;
+            HitStopDuration = hitStopDuration;
+            IsComboPossible = isComboPossible;
+            GetKnockBackToOpponent = getKnockBackToOpponent;
+            KnockBackTime = knockBackTime;
+            AttackForce = attackForce;
+            GetFixedKnockBack = hasFixedKnockBack;
         }
     }
 

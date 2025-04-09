@@ -284,7 +284,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     #region SawFighter Methods
 
     public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, 
-        float knockBackTime, bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent)
+        float knockBackTime, bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent, bool isPlayerAttack)
     {
         if (canGetDamage && !inHitStun)
         {

@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckHandler
 {
     private CharacterMoves currentMove;
-    
+
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
     }
@@ -14,9 +15,7 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
         {
             OnHitFrameEnd();
         }
-        
-        Debug.Log("Enter Attack");
-        
+
         Ctx.Anim.Play(Ctx.CurrentMove.ToString());
         currentMove = Ctx.Moves[(int)Ctx.CurrentMove];
         for (int i = 0; i < currentMove.hitbox.Length; i++)
@@ -35,6 +34,11 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
         for (int i = 0; i < currentMove.hitbox.Length; i++)
         {
             currentMove.hitbox[i].HitBoxUpdate();
+        }
+        
+        if (Ctx.CanCombo && Ctx.IsAttacking)
+        {
+            SwitchState(Factory.Attack());
         }
     }
 
@@ -84,14 +88,12 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
 
     public void OnLastFrameStart()
     {
-        Debug.Log("Last Frame Exit");
         Ctx.IsAttacking = false;
         CheckSwitchStates();
     }
 
     public void OnLastFrameEnd()
     {
-        Debug.Log("After Animation Exit");
         Ctx.IsAttacking = false;
         CheckSwitchStates();
     }
@@ -102,13 +104,16 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
 
     public void CollisionedWith(Collider collider)
     {
+       
         for (int i = 0; i < currentMove.hitbox.Length; i++)
         {
             currentMove.hitbox[i].StopCheckingCollision();
         }
+        
         IDamageable iDamageable = collider.gameObject.GetComponentInParent<IDamageable>();
         iDamageable?.Damage(currentMove.damage, currentMove.stunDuration, currentMove.hitStopDuration, 
-            currentMove.attackForce, currentMove.knockBackTime, currentMove.hasFixedKnockBack, currentMove.isComboPossible, currentMove.getKnockBackToOpponent);
+            currentMove.attackForce, currentMove.knockBackTime, currentMove.hasFixedKnockBack, 
+            currentMove.isComboPossible, currentMove.getKnockBackToOpponent, true);
     }
 
     #endregion

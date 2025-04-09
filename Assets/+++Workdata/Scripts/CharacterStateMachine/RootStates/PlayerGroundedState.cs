@@ -9,7 +9,6 @@ public class PlayerGroundedState : PlayerBaseState
     
     public override void EnterState()
     {
-        Debug.Log("Enter Grounded");
         InitializeSubState();
     }
 
@@ -25,7 +24,6 @@ public class PlayerGroundedState : PlayerBaseState
     
     public override void InitializeSubState()
     {
-        Debug.Log("Enter InitSub Ground");
         if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
         {
             SetSubState(Factory.Idle());

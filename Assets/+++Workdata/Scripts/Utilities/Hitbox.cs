@@ -12,6 +12,7 @@ public class Hitbox : MonoBehaviour
     
     private ColliderState state = ColliderState.Closed;
     private IHitboxResponder responder = null;
+    private bool collided;
 
     [SerializeField] private LayerMask layerToCheck;
     [SerializeField] private Color inactiveColor = new Color(0.6f, 0.2f, 0.2f, 0.2f);
@@ -27,47 +28,11 @@ public class Hitbox : MonoBehaviour
 
     #endregion
 
-    #region Unity Methods
-
-    // private void Update()
-    // {
-    //     if (state == ColliderState.Closed)
-    //     {
-    //         return;
-    //     }
-    //     
-    //     Collider[] colliders;
-    //     
-    //     //by adding the offset we need to rotate the position correctly with the object 
-    //     Vector3 hitboxBoxPosition = transform.position + transform.rotation * hitboxOffset;
-    //
-    //     if (useSphere)
-    //     {
-    //         colliders = Physics.OverlapSphere(transform.position + hitboxOffset, radius, layerToCheck);
-    //     }
-    //     else
-    //     {
-    //         colliders = Physics.OverlapBox(hitboxBoxPosition, hitboxSize, transform.rotation, layerToCheck);
-    //     }
-    //
-    //     if (colliders.Length > 0)
-    //     {
-    //         state = ColliderState.Colliding;
-    //         Debug.Log("got a hit");
-    //     }
-    //     else
-    //     {
-    //         state = ColliderState.Open;
-    //     }
-    // }
-
-    #endregion
-
     #region Hitbox Methods
 
     public void HitBoxUpdate()
     {
-        if (state == ColliderState.Closed)
+        if (state == ColliderState.Closed || state == ColliderState.Colliding)
         {
             return;
         }

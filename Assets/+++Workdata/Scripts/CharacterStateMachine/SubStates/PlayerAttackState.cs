@@ -4,13 +4,21 @@ using UnityEngine;
 public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckHandler
 {
     private CharacterMoves currentMove;
+    private PlayerStateMachine opponentScript;
 
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
+        opponentScript = Ctx.Opponent.GetComponent<PlayerStateMachine>();
     }
 
     public override void EnterState()
     {
+        //check if the current move is already in his animation so its already active in the moment
+        if (currentMove == Ctx.Moves[(int)Ctx.CurrentMove] && Ctx.Moves[(int)Ctx.CurrentMove].frameChecker.animationFrameInfo.isActive())
+        {
+            return;
+        }
+        
         if (currentMove != null)
         {
             OnHitFrameEnd();
@@ -88,6 +96,7 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
 
     public void OnLastFrameStart()
     {
+        opponentScript.InBlock = false;
         Ctx.IsAttacking = false;
         CheckSwitchStates();
     }

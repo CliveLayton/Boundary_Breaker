@@ -20,7 +20,6 @@ public class PlayerStunnedState : PlayerBaseState
 
     public override void UpdateState()
     {
-        Debug.Log("Stunned");
         CheckSwitchStates();
     }
 

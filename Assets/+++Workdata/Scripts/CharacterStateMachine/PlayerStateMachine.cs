@@ -20,7 +20,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     [Header("KnockBack Variables")]
 
     //public Variables
-    public bool inBlock = false;
 
     //private Variables
     private bool canDash = true;
@@ -48,6 +47,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public bool IsJumpedPressed { get; private set; }
     public bool RequireNewJumpPress { get; set; }
     public bool IsDashing { get; set; }
+    public bool InBlock { get; set; }
     [field: SerializeField] public bool IsAttacking { get; set; }
     public bool CanCombo { get; set; }
     public  bool InHitStun { get; set; }
@@ -70,13 +70,13 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public enum ECurrentMove
     {
         Attack1,
-        AttackLw1,
-        AttackS1,
-        AttackAir1,
+        Attack1Lw,
+        Attack1S,
+        Attack1Air,
         Attack2,
-        AttackLw2,
-        AttackS2,
-        AttackAir2,
+        Attack2Lw,
+        Attack2S,
+        Attack2Air,
         SpecialN,
         SpecialLw,
         SpecialS,
@@ -158,23 +158,23 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
 
     public void OnBlock(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsAttacking && !inBlock) //isgrounded
+        if (context.performed && !IsAttacking && !InBlock) //isgrounded
         {
             //Anim.SetTrigger("Block");
             //Anim.SetBool("isBlocking", true);
-            inBlock = true;
+            //InBlock = true;
         }
 
         if (context.canceled  && !IsAttacking) //isgrounded
         {
             //Anim.SetBool("isBlocking", false);
-            inBlock = false;
+            //InBlock = false;
         }
     }
 
     public void OnLightAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsAttacking && !inBlock && !Anim.IsInTransition(0)
+        if (context.performed && !IsAttacking && !InBlock && !Anim.IsInTransition(0)
             && !InHitStun && !IsBeingKnockedBack)
         {
             CurrentMove = ECurrentMove.Attack1;
@@ -184,17 +184,24 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
 
     public void OnHeavyAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsAttacking && !inBlock && !Anim.IsInTransition(0) 
-            && !InHitStun  && !IsBeingKnockedBack)
+        if (context.performed && !IsAttacking && !InBlock && !Anim.IsInTransition(0) 
+            && !InHitStun  && !IsBeingKnockedBack && MoveInput == Vector2.zero)
         {
             CurrentMove = ECurrentMove.Attack2;
+            IsAttacking = true;
+        }
+        
+        if (context.performed && !IsAttacking && !InBlock && !Anim.IsInTransition(0) 
+            && !InHitStun  && !IsBeingKnockedBack && MoveInput.y < 0)
+        {
+            CurrentMove = ECurrentMove.Attack2Lw;
             IsAttacking = true;
         }
     }
 
     public void OnSpecialAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsAttacking && !inBlock && !Anim.IsInTransition(0) 
+        if (context.performed && !IsAttacking && !InBlock && !Anim.IsInTransition(0) 
             && !InHitStun  && !IsBeingKnockedBack)
         {
             CurrentMove = ECurrentMove.SpecialN;
@@ -224,7 +231,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     {
         float currentSpeed = LastMovementX;
         
-        if (!inBlock)
+        if (!InBlock)
         {
             float targetSpeed = MoveInput.x == 0 ? 0 : Speed * MoveInput.x;
 
@@ -250,6 +257,18 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, 
         float knockBackTime, bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent, bool isPlayerAttack)
     {
+        if (IsFacingRight() && MoveInput.x < 0)
+        {
+            InBlock = true;
+            return;
+        }
+
+        if (!IsFacingRight() && MoveInput.x > 0)
+        {
+            InBlock = true;
+            return;
+        }
+
         if (!InHitStun)
         {
             //CanGetDamage = false;

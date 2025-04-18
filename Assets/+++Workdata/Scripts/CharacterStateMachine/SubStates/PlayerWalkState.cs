@@ -51,17 +51,21 @@ public class PlayerWalkState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
+        if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing && !Ctx.IsAttacking && !Ctx.InBlock)
         {
             SwitchState(Factory.Idle());
         }
-        else if (Ctx.IsDashing && !Ctx.IsAttacking)
+        else if (Ctx.IsDashing && !Ctx.IsAttacking && !Ctx.InBlock)
         {
             SwitchState(Factory.Dash());
         }
-        else if(Ctx.IsAttacking && !Ctx.IsDashing)
+        else if(Ctx.IsAttacking && !Ctx.IsDashing && !Ctx.InBlock)
         {
             SwitchState(Factory.Attack());
+        }
+        else if(Ctx.InBlock && !Ctx.IsAttacking && !Ctx.IsDashing)
+        {
+            SwitchState(Factory.Block());
         }
     }
 }

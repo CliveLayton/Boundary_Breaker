@@ -9,7 +9,8 @@ enum PlayerStates
     InAir,
     Attack,
     Stunned,
-    KnockBack
+    KnockBack,
+    Block
 }
 
 public class PlayerStateFactory
@@ -28,6 +29,7 @@ public class PlayerStateFactory
         states[PlayerStates.Attack] = new PlayerAttackState(context, this);
         states[PlayerStates.Stunned] = new PlayerStunnedState(context, this);
         states[PlayerStates.KnockBack] = new PlayerKnockBackState(context, this);
+        states[PlayerStates.Block] = new PlayerBlockState(context, this);
     }
 
     public PlayerBaseState Idle()
@@ -68,5 +70,10 @@ public class PlayerStateFactory
     public PlayerBaseState KnockBack()
     {
         return states[PlayerStates.KnockBack];
+    }
+
+    public PlayerBaseState Block()
+    {
+        return states[PlayerStates.Block];
     }
 }

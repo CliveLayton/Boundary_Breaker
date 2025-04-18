@@ -1684,7 +1684,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  inBlock: 0
   <PercentageCount>k__BackingField: 0
   <Speed>k__BackingField: 4
   <SpeedChangeRate>k__BackingField: 5
@@ -1820,23 +1819,25 @@ MonoBehaviour:
         animatorStateName: Attack2
         layerNumber: 0
   - name: Attack2Lw
-    damage: 3
+    damage: 4
     stunDuration: 0.2
     hitStopDuration: 0.05
-    attackForce: {x: 0, y: 0}
-    knockBackTime: 0
-    hasFixedKnockBack: 0
+    attackForce: {x: 3, y: 0}
+    knockBackTime: 0.5
+    hasFixedKnockBack: 1
     isComboPossible: 0
     getKnockBackToOpponent: 0
-    hitbox: []
+    hitbox:
+    - {fileID: 1852933772}
+    - {fileID: 811541549}
     frameChecker:
-      hitFrameStart: 0
-      hitFrameEnd: 0
-      totalFrames: 0
+      hitFrameStart: 9
+      hitFrameEnd: 11
+      totalFrames: 23
       animationFrameInfo:
-        animator: {fileID: 0}
-        clip: {fileID: 0}
-        animatorStateName: 
+        animator: {fileID: 706236664}
+        clip: {fileID: 7400000, guid: cdd2ab0c34bbf9a47ac8b76ab6a240a5, type: 2}
+        animatorStateName: Attack2Lw
         layerNumber: 0
   - name: Attack2S
     damage: 3
@@ -4181,7 +4182,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  inBlock: 0
   <PercentageCount>k__BackingField: 0
   <Speed>k__BackingField: 4
   <SpeedChangeRate>k__BackingField: 5

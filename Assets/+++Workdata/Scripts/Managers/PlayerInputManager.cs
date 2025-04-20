@@ -59,9 +59,6 @@ public class PlayerInputManager : MonoBehaviour
         // gameInput.Player.Dash.performed += playerController.OnDash;
         // gameInput.Player.Dash.canceled += playerController.OnDash;
         //
-        // gameInput.Player.Block.performed += playerController.OnBlock;
-        // gameInput.Player.Block.canceled += playerController.OnBlock;
-        //
         // gameInput.Player.Jab.performed += playerController.OnLightAttack;
         //
         // gameInput.Player.HeavyAttack.performed += playerController.OnHeavyAttack;
@@ -77,9 +74,6 @@ public class PlayerInputManager : MonoBehaviour
         gameInput.Player.Dash.performed += playerStateMachine.OnDash;
         gameInput.Player.Dash.canceled += playerStateMachine.OnDash;
 
-        gameInput.Player.Block.performed += playerStateMachine.OnBlock;
-        gameInput.Player.Block.canceled += playerStateMachine.OnBlock;
-        
         gameInput.Player.Jab.performed += playerStateMachine.OnLightAttack;
 
         gameInput.Player.HeavyAttack.performed += playerStateMachine.OnHeavyAttack;
@@ -104,9 +98,6 @@ public class PlayerInputManager : MonoBehaviour
         // gameInput.Player.Dash.performed -= playerController.OnDash;
         // gameInput.Player.Dash.canceled -= playerController.OnDash;
         //
-        // gameInput.Player.Block.performed -= playerController.OnBlock;
-        // gameInput.Player.Block.canceled -= playerController.OnBlock;
-        //
         // gameInput.Player.Jab.performed -= playerController.OnLightAttack;
         //
         // gameInput.Player.HeavyAttack.performed -= playerController.OnHeavyAttack;
@@ -122,9 +113,6 @@ public class PlayerInputManager : MonoBehaviour
         gameInput.Player.Dash.performed -= playerStateMachine.OnDash;
         gameInput.Player.Dash.canceled -= playerStateMachine.OnDash;
 
-        gameInput.Player.Block.performed -= playerStateMachine.OnBlock;
-        gameInput.Player.Block.canceled -= playerStateMachine.OnBlock;
-        
         gameInput.Player.Jab.performed -= playerStateMachine.OnLightAttack;
 
         gameInput.Player.HeavyAttack.performed -= playerStateMachine.OnHeavyAttack;

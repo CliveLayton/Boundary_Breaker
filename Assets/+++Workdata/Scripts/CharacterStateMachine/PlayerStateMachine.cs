@@ -28,7 +28,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     
     //getters and setters
     [field: SerializeField] public float PercentageCount { get; private set; }
-    [field: SerializeField] public float Speed { get; private set; }
+    [field: SerializeField] public float ForwardSpeed { get; private set; }
+    [field: SerializeField] public float BackwardSpeed { get; private set; }
     [field: SerializeField] public float SpeedChangeRate { get; private set; }
     [field: SerializeField] public float DashPower { get; private set; }
     [field: SerializeField] public float JumpPower { get; private set; }
@@ -43,6 +44,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public  Animator Anim { get; private set; }
     public ECurrentMove CurrentMove { get; private set; }
     public  Vector2 MoveInput { get; private set; }
+    public float Speed { get; set; }
     public float LastMovementX { get; set; }
     public bool IsJumpedPressed { get; private set; }
     public bool RequireNewJumpPress { get; set; }
@@ -105,6 +107,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     {
         Rb = GetComponent<Rigidbody>();
         Anim = GetComponentInChildren<Animator>();
+        Speed = ForwardSpeed;
         
         //setup states
         states = new PlayerStateFactory(this);
@@ -154,27 +157,10 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
             StartCoroutine(DashCooldown());
         }
     }
-    
-
-    public void OnBlock(InputAction.CallbackContext context)
-    {
-        if (context.performed && !IsAttacking && !InBlock) //isgrounded
-        {
-            //Anim.SetTrigger("Block");
-            //Anim.SetBool("isBlocking", true);
-            //InBlock = true;
-        }
-
-        if (context.canceled  && !IsAttacking) //isgrounded
-        {
-            //Anim.SetBool("isBlocking", false);
-            //InBlock = false;
-        }
-    }
 
     public void OnLightAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsAttacking && !InBlock && !Anim.IsInTransition(0)
+        if (context.performed && !IsAttacking && !InBlock
             && !InHitStun && !IsBeingKnockedBack)
         {
             CurrentMove = ECurrentMove.Attack1;
@@ -184,24 +170,25 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
 
     public void OnHeavyAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsAttacking && !InBlock && !Anim.IsInTransition(0) 
-            && !InHitStun  && !IsBeingKnockedBack && MoveInput == Vector2.zero)
+        if (context.performed && !IsAttacking && !InBlock 
+            && !InHitStun  && !IsBeingKnockedBack)
         {
-            CurrentMove = ECurrentMove.Attack2;
-            IsAttacking = true;
-        }
-        
-        if (context.performed && !IsAttacking && !InBlock && !Anim.IsInTransition(0) 
-            && !InHitStun  && !IsBeingKnockedBack && MoveInput.y < 0)
-        {
-            CurrentMove = ECurrentMove.Attack2Lw;
-            IsAttacking = true;
+            if (MoveInput == Vector2.zero)
+            {
+                CurrentMove = ECurrentMove.Attack2;
+                IsAttacking = true;
+            }
+            else if (MoveInput.y < 0)
+            {
+                CurrentMove = ECurrentMove.Attack2Lw;
+                IsAttacking = true;
+            }
         }
     }
 
     public void OnSpecialAttack(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsAttacking && !InBlock && !Anim.IsInTransition(0) 
+        if (context.performed && !IsAttacking && !InBlock 
             && !InHitStun  && !IsBeingKnockedBack)
         {
             CurrentMove = ECurrentMove.SpecialN;

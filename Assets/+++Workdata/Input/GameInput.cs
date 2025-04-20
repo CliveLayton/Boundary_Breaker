@@ -139,15 +139,6 @@ namespace UnityEngine.InputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Block"",
-                    ""type"": ""Button"",
-                    ""id"": ""d3e17b66-d522-4850-aa9c-5dac018ef341"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""HeavyAttack"",
                     ""type"": ""Button"",
                     ""id"": ""15cefb88-9385-4522-9b84-0153ca063488"",
@@ -395,28 +386,6 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Dash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""dd3f5ae9-d807-471f-b193-829b12aa1f1a"",
-                    ""path"": ""<Keyboard>/alt"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Block"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c1de8be9-43f7-4d37-89cc-55da2c2b3884"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1053,7 +1022,6 @@ namespace UnityEngine.InputSystem
             m_Player_Jab = m_Player.FindAction("Jab", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
-            m_Player_Block = m_Player.FindAction("Block", throwIfNotFound: true);
             m_Player_HeavyAttack = m_Player.FindAction("HeavyAttack", throwIfNotFound: true);
             m_Player_SpecialAttack = m_Player.FindAction("SpecialAttack", throwIfNotFound: true);
             // UI
@@ -1154,7 +1122,6 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_Player_Jab;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Dash;
-        private readonly InputAction m_Player_Block;
         private readonly InputAction m_Player_HeavyAttack;
         private readonly InputAction m_Player_SpecialAttack;
         /// <summary>
@@ -1188,10 +1155,6 @@ namespace UnityEngine.InputSystem
             /// Provides access to the underlying input action "Player/Dash".
             /// </summary>
             public InputAction @Dash => m_Wrapper.m_Player_Dash;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/Block".
-            /// </summary>
-            public InputAction @Block => m_Wrapper.m_Player_Block;
             /// <summary>
             /// Provides access to the underlying input action "Player/HeavyAttack".
             /// </summary>
@@ -1241,9 +1204,6 @@ namespace UnityEngine.InputSystem
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
-                @Block.started += instance.OnBlock;
-                @Block.performed += instance.OnBlock;
-                @Block.canceled += instance.OnBlock;
                 @HeavyAttack.started += instance.OnHeavyAttack;
                 @HeavyAttack.performed += instance.OnHeavyAttack;
                 @HeavyAttack.canceled += instance.OnHeavyAttack;
@@ -1276,9 +1236,6 @@ namespace UnityEngine.InputSystem
                 @Dash.started -= instance.OnDash;
                 @Dash.performed -= instance.OnDash;
                 @Dash.canceled -= instance.OnDash;
-                @Block.started -= instance.OnBlock;
-                @Block.performed -= instance.OnBlock;
-                @Block.canceled -= instance.OnBlock;
                 @HeavyAttack.started -= instance.OnHeavyAttack;
                 @HeavyAttack.performed -= instance.OnHeavyAttack;
                 @HeavyAttack.canceled -= instance.OnHeavyAttack;
@@ -1620,13 +1577,6 @@ namespace UnityEngine.InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnDash(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Block" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnBlock(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "HeavyAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>

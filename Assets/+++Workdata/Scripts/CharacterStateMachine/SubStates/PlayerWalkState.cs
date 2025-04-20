@@ -35,6 +35,24 @@ public class PlayerWalkState : PlayerBaseState
 
     public override void UpdateState()
     {
+        if (Ctx.IsFacingRight() && Ctx.MoveInput.x > 0)
+        {
+            Ctx.Speed = Ctx.ForwardSpeed;
+        }
+        else if (Ctx.IsFacingRight() && Ctx.MoveInput.x < 0)
+        {
+            Ctx.Speed = Ctx.BackwardSpeed;
+        }
+        
+        if (!Ctx.IsFacingRight() && Ctx.MoveInput.x > 0)
+        {
+            Ctx.Speed = Ctx.ForwardSpeed;
+        }
+        else if (!Ctx.IsFacingRight() && Ctx.MoveInput.x < 0)
+        {
+            Ctx.Speed = Ctx.BackwardSpeed;
+        }
+
         Ctx.PlayerMovement();
         CheckSwitchStates();
     }

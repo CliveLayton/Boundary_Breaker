@@ -1685,7 +1685,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   <PercentageCount>k__BackingField: 0
-  <Speed>k__BackingField: 4
+  <ForwardSpeed>k__BackingField: 4
+  <BackwardSpeed>k__BackingField: 2
   <SpeedChangeRate>k__BackingField: 5
   <DashPower>k__BackingField: 10
   <JumpPower>k__BackingField: 6
@@ -1840,23 +1841,25 @@ MonoBehaviour:
         animatorStateName: Attack2Lw
         layerNumber: 0
   - name: Attack2S
-    damage: 3
+    damage: 5
     stunDuration: 0.2
-    hitStopDuration: 0.05
-    attackForce: {x: 0, y: 0}
-    knockBackTime: 0
+    hitStopDuration: 0.4
+    attackForce: {x: 5, y: 2}
+    knockBackTime: 0.4
     hasFixedKnockBack: 0
     isComboPossible: 0
     getKnockBackToOpponent: 0
-    hitbox: []
+    hitbox:
+    - {fileID: 1852933772}
+    - {fileID: 811541549}
     frameChecker:
-      hitFrameStart: 0
-      hitFrameEnd: 0
-      totalFrames: 0
+      hitFrameStart: 12
+      hitFrameEnd: 15
+      totalFrames: 27
       animationFrameInfo:
-        animator: {fileID: 0}
-        clip: {fileID: 0}
-        animatorStateName: 
+        animator: {fileID: 706236664}
+        clip: {fileID: 7400000, guid: bf940f460fca5c442a6db49e4e19ae4a, type: 2}
+        animatorStateName: Attack2S
         layerNumber: 0
   - name: Attack2Air
     damage: 3
@@ -1918,23 +1921,25 @@ MonoBehaviour:
         animatorStateName: 
         layerNumber: 0
   - name: SpecialS
-    damage: 3
+    damage: 5
     stunDuration: 0.2
-    hitStopDuration: 0.05
-    attackForce: {x: 0, y: 0}
-    knockBackTime: 0
+    hitStopDuration: 0.4
+    attackForce: {x: 5, y: 2}
+    knockBackTime: 0.4
     hasFixedKnockBack: 0
     isComboPossible: 0
     getKnockBackToOpponent: 0
-    hitbox: []
+    hitbox:
+    - {fileID: 1852933772}
+    - {fileID: 811541549}
     frameChecker:
-      hitFrameStart: 0
-      hitFrameEnd: 0
-      totalFrames: 0
+      hitFrameStart: 12
+      hitFrameEnd: 15
+      totalFrames: 27
       animationFrameInfo:
-        animator: {fileID: 0}
-        clip: {fileID: 0}
-        animatorStateName: 
+        animator: {fileID: 706236664}
+        clip: {fileID: 7400000, guid: bf940f460fca5c442a6db49e4e19ae4a, type: 2}
+        animatorStateName: SpecialS
         layerNumber: 0
   - name: SpecialAir
     damage: 3
@@ -4183,7 +4188,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   <PercentageCount>k__BackingField: 0
-  <Speed>k__BackingField: 4
+  <ForwardSpeed>k__BackingField: 4
+  <BackwardSpeed>k__BackingField: 2
   <SpeedChangeRate>k__BackingField: 5
   <DashPower>k__BackingField: 10
   <JumpPower>k__BackingField: 6

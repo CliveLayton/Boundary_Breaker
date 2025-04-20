@@ -51,15 +51,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Block",
-                    "type": "Button",
-                    "id": "d3e17b66-d522-4850-aa9c-5dac018ef341",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "HeavyAttack",
                     "type": "Button",
                     "id": "15cefb88-9385-4522-9b84-0153ca063488",
@@ -307,28 +298,6 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Dash",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "dd3f5ae9-d807-471f-b193-829b12aa1f1a",
-                    "path": "<Keyboard>/alt",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Block",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c1de8be9-43f7-4d37-89cc-55da2c2b3884",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Block",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

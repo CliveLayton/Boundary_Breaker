@@ -13,9 +13,12 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     [SerializeField] private int playerIndex;
 
     [Header("SawFighter Behavior Variables")]
+    [SerializeField] private Quaternion lookDirectionToLeft;
+    [SerializeField] private Quaternion lookDirectionToRight;
     [SerializeField] private float rotationSpeed = 60f;
     //[SerializeField] private float knockbackPower = 10f;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask pushboxLayer;
 
     [Header("KnockBack Variables")]
 
@@ -36,6 +39,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     [field: SerializeField] public float FallMultiplier { get; private set; }
     [field: SerializeField] public float InputForce { get; private set; }
     [field: SerializeField] public AnimationCurve KnockBackForceCurve { get; private set; }
+    [field: SerializeField] public CapsuleCollider Pushbox { get; set; }
     [field: SerializeField] public GameObject Opponent { get; private set; }
     [field: SerializeField] public CinemachineImpulseSource CmImpulse { get; private set; }
 
@@ -202,16 +206,27 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     
     private void RotateToOpponent()
     {
-        Vector3 direction = (Opponent.transform.position - transform.position).normalized;
-
-        //ensure the rotation only happens on the Y-Axis
-        direction.y = 0;
+        if (Opponent.transform.position.x > transform.position.x)
+        {
+            Anim.transform.rotation = Quaternion.Slerp(Anim.transform.rotation, lookDirectionToRight,
+                rotationSpeed * Time.deltaTime);
+        }
+        else
+        {
+            Anim.transform.rotation = Quaternion.Slerp(Anim.transform.rotation, lookDirectionToLeft,
+                rotationSpeed * Time.deltaTime);
+        }
         
-        targetRotation = Quaternion.LookRotation(direction);
-
-        //rotate the visual of the player to opponent
-        Anim.transform.rotation =
-            Quaternion.Slerp(Anim.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        // Vector3 direction = (Opponent.transform.position - transform.position).normalized;
+        //
+        // //ensure the rotation only happens on the Y-Axis
+        // direction.y = 0;
+        //
+        // targetRotation = Quaternion.LookRotation(direction);
+        //
+        // //rotate the visual of the player to opponent
+        // Anim.transform.rotation =
+        //     Quaternion.Slerp(Anim.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
     public void PlayerMovement()
@@ -298,12 +313,22 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     /// <returns></returns>
     public bool IsGrounded()
     {
-        
         bool hitGround = Physics.Raycast(transform.position, Vector3.down, 0.1f, groundLayer);
         
         return hitGround;
     }
-    
+
+    /// <summary>
+    /// check if player is above other player
+    /// </summary>
+    /// <returns></returns>
+    public bool IsAbovePlayer()
+    {
+        bool hitPlayer = Physics.Raycast(transform.position, Vector3.down, 1f, pushboxLayer);
+
+        return hitPlayer;
+    }
+
     /// <summary>
     /// check if player is facing right
     /// </summary>

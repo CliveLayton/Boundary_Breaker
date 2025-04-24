@@ -1,7 +1,10 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerInAirState : PlayerBaseState
 {
+    private Coroutine pushBoxCoroutine;
+    
     public PlayerInAirState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
         IsRootState = true;
@@ -16,6 +19,11 @@ public class PlayerInAirState : PlayerBaseState
 
     public override void UpdateState()
     {
+        if (pushBoxCoroutine == null && Ctx.IsAbovePlayer())
+        {
+            pushBoxCoroutine = Ctx.StartCoroutine(HandlePushbox());
+        }
+        
         HandleJump();
         CheckSwitchStates();
     }
@@ -73,5 +81,13 @@ public class PlayerInAirState : PlayerBaseState
             Ctx.Rb.linearVelocity += Vector3.up * (Ctx.FallMultiplier * Physics.gravity.y * Time.deltaTime);
         }
         
+    }
+
+    private IEnumerator HandlePushbox()
+    {
+        Ctx.Pushbox.enabled = false;
+        yield return new WaitForSeconds(0.2f);
+        Ctx.Pushbox.enabled = true;
+        pushBoxCoroutine = null;
     }
 }

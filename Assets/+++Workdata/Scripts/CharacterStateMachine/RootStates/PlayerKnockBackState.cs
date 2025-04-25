@@ -74,7 +74,7 @@ public class PlayerKnockBackState : PlayerBaseState
             elapsedTime += Time.fixedDeltaTime;
             
             //update hitForce
-            hitForce = hitDirection * (Ctx.AttackForce.x * Ctx.KnockBackForceCurve.Evaluate(elapsedTime));
+            hitForce = hitDirection * (Ctx.AttackForce.x * Ctx.KnockBackForceCurve.Evaluate(elapsedTime / Ctx.KnockBackTime));
             
             //combine hitForce and constantForce
             knockBackForce = hitForce + constantKnockBackForce;
@@ -105,7 +105,8 @@ public class PlayerKnockBackState : PlayerBaseState
             yield return new WaitForFixedUpdate();
         }
 
-        Ctx.StartCoroutine(KnockbackDecay());
+        Ctx.IsBeingKnockedBack = false;
+        //Ctx.StartCoroutine(KnockbackDecay());
     }
     
     private IEnumerator KnockbackDecay()

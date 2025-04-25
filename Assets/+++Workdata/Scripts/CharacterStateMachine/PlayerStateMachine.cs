@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using Unity.Cinemachine;
+using UnityEditor;
 using UnityEngine.InputSystem;
 
 public class PlayerStateMachine : MonoBehaviour, IDamageable
@@ -324,9 +325,18 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     /// <returns></returns>
     public bool IsAbovePlayer()
     {
-        bool hitPlayer = Physics.Raycast(transform.position, Vector3.down, 1f, pushboxLayer);
-
+        RaycastHit hit;
+        bool hitPlayer = Physics.SphereCast(transform.position + new Vector3(0,0.5f, 0), 0.3f,Vector3.down, out hit, 0.6f, pushboxLayer);
+        
         return hitPlayer;
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Vector3 startPos = transform.position + new Vector3(0, 0.5f, 0);
+        // Gizmos.DrawWireSphere(startPos, 0.3f);
+        // Gizmos.DrawLine(startPos, startPos + 0.6f * Vector3.down);
+        // Gizmos.DrawWireSphere(startPos + (0.6f * Vector3.down), 0.3f);
     }
 
     /// <summary>

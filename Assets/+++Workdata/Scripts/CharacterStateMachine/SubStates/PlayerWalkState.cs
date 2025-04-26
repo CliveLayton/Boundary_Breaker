@@ -44,11 +44,11 @@ public class PlayerWalkState : PlayerBaseState
             Ctx.Speed = Ctx.BackwardSpeed;
         }
         
-        if (!Ctx.IsFacingRight() && Ctx.MoveInput.x > 0)
+        if (!Ctx.IsFacingRight() && Ctx.MoveInput.x < 0)
         {
             Ctx.Speed = Ctx.ForwardSpeed;
         }
-        else if (!Ctx.IsFacingRight() && Ctx.MoveInput.x < 0)
+        else if (!Ctx.IsFacingRight() && Ctx.MoveInput.x > 0)
         {
             Ctx.Speed = Ctx.BackwardSpeed;
         }

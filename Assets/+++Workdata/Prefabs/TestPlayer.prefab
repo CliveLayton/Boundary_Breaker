@@ -87,7 +87,7 @@ MonoBehaviour:
   <ForwardSpeed>k__BackingField: 4
   <BackwardSpeed>k__BackingField: 2
   <SpeedChangeRate>k__BackingField: 5
-  <DashPower>k__BackingField: 10
+  <DashPower>k__BackingField: 5
   <JumpPower>k__BackingField: 7
   <FallMultiplier>k__BackingField: 2
   <InputForce>k__BackingField: 4.5
@@ -121,11 +121,11 @@ MonoBehaviour:
   <IsAttacking>k__BackingField: 0
   <Moves>k__BackingField:
   - name: Attack1
-    damage: 2
-    stunDuration: 0.2
-    hitStopDuration: 0.1
-    attackForce: {x: 2, y: 1}
-    knockBackTime: 0.2
+    damage: 1
+    stunDuration: 0.1
+    hitStopDuration: 0.05
+    attackForce: {x: 1.7, y: 0.7}
+    knockBackTime: 0.1
     hasFixedKnockBack: 1
     isComboPossible: 1
     getKnockBackToOpponent: 0
@@ -142,68 +142,74 @@ MonoBehaviour:
         animatorStateName: Attack1
         layerNumber: 0
   - name: Attack1Lw
-    damage: 3
-    stunDuration: 0.2
-    hitStopDuration: 0.05
-    attackForce: {x: 0, y: 0}
-    knockBackTime: 0
-    hasFixedKnockBack: 0
-    isComboPossible: 0
+    damage: 2
+    stunDuration: 0.16
+    hitStopDuration: 0.08
+    attackForce: {x: 2.2, y: 0.2}
+    knockBackTime: 0.1
+    hasFixedKnockBack: 1
+    isComboPossible: 1
     getKnockBackToOpponent: 0
-    hitbox: []
+    hitbox:
+    - {fileID: 3894246688669626435}
+    - {fileID: 7692495656288624198}
     frameChecker:
-      hitFrameStart: 0
-      hitFrameEnd: 0
-      totalFrames: 0
+      hitFrameStart: 10
+      hitFrameEnd: 14
+      totalFrames: 29
       animationFrameInfo:
-        animator: {fileID: 0}
-        clip: {fileID: 0}
-        animatorStateName: 
+        animator: {fileID: 1162625348799132470}
+        clip: {fileID: 7400000, guid: 378cbd969e2a6164b9946e6dc38e36d6, type: 2}
+        animatorStateName: Attack1Lw
         layerNumber: 0
   - name: Attack1S
     damage: 3
     stunDuration: 0.2
-    hitStopDuration: 0.05
-    attackForce: {x: 0, y: 0}
-    knockBackTime: 0
+    hitStopDuration: 0.1
+    attackForce: {x: 2.6, y: 0.8}
+    knockBackTime: 0.2
     hasFixedKnockBack: 0
-    isComboPossible: 0
+    isComboPossible: 1
     getKnockBackToOpponent: 0
-    hitbox: []
+    hitbox:
+    - {fileID: 5246500182480573196}
+    - {fileID: 6512434144651226089}
     frameChecker:
-      hitFrameStart: 0
-      hitFrameEnd: 0
-      totalFrames: 0
+      hitFrameStart: 9
+      hitFrameEnd: 12
+      totalFrames: 25
       animationFrameInfo:
-        animator: {fileID: 0}
-        clip: {fileID: 0}
-        animatorStateName: 
+        animator: {fileID: 1162625348799132470}
+        clip: {fileID: 7400000, guid: 92b65ed31d28ddb4a938dc8270cf5b9c, type: 2}
+        animatorStateName: Attack1S
         layerNumber: 0
   - name: Attack1Air
-    damage: 3
-    stunDuration: 0.2
+    damage: 2
+    stunDuration: 0.1
     hitStopDuration: 0.05
-    attackForce: {x: 0, y: 0}
-    knockBackTime: 0
+    attackForce: {x: 1.6, y: 0.3}
+    knockBackTime: 0.1
     hasFixedKnockBack: 0
-    isComboPossible: 0
+    isComboPossible: 1
     getKnockBackToOpponent: 0
-    hitbox: []
+    hitbox:
+    - {fileID: 3894246688669626435}
+    - {fileID: 7692495656288624198}
     frameChecker:
-      hitFrameStart: 0
-      hitFrameEnd: 0
-      totalFrames: 0
+      hitFrameStart: 3
+      hitFrameEnd: 7
+      totalFrames: 18
       animationFrameInfo:
-        animator: {fileID: 0}
-        clip: {fileID: 0}
-        animatorStateName: 
+        animator: {fileID: 1162625348799132470}
+        clip: {fileID: 7400000, guid: 8f8fcd702797f6a488869940a77cf0b1, type: 2}
+        animatorStateName: Attack1Air
         layerNumber: 0
   - name: Attack2
-    damage: 3
-    stunDuration: 0.2
-    hitStopDuration: 0.3
-    attackForce: {x: 3, y: 2.5}
-    knockBackTime: 0.2
+    damage: 4
+    stunDuration: 0.3
+    hitStopDuration: 0.2
+    attackForce: {x: 3.2, y: 2.5}
+    knockBackTime: 0.34
     hasFixedKnockBack: 0
     isComboPossible: 1
     getKnockBackToOpponent: 0
@@ -220,11 +226,11 @@ MonoBehaviour:
         animatorStateName: Attack2
         layerNumber: 0
   - name: Attack2Lw
-    damage: 4
-    stunDuration: 0.2
-    hitStopDuration: 0.05
+    damage: 5
+    stunDuration: 0.25
+    hitStopDuration: 0.12
     attackForce: {x: 3, y: 0}
-    knockBackTime: 0.5
+    knockBackTime: 0.28
     hasFixedKnockBack: 1
     isComboPossible: 0
     getKnockBackToOpponent: 0
@@ -242,19 +248,19 @@ MonoBehaviour:
         layerNumber: 0
   - name: Attack2S
     damage: 5
-    stunDuration: 0.2
-    hitStopDuration: 0.4
-    attackForce: {x: 5, y: 2}
-    knockBackTime: 0.4
+    stunDuration: 0.27
+    hitStopDuration: 0.18
+    attackForce: {x: 4, y: 1.8}
+    knockBackTime: 0.3
     hasFixedKnockBack: 0
-    isComboPossible: 0
+    isComboPossible: 1
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 3894246688669626435}
     - {fileID: 7692495656288624198}
     frameChecker:
       hitFrameStart: 12
-      hitFrameEnd: 15
+      hitFrameEnd: 14
       totalFrames: 27
       animationFrameInfo:
         animator: {fileID: 1162625348799132470}
@@ -262,30 +268,74 @@ MonoBehaviour:
         animatorStateName: Attack2S
         layerNumber: 0
   - name: Attack2Air
-    damage: 3
-    stunDuration: 0.2
-    hitStopDuration: 0.05
-    attackForce: {x: 0, y: 0}
-    knockBackTime: 0
+    damage: 4
+    stunDuration: 0.22
+    hitStopDuration: 0.3
+    attackForce: {x: 0.4, y: -1.3}
+    knockBackTime: 0.13
     hasFixedKnockBack: 0
     isComboPossible: 0
     getKnockBackToOpponent: 0
-    hitbox: []
+    hitbox:
+    - {fileID: 3894246688669626435}
+    - {fileID: 7692495656288624198}
     frameChecker:
-      hitFrameStart: 0
-      hitFrameEnd: 0
-      totalFrames: 0
+      hitFrameStart: 7
+      hitFrameEnd: 9
+      totalFrames: 26
       animationFrameInfo:
-        animator: {fileID: 0}
-        clip: {fileID: 0}
-        animatorStateName: 
+        animator: {fileID: 1162625348799132470}
+        clip: {fileID: 7400000, guid: 998d24b7163d91e4b94aee02104df389, type: 2}
+        animatorStateName: Attack2Air
         layerNumber: 0
   - name: SpecialN
-    damage: 4
+    damage: 10
+    stunDuration: 0.3
+    hitStopDuration: 0.2
+    attackForce: {x: 5.5, y: 2}
+    knockBackTime: 0.5
+    hasFixedKnockBack: 0
+    isComboPossible: 0
+    getKnockBackToOpponent: 0
+    hitbox:
+    - {fileID: 5246500182480573196}
+    - {fileID: 6512434144651226089}
+    frameChecker:
+      hitFrameStart: 41
+      hitFrameEnd: 55
+      totalFrames: 64
+      animationFrameInfo:
+        animator: {fileID: 1162625348799132470}
+        clip: {fileID: 7400000, guid: dd151914d4789cd4b8239b84933ef4fc, type: 2}
+        animatorStateName: SpecialN
+        layerNumber: 0
+  - name: SpecialLw
+    damage: 5
     stunDuration: 0.2
-    hitStopDuration: 0.4
-    attackForce: {x: 4, y: 1.5}
-    knockBackTime: 0.3
+    hitStopDuration: 0.1
+    attackForce: {x: 3.4, y: 3.6}
+    knockBackTime: 0.38
+    hasFixedKnockBack: 0
+    isComboPossible: 1
+    getKnockBackToOpponent: 0
+    hitbox:
+    - {fileID: 5246500182480573196}
+    - {fileID: 6512434144651226089}
+    frameChecker:
+      hitFrameStart: 17
+      hitFrameEnd: 21
+      totalFrames: 46
+      animationFrameInfo:
+        animator: {fileID: 1162625348799132470}
+        clip: {fileID: 7400000, guid: a9391faa2cb3fb04cb7e2197750a2b91, type: 2}
+        animatorStateName: SpecialLw
+        layerNumber: 0
+  - name: SpecialS
+    damage: 7
+    stunDuration: 0.25
+    hitStopDuration: 0.18
+    attackForce: {x: 5, y: 1.7}
+    knockBackTime: 0.4
     hasFixedKnockBack: 0
     isComboPossible: 0
     getKnockBackToOpponent: 0
@@ -299,33 +349,14 @@ MonoBehaviour:
       animationFrameInfo:
         animator: {fileID: 1162625348799132470}
         clip: {fileID: 7400000, guid: 30bc441282f80a444abbef45bac73ba8, type: 2}
-        animatorStateName: SpecialN
+        animatorStateName: SpecialS
         layerNumber: 0
-  - name: SpecialLw
-    damage: 3
-    stunDuration: 0.2
-    hitStopDuration: 0.05
-    attackForce: {x: 0, y: 0}
-    knockBackTime: 0
-    hasFixedKnockBack: 0
-    isComboPossible: 0
-    getKnockBackToOpponent: 0
-    hitbox: []
-    frameChecker:
-      hitFrameStart: 0
-      hitFrameEnd: 0
-      totalFrames: 0
-      animationFrameInfo:
-        animator: {fileID: 0}
-        clip: {fileID: 0}
-        animatorStateName: 
-        layerNumber: 0
-  - name: SpecialS
-    damage: 5
-    stunDuration: 0.2
-    hitStopDuration: 0.4
-    attackForce: {x: 5, y: 2}
-    knockBackTime: 0.4
+  - name: SpecialAir
+    damage: 6
+    stunDuration: 0.25
+    hitStopDuration: 0.5
+    attackForce: {x: 0.3, y: -2.5}
+    knockBackTime: 0.25
     hasFixedKnockBack: 0
     isComboPossible: 0
     getKnockBackToOpponent: 0
@@ -333,32 +364,13 @@ MonoBehaviour:
     - {fileID: 3894246688669626435}
     - {fileID: 7692495656288624198}
     frameChecker:
-      hitFrameStart: 12
-      hitFrameEnd: 15
-      totalFrames: 27
+      hitFrameStart: 6
+      hitFrameEnd: 8
+      totalFrames: 28
       animationFrameInfo:
         animator: {fileID: 1162625348799132470}
-        clip: {fileID: 7400000, guid: bf940f460fca5c442a6db49e4e19ae4a, type: 2}
-        animatorStateName: SpecialS
-        layerNumber: 0
-  - name: SpecialAir
-    damage: 3
-    stunDuration: 0.2
-    hitStopDuration: 0.05
-    attackForce: {x: 0, y: 0}
-    knockBackTime: 0
-    hasFixedKnockBack: 0
-    isComboPossible: 0
-    getKnockBackToOpponent: 0
-    hitbox: []
-    frameChecker:
-      hitFrameStart: 0
-      hitFrameEnd: 0
-      totalFrames: 0
-      animationFrameInfo:
-        animator: {fileID: 0}
-        clip: {fileID: 0}
-        animatorStateName: 
+        clip: {fileID: 7400000, guid: e0f0573155c4faa40a7ea0575973d6e0, type: 2}
+        animatorStateName: SpecialAir
         layerNumber: 0
 --- !u!1001 &2267086960580220772
 PrefabInstance:
@@ -764,6 +776,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4802481941037508756, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 444511454871165135}
+    - targetCorrespondingSourceObject: {fileID: 4457710007197381827, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5246500182480573196}
     - targetCorrespondingSourceObject: {fileID: 8672989757797867047, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6512434144651226089}
@@ -773,6 +788,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7717676222899933357, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4018674871336701911}
+    - targetCorrespondingSourceObject: {fileID: 5379867374098464558, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7612922023484932149}
     - targetCorrespondingSourceObject: {fileID: 8884023958720200142, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3171321750332283236}
@@ -810,6 +828,34 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &2498011487327085479 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4457710007197381827, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
+  m_PrefabInstance: {fileID: 2267086960580220772}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5246500182480573196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2498011487327085479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitboxSize: {x: 0.14, y: 0.065, z: 0.08}
+  hitboxOffset: {x: 0.17874013, y: 0.007506833, z: -0.0010445822}
+  useSphere: 0
+  radius: 0.3
+  colliderColor: {r: 0.57232696, g: 0.20697348, b: 0.20697348, a: 0.2}
+  layerToCheck:
+    serializedVersion: 2
+    m_Bits: 128
+  inactiveColor: {r: 0.57232696, g: 0.20697348, b: 0.20697348, a: 0.2}
+  collisionOpenColor: {r: 0.6, g: 0.2, b: 0.2, a: 1}
+  collidingColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &2521696526892756887 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4433954590358681843, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
@@ -929,6 +975,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitboxSize: {x: 0.23, y: 0.09, z: 0.12}
   hitboxOffset: {x: -0.16368043, y: 0.011619939, z: 0.0063040755}
+  useSphere: 0
+  radius: 0.3
+  colliderColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
+  layerToCheck:
+    serializedVersion: 2
+    m_Bits: 128
+  inactiveColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
+  collisionOpenColor: {r: 0.6, g: 0.2, b: 0.2, a: 1}
+  collidingColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!1 &6187786781943392330 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5379867374098464558, guid: 4a96c1b699c6b8441bd59a01b9e3f58c, type: 3}
+  m_PrefabInstance: {fileID: 2267086960580220772}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7612922023484932149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6187786781943392330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitboxSize: {x: 0.23, y: 0.09, z: 0.12}
+  hitboxOffset: {x: 0.15544884, y: -0.0053951945, z: -0.0035473711}
   useSphere: 0
   radius: 0.3
   colliderColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}

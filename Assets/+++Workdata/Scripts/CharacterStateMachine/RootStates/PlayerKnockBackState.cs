@@ -82,13 +82,13 @@ public class PlayerKnockBackState : PlayerBaseState
             //combine knockBackForce with Input Force
             if (Ctx.MoveInput.x != 0 && !Ctx.GetFixedKnockBack)
             {
-                Ctx.CombinedForce = new Vector2(knockBackForce.x * (Ctx.PercentageCount * 0.1f),
-                    knockBackForce.y * (Ctx.PercentageCount * 0.05f)) + new Vector2(Ctx.MoveInput.x * Ctx.InputForce, 0f);
+                Ctx.CombinedForce = new Vector2(knockBackForce.x * (Ctx.PercentageCount/100),
+                    knockBackForce.y * (Ctx.PercentageCount/150)) + new Vector2(Ctx.MoveInput.x * Ctx.InputForce, 0f);
             }
             else if(!Ctx.GetFixedKnockBack)
             {
-                Ctx.CombinedForce = new Vector2(knockBackForce.x * (Ctx.PercentageCount * 0.1f),
-                    knockBackForce.y * (Ctx.PercentageCount * 0.05f));
+                Ctx.CombinedForce = new Vector2(knockBackForce.x * (Ctx.PercentageCount/100),
+                    knockBackForce.y * (Ctx.PercentageCount/150));
             }
             else if (Ctx.MoveInput.x != 0 && Ctx.GetFixedKnockBack)
             {

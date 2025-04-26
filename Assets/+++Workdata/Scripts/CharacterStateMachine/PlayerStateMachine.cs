@@ -166,9 +166,32 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public void OnLightAttack(InputAction.CallbackContext context)
     {
         if (context.performed && !IsAttacking && !InBlock
-            && !InHitStun && !IsBeingKnockedBack)
+            && !InHitStun && !IsBeingKnockedBack && IsGrounded())
         {
-            CurrentMove = ECurrentMove.Attack1;
+            if (Mathf.Abs(MoveInput.y) <= 0.3f && Mathf.Abs(MoveInput.x) <= 0.3f)
+            {
+                CurrentMove = ECurrentMove.Attack1;
+                IsAttacking = true;
+            }
+            else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack1Lw;
+                IsAttacking = true;
+            }
+            else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack1S;
+                IsAttacking = true;
+            }
+            else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack1S;
+                IsAttacking = true;
+            }
+        } else if (context.performed && !IsAttacking && !InBlock
+                   && !InHitStun && !IsBeingKnockedBack && !IsGrounded())
+        {
+            CurrentMove = ECurrentMove.Attack1Air;
             IsAttacking = true;
         }
     }
@@ -176,27 +199,65 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public void OnHeavyAttack(InputAction.CallbackContext context)
     {
         if (context.performed && !IsAttacking && !InBlock 
-            && !InHitStun  && !IsBeingKnockedBack)
+            && !InHitStun  && !IsBeingKnockedBack && IsGrounded())
         {
-            if (MoveInput == Vector2.zero)
+            if (Mathf.Abs(MoveInput.y) <= 0.3f && Mathf.Abs(MoveInput.x) <= 0.3f)
             {
                 CurrentMove = ECurrentMove.Attack2;
                 IsAttacking = true;
             }
-            else if (MoveInput.y < 0)
+            else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
             {
                 CurrentMove = ECurrentMove.Attack2Lw;
                 IsAttacking = true;
             }
+            else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack2S;
+                IsAttacking = true;
+            }
+            else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack2S;
+                IsAttacking = true;
+            }
+        } else if (context.performed && !IsAttacking && !InBlock
+                  && !InHitStun && !IsBeingKnockedBack && !IsGrounded())
+        {
+            CurrentMove = ECurrentMove.Attack2Air;
+            IsAttacking = true;
         }
     }
 
     public void OnSpecialAttack(InputAction.CallbackContext context)
     {
         if (context.performed && !IsAttacking && !InBlock 
-            && !InHitStun  && !IsBeingKnockedBack)
+            && !InHitStun  && !IsBeingKnockedBack && IsGrounded())
         {
-            CurrentMove = ECurrentMove.SpecialN;
+            if (Mathf.Abs(MoveInput.y) <= 0.3f && Mathf.Abs(MoveInput.x) <= 0.3f)
+            {
+                CurrentMove = ECurrentMove.SpecialN;
+                IsAttacking = true;
+            }
+            else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
+            {
+                CurrentMove = ECurrentMove.SpecialLw;
+                IsAttacking = true;
+            }
+            else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
+            {
+                CurrentMove = ECurrentMove.SpecialS;
+                IsAttacking = true;
+            }
+            else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
+            {
+                CurrentMove = ECurrentMove.SpecialS;
+                IsAttacking = true;
+            }
+        } else if (context.performed && !IsAttacking && !InBlock
+                   && !InHitStun && !IsBeingKnockedBack && !IsGrounded())
+        {
+            CurrentMove = ECurrentMove.SpecialAir;
             IsAttacking = true;
         }
     }

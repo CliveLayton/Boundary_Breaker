@@ -10,7 +10,10 @@ enum PlayerStates
     Attack,
     Stunned,
     KnockBack,
-    Block
+    Block,
+    HitStun,
+    Grabbed,
+    Knockdown
 }
 
 public class PlayerStateFactory
@@ -30,6 +33,9 @@ public class PlayerStateFactory
         states[PlayerStates.Stunned] = new PlayerStunnedState(context, this);
         states[PlayerStates.KnockBack] = new PlayerKnockBackState(context, this);
         states[PlayerStates.Block] = new PlayerBlockState(context, this);
+        states[PlayerStates.HitStun] = new PlayerHitStunState(context, this);
+        states[PlayerStates.Grabbed] = new PlayerGrabbedState(context, this);
+        states[PlayerStates.Knockdown] = new PlayerKnockdownState(context, this);
     }
 
     public PlayerBaseState Idle()
@@ -75,5 +81,20 @@ public class PlayerStateFactory
     public PlayerBaseState Block()
     {
         return states[PlayerStates.Block];
+    }
+
+    public PlayerBaseState HitStun()
+    {
+        return states[PlayerStates.HitStun];
+    }
+
+    public PlayerBaseState Grabbed()
+    {
+        return states[PlayerStates.Grabbed];
+    }
+
+    public PlayerBaseState Knockdown()
+    {
+        return states[PlayerStates.Knockdown];
     }
 }

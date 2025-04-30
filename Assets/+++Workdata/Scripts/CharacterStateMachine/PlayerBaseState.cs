@@ -40,14 +40,15 @@ public abstract class PlayerBaseState
         
         //new state enters state
         newState.EnterState();
-
+        
         if (IsRootState)
         {
             //switch current state of context
             Ctx.CurrentState = newState;
-            if (currentSubState != null)
+
+            if (newState.currentSubState != null)
             {
-                currentSubState.EnterState();
+                newState.currentSubState.EnterState();
             }
         }
         else if (currentSuperState != null)

@@ -41,7 +41,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     [field: SerializeField] public float InputForce { get; private set; }
     [field: SerializeField] public AnimationCurve KnockBackForceCurve { get; private set; }
     [field: SerializeField] public CapsuleCollider Pushbox { get; set; }
-    [field: SerializeField] public GameObject Opponent { get; private set; }
+    [field: SerializeField] public PlayerStateMachine Opponent { get; private set; }
     [field: SerializeField] public CinemachineImpulseSource CmImpulse { get; private set; }
 
     public PlayerBaseState CurrentState { get; set; }
@@ -56,6 +56,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public bool IsDashing { get; set; }
     public bool InBlock { get; set; }
     [field: SerializeField] public bool IsAttacking { get; set; }
+    [field: SerializeField] public bool IsGrabbing { get; set; }
     public bool CanCombo { get; set; }
     public  bool InHitStun { get; set; }
     public bool InComboHit { get; set; }
@@ -69,6 +70,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public bool IsComboPossible { get; private set; }
     public bool GetKnockBackToOpponent { get; private set; }
     public bool IsBeingKnockedBack { get; set; }
+    public Coroutine HitStunCoroutine { get; set; }
     [field: SerializeField] public CharacterMoves[] Moves { get; private set; }
 
 
@@ -87,7 +89,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         SpecialN,
         SpecialLw,
         SpecialS,
-        SpecialAir
+        SpecialAir,
+        Grab
     }
 
     #region ContextMenu Methods
@@ -262,6 +265,17 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         }
     }
 
+    public void OnGrab(InputAction.CallbackContext context)
+    {
+        if (context.performed && !IsAttacking && !InBlock
+            && !InHitStun && !IsBeingKnockedBack && IsGrounded())
+        {
+            CurrentMove = ECurrentMove.Grab;
+            IsAttacking = true;
+            IsGrabbing = true;
+        }
+    }
+
     #endregion
     
     #region Player Movement
@@ -362,6 +376,12 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
             GetFixedKnockBack = hasFixedKnockBack;
         }
     }
+    
+    public void HandleCombo(bool isComboTime)
+    {
+        IsAttacking = !isComboTime;
+        CanCombo = isComboTime;
+    }
 
     private IEnumerator DashCooldown()
     {
@@ -392,13 +412,13 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         return hitPlayer;
     }
 
-    private void OnDrawGizmos()
-    {
-        // Vector3 startPos = transform.position + new Vector3(0, 0.5f, 0);
-        // Gizmos.DrawWireSphere(startPos, 0.3f);
-        // Gizmos.DrawLine(startPos, startPos + 0.6f * Vector3.down);
-        // Gizmos.DrawWireSphere(startPos + (0.6f * Vector3.down), 0.3f);
-    }
+    // private void OnDrawGizmos()
+    // {
+    //     Vector3 startPos = transform.position + new Vector3(0, 0.5f, 0);
+    //     Gizmos.DrawWireSphere(startPos, 0.3f);
+    //     Gizmos.DrawLine(startPos, startPos + 0.6f * Vector3.down);
+    //     Gizmos.DrawWireSphere(startPos + (0.6f * Vector3.down), 0.3f);
+    // }
 
     /// <summary>
     /// check if player is facing right
@@ -443,6 +463,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         //     //anim.SetBool("isFalling", false);
         // }
     }
-
+    
     #endregion
 }

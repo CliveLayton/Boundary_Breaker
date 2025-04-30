@@ -119,6 +119,7 @@ MonoBehaviour:
   <Opponent>k__BackingField: {fileID: 0}
   <CmImpulse>k__BackingField: {fileID: 0}
   <IsAttacking>k__BackingField: 0
+  <IsGrabbing>k__BackingField: 0
   <Moves>k__BackingField:
   - name: Attack1
     damage: 1
@@ -355,7 +356,7 @@ MonoBehaviour:
     damage: 6
     stunDuration: 0.25
     hitStopDuration: 0.5
-    attackForce: {x: 0.3, y: -2.5}
+    attackForce: {x: 0.3, y: -10.5}
     knockBackTime: 0.25
     hasFixedKnockBack: 0
     isComboPossible: 0
@@ -371,6 +372,26 @@ MonoBehaviour:
         animator: {fileID: 1162625348799132470}
         clip: {fileID: 7400000, guid: e0f0573155c4faa40a7ea0575973d6e0, type: 2}
         animatorStateName: SpecialAir
+        layerNumber: 0
+  - name: Grab
+    damage: 0
+    stunDuration: 1
+    hitStopDuration: 0
+    attackForce: {x: 0, y: 0}
+    knockBackTime: 0
+    hasFixedKnockBack: 1
+    isComboPossible: 0
+    getKnockBackToOpponent: 0
+    hitbox:
+    - {fileID: 0}
+    frameChecker:
+      hitFrameStart: 4
+      hitFrameEnd: 7
+      totalFrames: 10
+      animationFrameInfo:
+        animator: {fileID: 1162625348799132470}
+        clip: {fileID: 7400000, guid: 19a8c7c1d7249c249b9e43ba1062f30f, type: 2}
+        animatorStateName: Grab
         layerNumber: 0
 --- !u!1001 &2267086960580220772
 PrefabInstance:

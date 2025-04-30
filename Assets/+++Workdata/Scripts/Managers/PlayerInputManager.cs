@@ -79,6 +79,8 @@ public class PlayerInputManager : MonoBehaviour
         gameInput.Player.HeavyAttack.performed += playerStateMachine.OnHeavyAttack;
 
         gameInput.Player.SpecialAttack.performed += playerStateMachine.OnSpecialAttack;
+
+        gameInput.Player.Grab.performed += playerStateMachine.OnGrab;
     }
 
     /// <summary>
@@ -118,6 +120,8 @@ public class PlayerInputManager : MonoBehaviour
         gameInput.Player.HeavyAttack.performed -= playerStateMachine.OnHeavyAttack;
 
         gameInput.Player.SpecialAttack.performed -= playerStateMachine.OnSpecialAttack;
+        
+        gameInput.Player.Grab.performed -= playerStateMachine.OnGrab;
     }
 
     #endregion

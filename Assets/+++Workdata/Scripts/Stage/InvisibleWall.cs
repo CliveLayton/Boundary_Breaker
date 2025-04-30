@@ -19,7 +19,7 @@ public class InvisibleWall : MonoBehaviour
             PlayerStateMachine fighter = other.gameObject.GetComponent<PlayerStateMachine>();
             IDamageable iDamageable = other.gameObject.GetComponent<IDamageable>();
 
-            if (fighter.CombinedForce.magnitude > 20f && !isOnWall) //fighter.combinedForce.magnitude
+            if (fighter.CombinedForce.magnitude > 6f && !isOnWall) //fighter.combinedForce.magnitude
             {
                 col.enabled = false;
                 isOnWall = true;

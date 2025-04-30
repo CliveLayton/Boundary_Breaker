@@ -4,11 +4,10 @@ using UnityEngine;
 public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckHandler
 {
     private CharacterMoves currentMove;
-    private PlayerStateMachine opponentScript;
 
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
-        opponentScript = Ctx.Opponent.GetComponent<PlayerStateMachine>();
+        
     }
 
     public override void EnterState()
@@ -96,7 +95,7 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
 
     public void OnLastFrameStart()
     {
-        opponentScript.InBlock = false;
+        Ctx.Opponent.InBlock = false;
         Ctx.IsAttacking = false;
         CheckSwitchStates();
     }
@@ -118,11 +117,19 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
         {
             currentMove.hitbox[i].StopCheckingCollision();
         }
+
+        if (Ctx.IsGrabbing)
+        {
+            Debug.Log("Grab Opponent");
+        }
+        else
+        {
+            IDamageable iDamageable = collider.gameObject.GetComponentInParent<IDamageable>();
+            iDamageable?.Damage(currentMove.damage, currentMove.stunDuration, currentMove.hitStopDuration, 
+                currentMove.attackForce, currentMove.knockBackTime, currentMove.hasFixedKnockBack, 
+                currentMove.isComboPossible, currentMove.getKnockBackToOpponent, true);
+        }
         
-        IDamageable iDamageable = collider.gameObject.GetComponentInParent<IDamageable>();
-        iDamageable?.Damage(currentMove.damage, currentMove.stunDuration, currentMove.hitStopDuration, 
-            currentMove.attackForce, currentMove.knockBackTime, currentMove.hasFixedKnockBack, 
-            currentMove.isComboPossible, currentMove.getKnockBackToOpponent, true);
     }
 
     #endregion

@@ -5,7 +5,7 @@ using Unity.Cinemachine;
 using UnityEditor;
 using UnityEngine.InputSystem;
 
-public class PlayerStateMachine : MonoBehaviour, IDamageable
+public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
 {
     #region Variables
 
@@ -41,13 +41,14 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     [field: SerializeField] public float InputForce { get; private set; }
     [field: SerializeField] public AnimationCurve KnockBackForceCurve { get; private set; }
     [field: SerializeField] public CapsuleCollider Pushbox { get; set; }
+    [field: SerializeField] public Transform GrabPosition { get; private set; }
     [field: SerializeField] public PlayerStateMachine Opponent { get; private set; }
     [field: SerializeField] public CinemachineImpulseSource CmImpulse { get; private set; }
 
     public PlayerBaseState CurrentState { get; set; }
     public Rigidbody Rb { get; private set; }
     public  Animator Anim { get; private set; }
-    public ECurrentMove CurrentMove { get; private set; }
+    public ECurrentMove CurrentMove { get; set; }
     public  Vector2 MoveInput { get; private set; }
     public float Speed { get; set; }
     public float LastMovementX { get; set; }
@@ -57,6 +58,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
     public bool InBlock { get; set; }
     [field: SerializeField] public bool IsAttacking { get; set; }
     [field: SerializeField] public bool IsGrabbing { get; set; }
+    public bool InGrab { get; set; }
+    public bool IsThrowing { get; set; }
     public bool CanCombo { get; set; }
     public  bool InHitStun { get; set; }
     public bool InComboHit { get; set; }
@@ -90,7 +93,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         SpecialLw,
         SpecialS,
         SpecialAir,
-        Grab
+        Grab,
+        Throw
     }
 
     #region ContextMenu Methods
@@ -377,6 +381,12 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable
         }
     }
     
+    public void Grabbed(Vector2 newPosition)
+    {
+        InGrab = true;
+        transform.position = newPosition;
+    }
+
     public void HandleCombo(bool isComboTime)
     {
         IsAttacking = !isComboTime;

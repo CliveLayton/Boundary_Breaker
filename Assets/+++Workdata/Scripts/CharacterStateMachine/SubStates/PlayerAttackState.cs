@@ -56,17 +56,24 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
+        if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing && !Ctx.IsAttacking && !Ctx.IsThrowing)
         {
             SwitchState(Factory.Idle());
         }
-        else if (Ctx.MoveInput.x != 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
+        else if (Ctx.MoveInput.x != 0 && !Ctx.IsDashing && !Ctx.IsAttacking && !Ctx.IsThrowing)
         {
             SwitchState(Factory.Walk());
         }
-        else if (Ctx.IsDashing && !Ctx.IsAttacking)
+        else if (Ctx.IsDashing && !Ctx.IsAttacking && !Ctx.IsThrowing)
         {
             SwitchState(Factory.Dash());
+        }
+        else if (Ctx.IsThrowing)
+        {
+            Ctx.CurrentMove = PlayerStateMachine.ECurrentMove.Throw;
+            Ctx.IsAttacking = true;
+            Ctx.IsThrowing = false;
+            SwitchState(Factory.Attack());
         }
     }
 
@@ -97,12 +104,14 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
     {
         Ctx.Opponent.InBlock = false;
         Ctx.IsAttacking = false;
+        Ctx.IsGrabbing = false;
         CheckSwitchStates();
     }
 
     public void OnLastFrameEnd()
     {
         Ctx.IsAttacking = false;
+        Ctx.IsGrabbing = false;
         CheckSwitchStates();
     }
 
@@ -120,7 +129,9 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
 
         if (Ctx.IsGrabbing)
         {
-            Debug.Log("Grab Opponent");
+            IGrabable iGrabable = collider.gameObject.GetComponentInParent<IGrabable>();
+            iGrabable?.Grabbed(Ctx.GrabPosition.position);
+            Ctx.IsThrowing = true;
         }
         else
         {

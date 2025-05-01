@@ -44,11 +44,11 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsJumpedPressed && !Ctx.RequireNewJumpPress && !Ctx.InHitStun && !Ctx.IsAttacking)
+        if (Ctx.IsJumpedPressed && !Ctx.RequireNewJumpPress && !Ctx.InHitStun && !Ctx.InGrab && !Ctx.IsAttacking)
         {
             SwitchState(Factory.InAir());
         }
-        else if(Ctx.InHitStun)
+        else if(Ctx.InHitStun || Ctx.InGrab)
         {
             SwitchState(Factory.Stunned());
         }

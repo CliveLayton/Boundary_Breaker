@@ -13,7 +13,7 @@ public class PlayerGrabbedState : PlayerBaseState
 
     public override void UpdateState()
     {
-        
+        CheckSwitchStates();
     }
 
     public override void ExitState()
@@ -23,7 +23,11 @@ public class PlayerGrabbedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        
+        if (Ctx.InHitStun)
+        {
+            Ctx.InGrab = false;
+            SwitchState(Factory.HitStun());
+        }
     }
 
     public override void InitializeSubState()

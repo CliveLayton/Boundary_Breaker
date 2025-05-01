@@ -26,7 +26,7 @@ public class PlayerStunnedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (!Ctx.InHitStun)
+        if (!Ctx.InHitStun && !Ctx.InGrab)
         {
             SwitchState(Factory.KnockBack());
         }
@@ -40,6 +40,13 @@ public class PlayerStunnedState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        SetSubState(Factory.HitStun());
+        if (Ctx.InHitStun && !Ctx.InGrab)
+        {
+            SetSubState(Factory.HitStun());
+        }
+        else if (Ctx.InGrab && !Ctx.InHitStun)
+        {
+            SetSubState(Factory.Grabbed());
+        }
     }
 }

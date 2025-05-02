@@ -7,6 +7,7 @@ enum PlayerStates
     Dash,
     Grounded,
     InAir,
+    Jump,
     Attack,
     Stunned,
     KnockBack,
@@ -29,6 +30,7 @@ public class PlayerStateFactory
         states[PlayerStates.Dash] = new PlayerDashState(context, this);
         states[PlayerStates.Grounded] = new PlayerGroundedState(context, this);
         states[PlayerStates.InAir] = new PlayerInAirState(context, this);
+        states[PlayerStates.Jump] = new PlayerJumpState(context, this);
         states[PlayerStates.Attack] = new PlayerAttackState(context, this);
         states[PlayerStates.Stunned] = new PlayerStunnedState(context, this);
         states[PlayerStates.KnockBack] = new PlayerKnockBackState(context, this);
@@ -56,6 +58,11 @@ public class PlayerStateFactory
     public PlayerBaseState InAir()
     {
         return states[PlayerStates.InAir];
+    }
+
+    public PlayerBaseState Jump()
+    {
+        return states[PlayerStates.Jump];
     }
 
     public PlayerBaseState Grounded()

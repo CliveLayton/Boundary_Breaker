@@ -16,7 +16,7 @@ public class PlayerStunnedState : PlayerBaseState
 
     public override void UpdateState()
     {
-        CheckSwitchStates();
+        
     }
 
     public override void ExitState()
@@ -26,16 +26,7 @@ public class PlayerStunnedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (!Ctx.InHitStun && !Ctx.InGrab)
-        {
-            SwitchState(Factory.KnockBack());
-        }
-        else if (Ctx.InHitStun && Ctx.InComboHit)
-        {
-            Ctx.StopCoroutine(Ctx.HitStunCoroutine);
-            Ctx.InComboHit = false;
-            SwitchState(Factory.Stunned());
-        }
+        
     }
 
     public override void InitializeSubState()
@@ -44,9 +35,13 @@ public class PlayerStunnedState : PlayerBaseState
         {
             SetSubState(Factory.HitStun());
         }
-        else if (Ctx.InGrab && !Ctx.InHitStun)
+        else if (Ctx.InGrab && !Ctx.InHitStun && !Ctx.InKnockdown)
         {
             SetSubState(Factory.Grabbed());
+        }
+        else if (Ctx.InKnockdown && !Ctx.InHitStun && !Ctx.InGrab)
+        {
+            SetSubState(Factory.Knockdown());
         }
     }
 }

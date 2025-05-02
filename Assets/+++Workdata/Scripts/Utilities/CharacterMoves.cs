@@ -12,6 +12,7 @@ public class CharacterMoves
     [Min(0)] public float knockBackTime;
     public bool hasFixedKnockBack;
     public bool isComboPossible;
+    public bool applyKnockDown;
     public bool getKnockBackToOpponent;
     public Hitbox[] hitbox;
     public FrameChecker frameChecker;

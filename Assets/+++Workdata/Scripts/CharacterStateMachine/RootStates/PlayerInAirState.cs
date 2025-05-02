@@ -13,8 +13,6 @@ public class PlayerInAirState : PlayerBaseState
     public override void EnterState()
     {
         InitializeSubState();
-        Ctx.Anim.Play("Jump");
-        Ctx.Rb.linearVelocity = new Vector2(Ctx.Rb.linearVelocity.x, Ctx.JumpPower);
     }
 
     public override void UpdateState()
@@ -24,7 +22,6 @@ public class PlayerInAirState : PlayerBaseState
             pushBoxCoroutine = Ctx.StartCoroutine(HandlePushbox());
         }
         
-        HandleJump();
         CheckSwitchStates();
     }
 
@@ -38,13 +35,9 @@ public class PlayerInAirState : PlayerBaseState
     
     public override void InitializeSubState()
     {
-        if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
+        if (Ctx.IsJumpedPressed && !Ctx.IsDashing && !Ctx.IsAttacking)
         {
-            SetSubState(Factory.Idle());
-        }
-        else if (Ctx.MoveInput.x != 0 && !Ctx.IsDashing && !Ctx.IsAttacking)
-        {
-            SetSubState(Factory.Walk());
+            SetSubState(Factory.Jump());
         }
         else if(Ctx.IsDashing && !Ctx.IsAttacking)
         {
@@ -58,29 +51,14 @@ public class PlayerInAirState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.5f && !Ctx.InHitStun)
+        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.5f && !Ctx.InHitStun && !Ctx.InGrab)
         {
             SwitchState(Factory.Grounded());
         }
-        else if(Ctx.InHitStun)
+        else if(Ctx.InHitStun || Ctx.InGrab)
         {
             SwitchState(Factory.Stunned());
         }
-    }
-    
-    private void HandleJump()
-    {
-
-        if (!Ctx.IsJumpedPressed && Ctx.Rb.linearVelocity.y > 0)
-        {
-            Ctx.Rb.linearVelocity = new Vector2(Ctx.Rb.linearVelocity.x, Ctx.Rb.linearVelocity.y * 0.5f);
-        }
-
-        if (Ctx.Rb.linearVelocity.y < 0)
-        {
-            Ctx.Rb.linearVelocity += Vector3.up * (Ctx.FallMultiplier * Physics.gravity.y * Time.deltaTime);
-        }
-        
     }
 
     private IEnumerator HandlePushbox()

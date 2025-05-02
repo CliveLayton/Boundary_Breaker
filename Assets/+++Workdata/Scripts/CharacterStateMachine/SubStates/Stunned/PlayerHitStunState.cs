@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerHitStunState : PlayerBaseState
 {
+    private Coroutine hitStunCoroutine;
+    
     public PlayerHitStunState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
     }
@@ -16,7 +18,7 @@ public class PlayerHitStunState : PlayerBaseState
 
     public override void UpdateState()
     {
-        
+        CheckSwitchStates();
     }
 
     public override void ExitState()
@@ -26,7 +28,16 @@ public class PlayerHitStunState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        
+        if (!Ctx.InHitStun && !Ctx.InGrab)
+        {
+            SwitchState(Factory.KnockBack());
+        }
+        else if (Ctx.InHitStun && Ctx.InComboHit)
+        {
+            Ctx.StopCoroutine(hitStunCoroutine);
+            Ctx.InComboHit = false;
+            SwitchState(Factory.Stunned());
+        }
     }
 
     public override void InitializeSubState()
@@ -42,7 +53,7 @@ public class PlayerHitStunState : PlayerBaseState
             Ctx.Opponent.HandleCombo(true);
         }
         Ctx.CmImpulse.GenerateImpulse();
-        Ctx.HitStunCoroutine = Ctx.StartCoroutine(HitStunCoroutine());
+        hitStunCoroutine = Ctx.StartCoroutine(HitStunCoroutine());
         yield return new WaitForSecondsRealtime(Ctx.HitStopDuration); // wait for real-world time
         if (Ctx.IsComboPossible)
         {
@@ -69,7 +80,7 @@ public class PlayerHitStunState : PlayerBaseState
         }
 
         Ctx.transform.localPosition = originalPosition; // reset position
-
+        
         Ctx.InHitStun = false;
     }
 }

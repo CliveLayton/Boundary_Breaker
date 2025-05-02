@@ -8,7 +8,7 @@ public class PlayerGrabbedState : PlayerBaseState
 
     public override void EnterState()
     {
-        
+        Ctx.Anim.Play("Grabbed");
     }
 
     public override void UpdateState()

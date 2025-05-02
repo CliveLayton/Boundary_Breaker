@@ -24,13 +24,13 @@ public class InvisibleWall : MonoBehaviour
                 col.enabled = false;
                 isOnWall = true;
                 iDamageable?.Damage(0, 0.5f, 0.5f, 
-                    new Vector2(3,0.8f), 0.4f, false, false, false, false);
+                    new Vector2(3,0.8f), 0.4f, false, false, false, false, false);
             }
             else if(!isOnWall)
             {
                 isOnWall = true;
                 iDamageable?.Damage(0, 0.5f, 0.3f, 
-                    new Vector2(1.5f,-2f), 0.2f, false, false, true, false);
+                    new Vector2(1.5f,-2f), 0.2f, false, false, true, false, false);
             }
         }
     }

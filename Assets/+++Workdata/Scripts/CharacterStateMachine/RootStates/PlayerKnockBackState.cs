@@ -40,15 +40,15 @@ public class PlayerKnockBackState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.05f && !Ctx.InHitStun && !Ctx.IsBeingKnockedBack)
+        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.05f && !Ctx.InHitStun && !Ctx.IsBeingKnockedBack && !Ctx.InKnockdown)
         {
             SwitchState(Factory.Grounded());
         }
-        else if (Ctx.IsJumpedPressed && !Ctx.RequireNewJumpPress && !Ctx.InHitStun && !Ctx.IsBeingKnockedBack)
+        else if (!Ctx.IsGrounded() && !Ctx.InHitStun && !Ctx.IsBeingKnockedBack && !Ctx.InKnockdown)
         {
             SwitchState(Factory.InAir());
         }
-        else if(Ctx.InHitStun)
+        else if(Ctx.InHitStun || Ctx.InKnockdown)
         {
             SwitchState(Factory.Stunned());
         }

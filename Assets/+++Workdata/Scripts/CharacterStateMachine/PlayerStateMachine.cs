@@ -73,7 +73,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public bool IsComboPossible { get; private set; }
     public bool GetKnockBackToOpponent { get; private set; }
     public bool IsBeingKnockedBack { get; set; }
-    public Coroutine HitStunCoroutine { get; set; }
+    public bool InKnockdown { get; set; }
     [field: SerializeField] public CharacterMoves[] Moves { get; private set; }
 
 
@@ -336,8 +336,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
 
     #region PlayerStateMachine Methods
     
-    public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, 
-        float knockBackTime, bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent, bool isPlayerAttack)
+    public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, float knockBackTime, 
+        bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent, bool isPlayerAttack, bool applyKnockDown)
     {
         if (IsFacingRight() && MoveInput.x < 0)
         {
@@ -363,8 +363,9 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
             KnockBackTime = knockBackTime;
             AttackForce = attackForce;
             GetFixedKnockBack = hasFixedKnockBack;
-            
-            
+            InKnockdown = applyKnockDown;
+
+
             //StartCoroutine(WaitDamage());
         }
         else if (InHitStun && isPlayerAttack && !InComboHit)
@@ -378,6 +379,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
             KnockBackTime = knockBackTime;
             AttackForce = attackForce;
             GetFixedKnockBack = hasFixedKnockBack;
+            InKnockdown = applyKnockDown;
         }
     }
     

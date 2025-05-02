@@ -185,6 +185,7 @@ MonoBehaviour:
     knockBackTime: 0.1
     hasFixedKnockBack: 1
     isComboPossible: 1
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 9072671343309794909}
@@ -206,6 +207,7 @@ MonoBehaviour:
     knockBackTime: 0.1
     hasFixedKnockBack: 1
     isComboPossible: 1
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 3894246688669626435}
@@ -227,6 +229,7 @@ MonoBehaviour:
     knockBackTime: 0.2
     hasFixedKnockBack: 0
     isComboPossible: 1
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 5246500182480573196}
@@ -248,6 +251,7 @@ MonoBehaviour:
     knockBackTime: 0.1
     hasFixedKnockBack: 0
     isComboPossible: 1
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 3894246688669626435}
@@ -269,6 +273,7 @@ MonoBehaviour:
     knockBackTime: 0.34
     hasFixedKnockBack: 0
     isComboPossible: 1
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 9072671343309794909}
@@ -290,6 +295,7 @@ MonoBehaviour:
     knockBackTime: 0.28
     hasFixedKnockBack: 1
     isComboPossible: 0
+    applyKnockDown: 1
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 3894246688669626435}
@@ -311,6 +317,7 @@ MonoBehaviour:
     knockBackTime: 0.3
     hasFixedKnockBack: 0
     isComboPossible: 1
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 3894246688669626435}
@@ -332,6 +339,7 @@ MonoBehaviour:
     knockBackTime: 0.13
     hasFixedKnockBack: 0
     isComboPossible: 0
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 3894246688669626435}
@@ -353,6 +361,7 @@ MonoBehaviour:
     knockBackTime: 0.5
     hasFixedKnockBack: 0
     isComboPossible: 0
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 5246500182480573196}
@@ -374,6 +383,7 @@ MonoBehaviour:
     knockBackTime: 0.38
     hasFixedKnockBack: 0
     isComboPossible: 1
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 5246500182480573196}
@@ -395,6 +405,7 @@ MonoBehaviour:
     knockBackTime: 0.4
     hasFixedKnockBack: 0
     isComboPossible: 0
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 3894246688669626435}
@@ -416,6 +427,7 @@ MonoBehaviour:
     knockBackTime: 0.25
     hasFixedKnockBack: 0
     isComboPossible: 0
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 3894246688669626435}
@@ -437,6 +449,7 @@ MonoBehaviour:
     knockBackTime: 0
     hasFixedKnockBack: 1
     isComboPossible: 0
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 4651249270729331208}
@@ -455,8 +468,9 @@ MonoBehaviour:
     hitStopDuration: 0.05
     attackForce: {x: 2.6, y: 0.8}
     knockBackTime: 0.2
-    hasFixedKnockBack: 1
+    hasFixedKnockBack: 0
     isComboPossible: 0
+    applyKnockDown: 0
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 5246500182480573196}

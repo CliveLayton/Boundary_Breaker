@@ -46,6 +46,7 @@ public abstract class PlayerBaseState
             //switch current state of context
             Ctx.CurrentState = newState;
 
+            //if the new state has a substate initialized enter the substate too
             if (newState.currentSubState != null)
             {
                 newState.currentSubState.EnterState();
@@ -53,6 +54,21 @@ public abstract class PlayerBaseState
         }
         else if (currentSuperState != null)
         {
+            //if this state is not a root state but want to switch to a root state
+            //switch current state of context
+            if (newState.IsRootState)
+            {
+                Ctx.CurrentState = newState;
+                
+                //if the new state has a substate initialized enter the substate too
+                if (newState.currentSubState != null)
+                {
+                    newState.currentSubState.EnterState();
+                }
+
+                return;
+            }
+            
             //set the current super states sub state to the new state
             currentSuperState.SetSubState(newState);
         }

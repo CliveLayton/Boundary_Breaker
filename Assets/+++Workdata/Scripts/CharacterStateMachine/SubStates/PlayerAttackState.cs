@@ -138,7 +138,7 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
             IDamageable iDamageable = collider.gameObject.GetComponentInParent<IDamageable>();
             iDamageable?.Damage(currentMove.damage, currentMove.stunDuration, currentMove.hitStopDuration, 
                 currentMove.attackForce, currentMove.knockBackTime, currentMove.hasFixedKnockBack, 
-                currentMove.isComboPossible, currentMove.getKnockBackToOpponent, true);
+                currentMove.isComboPossible, currentMove.getKnockBackToOpponent, true, currentMove.applyKnockDown);
         }
         
     }

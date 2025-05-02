@@ -10,10 +10,7 @@ public class PlayerIdleState : PlayerBaseState
     
     public override void EnterState()
     {
-        if (Ctx.IsGrounded())
-        {
-            Ctx.Anim.Play("Idle");
-        }
+        Ctx.Anim.Play("Idle");
     }
 
     public override void UpdateState()

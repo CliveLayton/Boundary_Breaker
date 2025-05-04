@@ -138,6 +138,10 @@ MonoBehaviour:
   pushboxLayer:
     serializedVersion: 2
     m_Bits: 256
+  hurtboxes:
+  - {fileID: 4461061850928267871}
+  - {fileID: 8425263080095079927}
+  - {fileID: 7816383924666560286}
   <PercentageCount>k__BackingField: 0
   <ForwardSpeed>k__BackingField: 4
   <BackwardSpeed>k__BackingField: 2
@@ -1265,7 +1269,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

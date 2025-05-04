@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerKnockBackState : PlayerBaseState
 {
     private Coroutine knockBackCoroutine;
+    private bool applyKnockdown;
     
     public PlayerKnockBackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
@@ -28,6 +29,18 @@ public class PlayerKnockBackState : PlayerBaseState
 
     public override void UpdateState()
     {
+        if (!Ctx.InKnockdown)
+        {
+            if (!Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y <= -1f)
+            {
+                applyKnockdown = true;
+            }
+            else if (!Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y > -1f)
+            {
+                applyKnockdown = false;
+            }
+        }
+        
         CheckSwitchStates();
     }
 
@@ -40,15 +53,17 @@ public class PlayerKnockBackState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.05f && !Ctx.InHitStun && !Ctx.IsBeingKnockedBack && !Ctx.InKnockdown)
+        if (Ctx.IsGrounded() && !Ctx.InHitStun && !Ctx.IsBeingKnockedBack && !Ctx.InKnockdown)
         {
             SwitchState(Factory.Grounded());
         }
-        else if (!Ctx.IsGrounded() && !Ctx.InHitStun && !Ctx.IsBeingKnockedBack && !Ctx.InKnockdown)
+        else if (!Ctx.IsGrounded() && !Ctx.InHitStun && !Ctx.IsBeingKnockedBack)
         {
+            //set InKnockdown false if the knockback was strong enough to declare knockdown but stopped in air
+            Ctx.InKnockdown = false;
             SwitchState(Factory.InAir());
         }
-        else if(Ctx.InHitStun || Ctx.InKnockdown)
+        else if(Ctx.InHitStun || (Ctx.InKnockdown && Ctx.IsGrounded()))
         {
             SwitchState(Factory.Stunned());
         }
@@ -65,16 +80,17 @@ public class PlayerKnockBackState : PlayerBaseState
         Vector2 constantKnockBackForce;
         Vector2 knockBackForce;
 
-        constantKnockBackForce = constantForceDirection * Ctx.AttackForce.y;
-
         float elapsedTime = 0f;
         while (elapsedTime < Ctx.KnockBackTime)
         {
             //iterate the timer
             elapsedTime += Time.fixedDeltaTime;
             
-            //update hitForce
+            //update hitForce (x force)
             hitForce = hitDirection * (Ctx.AttackForce.x * Ctx.KnockBackForceCurve.Evaluate(elapsedTime / Ctx.KnockBackTime));
+            
+            //update y force
+            constantKnockBackForce = constantForceDirection * (Ctx.AttackForce.y * Ctx.KnockBackForceCurve.Evaluate(elapsedTime / Ctx.KnockBackTime));
             
             //combine hitForce and constantForce
             knockBackForce = hitForce + constantKnockBackForce;
@@ -83,12 +99,12 @@ public class PlayerKnockBackState : PlayerBaseState
             if (Ctx.MoveInput.x != 0 && !Ctx.GetFixedKnockBack)
             {
                 Ctx.CombinedForce = new Vector2(knockBackForce.x * (1 + Ctx.PercentageCount/100),
-                    knockBackForce.y * (1 + Ctx.PercentageCount/150)) + new Vector2(Ctx.MoveInput.x * Ctx.InputForce, 0f);
+                    knockBackForce.y * (1 + Ctx.PercentageCount/100)) + new Vector2(Ctx.MoveInput.x * Ctx.InputForce, 0f);
             }
             else if(!Ctx.GetFixedKnockBack)
             {
                 Ctx.CombinedForce = new Vector2(knockBackForce.x * (1 + Ctx.PercentageCount/100),
-                    knockBackForce.y * (1 + Ctx.PercentageCount/150));
+                    knockBackForce.y * (1 + Ctx.PercentageCount/100));
             }
             else if (Ctx.MoveInput.x != 0 && Ctx.GetFixedKnockBack)
             {
@@ -99,12 +115,18 @@ public class PlayerKnockBackState : PlayerBaseState
                 Ctx.CombinedForce = knockBackForce;
             }
 
+            //Debug.Log(Ctx.CombinedForce);
             //apply knockBack
             Ctx.Rb.linearVelocity = Ctx.CombinedForce;
 
             yield return new WaitForFixedUpdate();
         }
 
+        //if the player is not already declared as InKnockdown through the move, change value 
+        if (!Ctx.InKnockdown)
+        {
+            Ctx.InKnockdown = applyKnockdown;
+        }
         Ctx.IsBeingKnockedBack = false;
         //Ctx.StartCoroutine(KnockbackDecay());
     }

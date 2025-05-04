@@ -10,6 +10,7 @@ public class PlayerKnockdownState : PlayerBaseState
 
     public override void EnterState()
     {
+        Ctx.HandleHurtboxes(false);
         Ctx.Anim.Play("Knockdown");
     }
 
@@ -36,6 +37,7 @@ public class PlayerKnockdownState : PlayerBaseState
 
     public override void ExitState()
     {
+        Ctx.HandleHurtboxes(true);
         Ctx.InKnockdown = false;
     }
 

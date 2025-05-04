@@ -21,7 +21,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask pushboxLayer;
 
-    [Header("KnockBack Variables")]
+    [Header("Hurtboxes")] 
+    [SerializeField] private BoxCollider[] hurtboxes;
 
     //public Variables
 
@@ -63,7 +64,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public bool CanCombo { get; set; }
     public  bool InHitStun { get; set; }
     public bool InComboHit { get; set; }
-    public bool CanGetDamage { get; set; } = true;
     public float KnockBackTime { get; private set; }
     public Vector2 AttackForce { get; private set; }
     public Vector2 CombinedForce { get; set; }
@@ -272,7 +272,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public void OnGrab(InputAction.CallbackContext context)
     {
         if (context.performed && !IsAttacking && !InBlock
-            && !InHitStun && !IsBeingKnockedBack && IsGrounded())
+            && !InHitStun && !IsBeingKnockedBack && IsGrounded() && !CanCombo)
         {
             CurrentMove = ECurrentMove.Grab;
             IsAttacking = true;
@@ -353,7 +353,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
 
         if (!InHitStun)
         {
-            //CanGetDamage = false;
             InHitStun = true;
             PercentageCount += damageAmount;
             HitStunDuration = stunDuration;
@@ -364,9 +363,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
             AttackForce = attackForce;
             GetFixedKnockBack = hasFixedKnockBack;
             InKnockdown = applyKnockDown;
-
-
-            //StartCoroutine(WaitDamage());
         }
         else if (InHitStun && isPlayerAttack && !InComboHit)
         {
@@ -383,16 +379,36 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         }
     }
     
+    /// <summary>
+    /// Set the player in grab state if possible and set his position to the new position
+    /// </summary>
+    /// <param name="newPosition"></param>
     public void Grabbed(Vector2 newPosition)
     {
         InGrab = true;
         transform.position = newPosition;
     }
 
+    /// <summary>
+    /// Handle if the character can do a combo or not
+    /// </summary>
+    /// <param name="isComboTime"></param>
     public void HandleCombo(bool isComboTime)
     {
         IsAttacking = !isComboTime;
         CanCombo = isComboTime;
+    }
+    
+    /// <summary>
+    /// Handle if the hurtboxes of the player should be active or not
+    /// </summary>
+    /// <param name="active"></param>
+    public void HandleHurtboxes(bool active)
+    {
+        for (int i = 0; i < hurtboxes.Length; i++)
+        {
+            hurtboxes[i].enabled = active;
+        }
     }
 
     private IEnumerator DashCooldown()
@@ -400,7 +416,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         yield return new WaitForSeconds(1f);
         canDash = true;
     }
-    
+
     /// <summary>
     /// check if player is on the ground
     /// </summary>

@@ -28,7 +28,7 @@ public class SpawnPlayerCharacterSelection : MonoBehaviour
 
                 if (showStartButton)
                 {
-                    GameObject.Find("Character Selection").gameObject.GetComponent<CanvasGroup>().HideCanvasGroup();
+                   UIManager.Instance.CharacterSelected();
                 }
             }
         }

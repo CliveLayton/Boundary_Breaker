@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class PlayerHitStunState : PlayerBaseState
 {
+    private Coroutine hitStopCoroutine;
     private Coroutine hitStunCoroutine;
-    
+    private bool hasJumpCanceled = false;
+
     public PlayerHitStunState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
     }
@@ -13,7 +15,7 @@ public class PlayerHitStunState : PlayerBaseState
     {
         Ctx.Anim.Play("HitReactionHeavy");
         //Apply HitStop Before Knockback
-        Ctx.StartCoroutine(HitStop());
+        hitStopCoroutine = Ctx.StartCoroutine(HitStop());
     }
 
     public override void UpdateState()
@@ -50,14 +52,15 @@ public class PlayerHitStunState : PlayerBaseState
         Time.timeScale = 0f; //freeze game time
         if (Ctx.IsComboPossible)
         {
-            Ctx.Opponent.HandleCombo(true);
+            Ctx.Opponent.HandleCombo(true, false);
+            Ctx.StartCoroutine(CheckForJumpCancel());
         }
         Ctx.CmImpulse.GenerateImpulse();
         hitStunCoroutine = Ctx.StartCoroutine(HitStunCoroutine());
         yield return new WaitForSecondsRealtime(Ctx.HitStopDuration); // wait for real-world time
         if (Ctx.IsComboPossible)
         {
-            Ctx.Opponent.HandleCombo(false);
+            Ctx.Opponent.HandleCombo(false, hasJumpCanceled);
         }
         Time.timeScale = 1f; //resume game time
     }
@@ -82,5 +85,36 @@ public class PlayerHitStunState : PlayerBaseState
         Ctx.transform.localPosition = originalPosition; // reset position
         
         Ctx.InHitStun = false;
+    }
+
+    private IEnumerator CheckForJumpCancel()
+    {
+        float timer = 0f;
+        hasJumpCanceled = false;
+
+        while (timer < Ctx.HitStopDuration)
+        {
+            hasJumpCanceled = Ctx.Opponent.IsJumpedPressed;
+
+            if (hasJumpCanceled)
+            {
+                Time.timeScale = 1f;
+                if (hitStopCoroutine != null)
+                {
+                    Ctx.StopCoroutine(hitStopCoroutine); 
+                }
+                
+                if (hitStunCoroutine != null)
+                {
+                    Ctx.StopCoroutine(hitStunCoroutine); 
+                }
+                Ctx.Opponent.HandleCombo(false,true);
+                Ctx.InHitStun = false;
+                break;
+            }
+
+            timer += Time.unscaledDeltaTime;
+            yield return null;
+        }
     }
 }

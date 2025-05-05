@@ -23,4 +23,14 @@ public static class UIExtensionMethods
         myCanvasGroup.interactable = true;
         myCanvasGroup.blocksRaycasts = true;
     }
+
+    /// <summary>
+    /// sets only interactable and blockRaycasts to false to still display the menu
+    /// </summary>
+    /// <param name="myCanvasGroup"></param>
+    public static void DisableInteraction(this CanvasGroup myCanvasGroup)
+    {
+        myCanvasGroup.interactable = false;
+        myCanvasGroup.blocksRaycasts = false;
+    }
 }

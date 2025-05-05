@@ -13,6 +13,7 @@ public class PlayerGrabbedState : PlayerBaseState
 
     public override void UpdateState()
     {
+        Debug.Log(Ctx.Rb.linearVelocity);
         CheckSwitchStates();
     }
 

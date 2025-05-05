@@ -40,6 +40,13 @@ public class PlayerInputManager : MonoBehaviour
             //Otherwise, keep the default device
             gameInput.devices = new[] { joinedDevice };
         }
+
+        GameStateManager.Instance.onStateChanged += HandleInputActivation;
+    }
+
+    private void OnDestroy()
+    {
+        GameStateManager.Instance.onStateChanged -= HandleInputActivation;
     }
 
     /// <summary>
@@ -48,39 +55,24 @@ public class PlayerInputManager : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        gameInput.Enable();
-
-        // gameInput.Player.Move.performed += playerController.OnMove;
-        // gameInput.Player.Move.canceled += playerController.OnMove;
+        // gameInput.Enable();
         //
-        // gameInput.Player.Jump.started += playerController.OnJump;
-        // gameInput.Player.Jump.canceled += playerController.OnJump;
+        // gameInput.Player.Move.performed += playerStateMachine.OnMove;
+        // gameInput.Player.Move.canceled += playerStateMachine.OnMove;
         //
-        // gameInput.Player.Dash.performed += playerController.OnDash;
-        // gameInput.Player.Dash.canceled += playerController.OnDash;
+        // gameInput.Player.Jump.started += playerStateMachine.OnJump;
+        // gameInput.Player.Jump.canceled += playerStateMachine.OnJump;
         //
-        // gameInput.Player.Jab.performed += playerController.OnLightAttack;
+        // gameInput.Player.Dash.performed += playerStateMachine.OnDash;
+        // gameInput.Player.Dash.canceled += playerStateMachine.OnDash;
         //
-        // gameInput.Player.HeavyAttack.performed += playerController.OnHeavyAttack;
+        // gameInput.Player.Jab.performed += playerStateMachine.OnLightAttack;
         //
-        // gameInput.Player.SpecialAttack.performed += playerController.OnSpecialAttack;
-        
-        gameInput.Player.Move.performed += playerStateMachine.OnMove;
-        gameInput.Player.Move.canceled += playerStateMachine.OnMove;
-
-        gameInput.Player.Jump.started += playerStateMachine.OnJump;
-        gameInput.Player.Jump.canceled += playerStateMachine.OnJump;
-
-        gameInput.Player.Dash.performed += playerStateMachine.OnDash;
-        gameInput.Player.Dash.canceled += playerStateMachine.OnDash;
-
-        gameInput.Player.Jab.performed += playerStateMachine.OnLightAttack;
-
-        gameInput.Player.HeavyAttack.performed += playerStateMachine.OnHeavyAttack;
-
-        gameInput.Player.SpecialAttack.performed += playerStateMachine.OnSpecialAttack;
-
-        gameInput.Player.Grab.performed += playerStateMachine.OnGrab;
+        // gameInput.Player.HeavyAttack.performed += playerStateMachine.OnHeavyAttack;
+        //
+        // gameInput.Player.SpecialAttack.performed += playerStateMachine.OnSpecialAttack;
+        //
+        // gameInput.Player.Grab.performed += playerStateMachine.OnGrab;
     }
 
     /// <summary>
@@ -89,39 +81,69 @@ public class PlayerInputManager : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        gameInput.Disable();
+        // gameInput.Disable();
+        //
+        // gameInput.Player.Move.performed -= playerStateMachine.OnMove;
+        // gameInput.Player.Move.canceled -= playerStateMachine.OnMove;
+        //
+        // gameInput.Player.Jump.started -= playerStateMachine.OnJump;
+        // gameInput.Player.Jump.canceled -= playerStateMachine.OnJump;
+        //
+        // gameInput.Player.Dash.performed -= playerStateMachine.OnDash;
+        // gameInput.Player.Dash.canceled -= playerStateMachine.OnDash;
+        //
+        // gameInput.Player.Jab.performed -= playerStateMachine.OnLightAttack;
+        //
+        // gameInput.Player.HeavyAttack.performed -= playerStateMachine.OnHeavyAttack;
+        //
+        // gameInput.Player.SpecialAttack.performed -= playerStateMachine.OnSpecialAttack;
+        //
+        // gameInput.Player.Grab.performed -= playerStateMachine.OnGrab;
+    }
+
+    private void HandleInputActivation(GameStateManager.GameState newState)
+    {
+        switch (newState)
+        {
+            case GameStateManager.GameState.InMainMenu:
+                gameInput.Disable();
+                gameInput.Player.Move.performed -= playerStateMachine.OnMove;
+                gameInput.Player.Move.canceled -= playerStateMachine.OnMove;
+
+                gameInput.Player.Jump.started -= playerStateMachine.OnJump;
+                gameInput.Player.Jump.canceled -= playerStateMachine.OnJump;
+
+                gameInput.Player.Dash.performed -= playerStateMachine.OnDash;
+                gameInput.Player.Dash.canceled -= playerStateMachine.OnDash;
+
+                gameInput.Player.Jab.performed -= playerStateMachine.OnLightAttack;
+
+                gameInput.Player.HeavyAttack.performed -= playerStateMachine.OnHeavyAttack;
+
+                gameInput.Player.SpecialAttack.performed -= playerStateMachine.OnSpecialAttack;
         
-        // gameInput.Player.Move.performed -= playerController.OnMove;
-        // gameInput.Player.Move.canceled -= playerController.OnMove;
-        //
-        // gameInput.Player.Jump.started -= playerController.OnJump;
-        // gameInput.Player.Jump.canceled -= playerController.OnJump;
-        //
-        // gameInput.Player.Dash.performed -= playerController.OnDash;
-        // gameInput.Player.Dash.canceled -= playerController.OnDash;
-        //
-        // gameInput.Player.Jab.performed -= playerController.OnLightAttack;
-        //
-        // gameInput.Player.HeavyAttack.performed -= playerController.OnHeavyAttack;
-        //
-        // gameInput.Player.SpecialAttack.performed -= playerController.OnSpecialAttack;
-        
-        gameInput.Player.Move.performed -= playerStateMachine.OnMove;
-        gameInput.Player.Move.canceled -= playerStateMachine.OnMove;
+                gameInput.Player.Grab.performed -= playerStateMachine.OnGrab;
+                break;
+            case GameStateManager.GameState.InGame:
+                gameInput.Enable();
+                gameInput.Player.Move.performed += playerStateMachine.OnMove;
+                gameInput.Player.Move.canceled += playerStateMachine.OnMove;
 
-        gameInput.Player.Jump.started -= playerStateMachine.OnJump;
-        gameInput.Player.Jump.canceled -= playerStateMachine.OnJump;
+                gameInput.Player.Jump.started += playerStateMachine.OnJump;
+                gameInput.Player.Jump.canceled += playerStateMachine.OnJump;
 
-        gameInput.Player.Dash.performed -= playerStateMachine.OnDash;
-        gameInput.Player.Dash.canceled -= playerStateMachine.OnDash;
+                gameInput.Player.Dash.performed += playerStateMachine.OnDash;
+                gameInput.Player.Dash.canceled += playerStateMachine.OnDash;
 
-        gameInput.Player.Jab.performed -= playerStateMachine.OnLightAttack;
+                gameInput.Player.Jab.performed += playerStateMachine.OnLightAttack;
 
-        gameInput.Player.HeavyAttack.performed -= playerStateMachine.OnHeavyAttack;
+                gameInput.Player.HeavyAttack.performed += playerStateMachine.OnHeavyAttack;
 
-        gameInput.Player.SpecialAttack.performed -= playerStateMachine.OnSpecialAttack;
-        
-        gameInput.Player.Grab.performed -= playerStateMachine.OnGrab;
+                gameInput.Player.SpecialAttack.performed += playerStateMachine.OnSpecialAttack;
+
+                gameInput.Player.Grab.performed += playerStateMachine.OnGrab;
+                break;
+        }
     }
 
     #endregion

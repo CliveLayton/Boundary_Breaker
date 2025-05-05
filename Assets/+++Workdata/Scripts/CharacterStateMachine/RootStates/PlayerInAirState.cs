@@ -35,7 +35,7 @@ public class PlayerInAirState : PlayerBaseState
     
     public override void InitializeSubState()
     {
-        if (Ctx.IsJumpedPressed && !Ctx.IsDashing && !Ctx.IsAttacking)
+        if (Ctx.IsJumpedPressed && !Ctx.IsDashing)
         {
             SetSubState(Factory.Jump());
         }
@@ -51,7 +51,7 @@ public class PlayerInAirState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.5f && !Ctx.InHitStun && !Ctx.InGrab)
+        if (Ctx.IsGrounded() && Ctx.Rb.linearVelocity.y < 0.5f && !Ctx.InHitStun && !Ctx.InGrab && !Ctx.RequireNewJumpPress)
         {
             SwitchState(Factory.Grounded());
         }

@@ -13,7 +13,7 @@ public class GameStateManager : MonoBehaviour
 {
     #region Variables
 
-    public static GameStateManager instance;
+    public static GameStateManager Instance;
 
     public const string mainMenuSceneName = "Main Menus";
     public const string fightingScene1 = "Gameplay";
@@ -36,25 +36,28 @@ public class GameStateManager : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
         //use "Screen.currentResolution.refreshRate" to check for the max refreshrate the monitor of the player has
         Application.targetFrameRate = 60;
 
 #if UNITY_EDITOR
     
-        if (EditorPrefs.GetString("activeScene") != null)
+        if (EditorPrefs.GetString("activeScene") != null && EditorPrefs.GetString("activeScene") != "ManagerScene")
         {
             SceneManager.LoadScene(EditorPrefs.GetString("activeScene"), LoadSceneMode.Additive);
         }
-        
-        
-    #endif
+        else
+        {
+            SceneManager.LoadScene("Gameplay", LoadSceneMode.Additive);
+        }
+
+#endif
     }
 
     private void Start()
     {
         //when we start the game, we first want to enter the main menu
-        //GoToMainMenu(false);
+        GoToMainMenu(false);
     }
 
     #endregion
@@ -72,7 +75,7 @@ public class GameStateManager : MonoBehaviour
         {
             onStateChanged(currentState);
         }
-        LoadSceneManager.instance.SwitchScene(mainMenuSceneName,showLoadingScreen);
+        //LoadSceneManager.instance.SwitchScene(mainMenuSceneName,showLoadingScreen);
         //MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
         Cursor.lockState = CursorLockMode.None;
     }
@@ -86,9 +89,9 @@ public class GameStateManager : MonoBehaviour
             onStateChanged(currentState);
         }
 
-        LoadSceneManager.instance.SwitchScene(fightingScene1);
+        LoadSceneManager.instance.SwitchScene(fightingScene1, false);
         //MusicManager.Instance.PlayMusic(MusicManager.Instance.forestMusic, 0.1f);
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void LoadNewGameplayScene(string sceneName)

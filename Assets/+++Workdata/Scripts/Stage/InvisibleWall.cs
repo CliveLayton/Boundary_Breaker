@@ -11,13 +11,19 @@ public class InvisibleWall : MonoBehaviour
     [SerializeField] private float knockBackTime = 0.2f;
     [SerializeField] private Vector2 attackForce = new Vector2(1.5f,-2f);
     [SerializeField] private bool applyKnockDown;
+    [SerializeField] private PlayerStateMachine Player1;
+    [SerializeField] private PlayerStateMachine Player2;
     
     private BoxCollider col;
     private bool isOnWall;
+    private Vector3 startPosPlayer1;
+    private Vector3 startPosPlayer2;
 
     private void Awake()
     {
         col = GetComponent<BoxCollider>();
+        startPosPlayer1 = Player1.transform.position;
+        startPosPlayer2 = Player2.transform.position;
     }
 
     private void OnCollisionEnter(Collision other)
@@ -56,6 +62,11 @@ public class InvisibleWall : MonoBehaviour
     private IEnumerator RestartGame()
     {
         yield return new WaitForSeconds(1.5f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        col.enabled = true;
+        Player1.transform.position = startPosPlayer1;
+        Player1.PercentageCount = 0f;
+        Player2.transform.position = startPosPlayer2;
+        Player2.PercentageCount = 0f;
+        //LoadSceneManager.instance.SwitchScene(GameStateManager.fightingScene1, false);
     }
 }

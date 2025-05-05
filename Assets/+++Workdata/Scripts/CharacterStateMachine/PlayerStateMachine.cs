@@ -28,11 +28,13 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
 
     //private Variables
     private bool canDash = true;
+    // private float jumpCancelBufferTimer = -1f;
+    // private float jumpCancelBufferDuration = 0.5f;
     private Quaternion targetRotation;
     private PlayerStateFactory states;
     
     //getters and setters
-    [field: SerializeField] public float PercentageCount { get; private set; }
+    [field: SerializeField] public float PercentageCount { get; set; }
     [field: SerializeField] public float ForwardSpeed { get; private set; }
     [field: SerializeField] public float BackwardSpeed { get; private set; }
     [field: SerializeField] public float SpeedChangeRate { get; private set; }
@@ -55,6 +57,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public float LastMovementX { get; set; }
     public bool IsJumpedPressed { get; private set; }
     public bool RequireNewJumpPress { get; set; }
+    public bool HasJumpCanceled { get; private set; }
+    //public bool BufferedJumpCancel => Time.unscaledTime <= jumpCancelBufferTimer;
     public bool IsDashing { get; set; }
     public bool InBlock { get; set; }
     [field: SerializeField] public bool IsAttacking { get; set; }
@@ -156,6 +160,10 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        // if (context.started)
+        // {
+        //     jumpCancelBufferTimer = Time.unscaledTime + jumpCancelBufferDuration;
+        // }
         IsJumpedPressed = context.ReadValueAsButton();
         RequireNewJumpPress = false;
     }
@@ -173,7 +181,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public void OnLightAttack(InputAction.CallbackContext context)
     {
         if (context.performed && !IsAttacking && !InBlock
-            && !InHitStun && !IsBeingKnockedBack && IsGrounded())
+            && !InHitStun && !IsBeingKnockedBack && IsGrounded() && !IsJumpedPressed)
         {
             if (Mathf.Abs(MoveInput.y) <= 0.3f && Mathf.Abs(MoveInput.x) <= 0.3f)
             {
@@ -239,7 +247,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public void OnSpecialAttack(InputAction.CallbackContext context)
     {
         if (context.performed && !IsAttacking && !InBlock 
-            && !InHitStun  && !IsBeingKnockedBack && IsGrounded())
+            && !InHitStun  && !IsBeingKnockedBack && IsGrounded() && !IsJumpedPressed)
         {
             if (Mathf.Abs(MoveInput.y) <= 0.3f && Mathf.Abs(MoveInput.x) <= 0.3f)
             {
@@ -339,13 +347,13 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, float knockBackTime, 
         bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent, bool isPlayerAttack, bool applyKnockDown)
     {
-        if (IsFacingRight() && MoveInput.x < 0)
+        if (IsFacingRight() && MoveInput.x < 0 && !InGrab)
         {
             InBlock = true;
             return;
         }
 
-        if (!IsFacingRight() && MoveInput.x > 0)
+        if (!IsFacingRight() && MoveInput.x > 0 && !InGrab)
         {
             InBlock = true;
             return;
@@ -393,12 +401,22 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     /// Handle if the character can do a combo or not
     /// </summary>
     /// <param name="isComboTime"></param>
-    public void HandleCombo(bool isComboTime)
+    /// <param name="isJumpCancel">Check if the opponent is jumping out the combo</param>
+    public void HandleCombo(bool isComboTime, bool isJumpCancel)
     {
-        IsAttacking = !isComboTime;
+        if (isJumpCancel)
+        {
+            HasJumpCanceled = true;
+            StartCoroutine(JumpCancelCooldown());
+            IsAttacking = isComboTime;
+        }
+        else
+        {
+            IsAttacking = !isComboTime;
+        }
         CanCombo = isComboTime;
     }
-    
+
     /// <summary>
     /// Handle if the hurtboxes of the player should be active or not
     /// </summary>
@@ -415,6 +433,12 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     {
         yield return new WaitForSeconds(1f);
         canDash = true;
+    }
+
+    private IEnumerator JumpCancelCooldown()
+    {
+        yield return new WaitForSeconds(0.05f);
+        HasJumpCanceled = false;
     }
 
     /// <summary>

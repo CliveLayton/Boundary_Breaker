@@ -10,13 +10,14 @@ public class PlayerStunnedState : PlayerBaseState
 
     public override void EnterState()
     {
-        Ctx.Rb.linearVelocity = Vector3.zero; //Reset movement
+        Ctx.Rb.linearVelocity = Vector3.zero; //reset velocity
         InitializeSubState();
     }
 
     public override void UpdateState()
     {
-        
+        //keep velocity on zero while stunned
+        Ctx.Rb.linearVelocity = Vector3.zero;
     }
 
     public override void ExitState()

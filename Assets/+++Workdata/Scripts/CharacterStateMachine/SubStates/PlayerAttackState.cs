@@ -16,8 +16,13 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
         if (currentMove == Ctx.Moves[(int)Ctx.CurrentMove] && Ctx.Moves[(int)Ctx.CurrentMove].frameChecker.animationFrameInfo.isActive())
         {
             return;
-        }
+        } 
         
+        if (Ctx.HasJumpCanceled)
+        {
+            return;
+        }
+
         if (currentMove != null)
         {
             OnHitFrameEnd();
@@ -37,6 +42,12 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
 
     public override void UpdateState()
     {
+        //if the current move is throw or grab reset velocity to ensure a hit
+        if (Ctx.CurrentMove == PlayerStateMachine.ECurrentMove.Grab || Ctx.CurrentMove == PlayerStateMachine.ECurrentMove.Throw)
+        {
+            Ctx.Rb.linearVelocity = Vector3.zero;
+        }
+        
         currentMove.frameChecker.CheckFrames();
         for (int i = 0; i < currentMove.hitbox.Length; i++)
         {

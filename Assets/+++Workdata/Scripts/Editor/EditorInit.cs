@@ -11,6 +11,9 @@ public class EditorInit
         EditorPrefs.SetString("activeScene", SceneManager.GetActiveScene().name);
         var pathOfFirstScene = EditorBuildSettings.scenes[0].path;
         var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(pathOfFirstScene);
-        EditorSceneManager.playModeStartScene = sceneAsset;
+        if (EditorPrefs.GetString("activeScene") == "Gameplay")
+        {
+            EditorSceneManager.playModeStartScene = sceneAsset;
+        }
     }
 }

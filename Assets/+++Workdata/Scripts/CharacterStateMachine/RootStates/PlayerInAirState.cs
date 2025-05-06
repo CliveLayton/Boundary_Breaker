@@ -31,6 +31,13 @@ public class PlayerInAirState : PlayerBaseState
         {
             Ctx.RequireNewJumpPress = true;
         }
+
+        Ctx.CanDash = true;
+        Ctx.IsAttacking = false;
+        
+        //prevent sliding if you enter ground 
+        Ctx.Rb.linearVelocity = new Vector2(0, Ctx.Rb.linearVelocity.y);
+        Ctx.LastMovementX = 0; 
     }
     
     public override void InitializeSubState()

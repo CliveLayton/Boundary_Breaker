@@ -2934,6 +2934,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4651249270729331208, guid: 52e6b30931d0ad048bba135d5faf2333, type: 3}
+      propertyPath: layerToCheck.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 4651949098223613047, guid: 52e6b30931d0ad048bba135d5faf2333, type: 3}
       propertyPath: m_Layer
       value: 10

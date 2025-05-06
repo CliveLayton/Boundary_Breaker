@@ -15,8 +15,15 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void UpdateState()
     {
-       Ctx.PlayerMovement();
-       CheckSwitchStates();
+        if (!Ctx.IsGrounded())
+        {
+            if (Ctx.Rb.linearVelocity.y < 0)
+            {
+                Ctx.Rb.linearVelocity += Vector3.up * (Ctx.FallMultiplier * Physics.gravity.y * Time.deltaTime);
+            }
+        }
+        Ctx.PlayerMovement(); 
+        CheckSwitchStates();
     }
 
     public override void ExitState()

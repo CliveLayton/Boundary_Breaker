@@ -50,6 +50,8 @@ public class PlayerGroundedState : PlayerBaseState
         }
         else if(Ctx.InHitStun || Ctx.InGrab)
         {
+            //reset dash if you got hit while dashing
+            Ctx.CanDash = true;
             SwitchState(Factory.Stunned());
         }
     }

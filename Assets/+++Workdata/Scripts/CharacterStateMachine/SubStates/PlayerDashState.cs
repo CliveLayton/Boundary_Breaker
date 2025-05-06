@@ -40,6 +40,7 @@ public class PlayerDashState : PlayerBaseState
 
     public override void UpdateState()
     {
+        Ctx.Rb.linearVelocity = new Vector2(Ctx.Rb.linearVelocity.x, 0);
         if (Ctx.Anim.NormalizedTime(0) > 0.9f)
         {
             CheckSwitchStates();  
@@ -48,7 +49,10 @@ public class PlayerDashState : PlayerBaseState
 
     public override void ExitState()
     {
-        
+        if (Ctx.IsGrounded())
+        {
+            Ctx.CanDash = true; 
+        }
     }
     
     public override void InitializeSubState()

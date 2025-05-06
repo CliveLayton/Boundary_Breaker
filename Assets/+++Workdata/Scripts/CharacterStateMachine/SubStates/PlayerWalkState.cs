@@ -52,6 +52,14 @@ public class PlayerWalkState : PlayerBaseState
         {
             Ctx.Speed = Ctx.BackwardSpeed;
         }
+        
+        if (!Ctx.IsGrounded())
+        {
+            if (Ctx.Rb.linearVelocity.y < 0)
+            {
+                Ctx.Rb.linearVelocity += Vector3.up * (Ctx.FallMultiplier * Physics.gravity.y * Time.deltaTime);
+            }
+        }
 
         Ctx.PlayerMovement();
         CheckSwitchStates();

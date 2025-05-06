@@ -27,7 +27,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     //public Variables
 
     //private Variables
-    private bool canDash = true;
     // private float jumpCancelBufferTimer = -1f;
     // private float jumpCancelBufferDuration = 0.5f;
     private Quaternion targetRotation;
@@ -78,6 +77,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public bool GetKnockBackToOpponent { get; private set; }
     public bool IsBeingKnockedBack { get; set; }
     public bool InKnockdown { get; set; }
+    public bool CanDash { get; set; } = true;
     [field: SerializeField] public CharacterMoves[] Moves { get; private set; }
 
 
@@ -170,11 +170,10 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
 
     public void OnDash(InputAction.CallbackContext context)
     {
-        if (canDash && context.performed)
+        if (CanDash && context.performed && !InBlock)
         {
-            canDash = false;
+            CanDash = false;
             IsDashing = true;
-            StartCoroutine(DashCooldown());
         }
     }
 
@@ -347,13 +346,13 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, float knockBackTime, 
         bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent, bool isPlayerAttack, bool applyKnockDown)
     {
-        if (IsFacingRight() && MoveInput.x < 0 && !InGrab)
+        if (IsFacingRight() && MoveInput.x < 0 && !InGrab && CanDash)
         {
             InBlock = true;
             return;
         }
 
-        if (!IsFacingRight() && MoveInput.x > 0 && !InGrab)
+        if (!IsFacingRight() && MoveInput.x > 0 && !InGrab && CanDash)
         {
             InBlock = true;
             return;
@@ -427,12 +426,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         {
             hurtboxes[i].enabled = active;
         }
-    }
-
-    private IEnumerator DashCooldown()
-    {
-        yield return new WaitForSeconds(1f);
-        canDash = true;
     }
 
     private IEnumerator JumpCancelCooldown()

@@ -35,9 +35,12 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
             currentMove.hitbox[i].SetResponder(this);
         }
         currentMove.frameChecker.Initialize(this);
-        
-        Ctx.Rb.linearVelocity = new Vector2(0, Ctx.Rb.linearVelocity.y);
-        Ctx.LastMovementX = 0;
+
+        if (Ctx.IsGrounded())
+        {
+            Ctx.Rb.linearVelocity = new Vector2(0, Ctx.Rb.linearVelocity.y);
+            Ctx.LastMovementX = 0; 
+        }
     }
 
     public override void UpdateState()

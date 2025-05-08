@@ -10,6 +10,7 @@ public class PlayerStunnedState : PlayerBaseState
 
     public override void EnterState()
     {
+        Ctx.HandleRbFreeze(false);
         Ctx.Rb.linearVelocity = Vector3.zero; //reset velocity
         InitializeSubState();
     }

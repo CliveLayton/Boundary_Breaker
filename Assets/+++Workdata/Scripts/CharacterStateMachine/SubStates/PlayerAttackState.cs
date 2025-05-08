@@ -39,18 +39,13 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
         if (Ctx.IsGrounded())
         {
             Ctx.Rb.linearVelocity = new Vector2(0, Ctx.Rb.linearVelocity.y);
-            Ctx.LastMovementX = 0; 
+            Ctx.LastMovementX = 0;
+            Ctx.HandleRbFreeze(true);
         }
     }
 
     public override void UpdateState()
     {
-        //if the current move is throw or grab reset velocity to ensure a hit
-        if (Ctx.CurrentMove == PlayerStateMachine.ECurrentMove.Grab || Ctx.CurrentMove == PlayerStateMachine.ECurrentMove.Throw)
-        {
-            Ctx.Rb.linearVelocity = Vector3.zero;
-        }
-        
         currentMove.frameChecker.CheckFrames();
         for (int i = 0; i < currentMove.hitbox.Length; i++)
         {
@@ -65,7 +60,8 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
 
     public override void ExitState()
     {
-        
+        Ctx.HandleRbFreeze(false);
+        Ctx.Opponent.InBlock = false;
     }
 
     public override void CheckSwitchStates()
@@ -116,7 +112,6 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
 
     public void OnLastFrameStart()
     {
-        Ctx.Opponent.InBlock = false;
         Ctx.IsAttacking = false;
         Ctx.IsGrabbing = false;
         CheckSwitchStates();

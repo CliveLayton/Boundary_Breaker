@@ -346,13 +346,13 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, float knockBackTime, 
         bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent, bool isPlayerAttack, bool applyKnockDown)
     {
-        if (IsFacingRight() && MoveInput.x < 0 && !InGrab && CanDash)
+        if (IsFacingRight() && MoveInput.x < 0 && !InGrab && CanDash && isPlayerAttack)
         {
             InBlock = true;
             return;
         }
 
-        if (!IsFacingRight() && MoveInput.x > 0 && !InGrab && CanDash)
+        if (!IsFacingRight() && MoveInput.x > 0 && !InGrab && CanDash && isPlayerAttack)
         {
             InBlock = true;
             return;
@@ -425,6 +425,22 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         for (int i = 0; i < hurtboxes.Length; i++)
         {
             hurtboxes[i].enabled = active;
+        }
+    }
+
+    /// <summary>
+    /// handle if the rigidbody should be freezed completely or switch to default
+    /// </summary>
+    /// <param name="freeze"></param>
+    public void HandleRbFreeze(bool freeze)
+    {
+        if (freeze)
+        {
+            Rb.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+        }
+        else
+        {
+            Rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
         }
     }
 

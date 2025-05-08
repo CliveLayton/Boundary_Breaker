@@ -34,7 +34,8 @@ public class PlayerInAirState : PlayerBaseState
 
         Ctx.CanDash = true;
         Ctx.IsAttacking = false;
-        
+        Ctx.Opponent.InBlock = false;
+
         //prevent sliding if you enter ground 
         Ctx.Rb.linearVelocity = new Vector2(0, Ctx.Rb.linearVelocity.y);
         Ctx.LastMovementX = 0; 
@@ -53,6 +54,10 @@ public class PlayerInAirState : PlayerBaseState
         else if (Ctx.IsAttacking && !Ctx.IsDashing)
         {
             SetSubState(Factory.Attack());
+        }
+        else
+        {
+            SetSubState(Factory.Idle());
         }
     }
 

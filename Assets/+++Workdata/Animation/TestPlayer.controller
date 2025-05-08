@@ -761,7 +761,7 @@ AnimatorStateMachine:
     m_Position: {x: -540, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4865225244202844956}
-    m_Position: {x: -530, y: 180, z: 0}
+    m_Position: {x: -520, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6933976690808456336}
     m_Position: {x: -120, y: 650, z: 0}
@@ -876,7 +876,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HitReactionSpecial
+  m_Name: Knockback
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -889,7 +889,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: c7c2ea490468d8f45a6f8e68991740e3, type: 2}
+  m_Motion: {fileID: 7400000, guid: 97ebe897b21115f478f79fe7d2d99f73, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

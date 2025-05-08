@@ -15,7 +15,11 @@ public class PlayerKnockBackState : PlayerBaseState
     {
         Ctx.Rb.linearVelocity = Vector3.zero;
         Ctx.IsBeingKnockedBack = true;
-        
+        if (!Ctx.GetFixedKnockBack)
+        {
+            Ctx.Anim.Play("Knockback"); 
+        }
+
         Vector3 directionToOpponent = (Ctx.Opponent.transform.position - Ctx.transform.position).normalized;
         if (Ctx.GetKnockBackToOpponent)
         {
@@ -61,6 +65,7 @@ public class PlayerKnockBackState : PlayerBaseState
         {
             //set InKnockdown false if the knockback was strong enough to declare knockdown but stopped in air
             Ctx.InKnockdown = false;
+            Ctx.LastMovementX = Ctx.Rb.linearVelocity.x;
             SwitchState(Factory.InAir());
         }
         else if(Ctx.InHitStun || (Ctx.InKnockdown && Ctx.IsGrounded()))
@@ -131,18 +136,18 @@ public class PlayerKnockBackState : PlayerBaseState
         //Ctx.StartCoroutine(KnockbackDecay());
     }
     
-    private IEnumerator KnockbackDecay()
-    {
-        float decayTime = 0.3f; // Time to stop knockback
-        float elapsedTime = 0f;
-
-        while (elapsedTime < decayTime)
-        {
-            Ctx.Rb.linearVelocity = new Vector2(Ctx.Rb.linearVelocity.x * 0.9f, Ctx.Rb.linearVelocity.y * -0.4f);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        Ctx.IsBeingKnockedBack = false;
-    }
+    // private IEnumerator KnockbackDecay()
+    // {
+    //     float decayTime = 0.3f; // Time to stop knockback
+    //     float elapsedTime = 0f;
+    //
+    //     while (elapsedTime < decayTime)
+    //     {
+    //         Ctx.Rb.linearVelocity = new Vector2(Ctx.Rb.linearVelocity.x * 0.9f, Ctx.Rb.linearVelocity.y * -0.4f);
+    //         elapsedTime += Time.deltaTime;
+    //         yield return null;
+    //     }
+    //
+    //     Ctx.IsBeingKnockedBack = false;
+    // }
 }

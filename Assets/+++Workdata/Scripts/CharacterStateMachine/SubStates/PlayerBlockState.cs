@@ -9,7 +9,6 @@ public class PlayerBlockState : PlayerBaseState
     public override void EnterState()
     {
         Ctx.Anim.Play("Blocking");
-        Ctx.Rb.linearVelocity = Vector3.zero;
     }
 
     public override void UpdateState()
@@ -24,15 +23,12 @@ public class PlayerBlockState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        Debug.Log("check");
         if (Ctx.MoveInput.x == 0 && !Ctx.IsDashing && !Ctx.InBlock)
         {
-            Debug.Log("Idle");
             SwitchState(Factory.Idle());
         }
         else if (Ctx.MoveInput.x != 0 && !Ctx.IsDashing && !Ctx.InBlock)
         {
-            Debug.Log("Walk");
             SwitchState(Factory.Walk());
         }
     }

@@ -24,6 +24,12 @@ public class InvisibleWall : MonoBehaviour
         col = GetComponent<BoxCollider>();
         startPosPlayer1 = Player1.transform.position;
         startPosPlayer2 = Player2.transform.position;
+        UIManager.Instance.onTimerExpired += RestartMatch;
+    }
+
+    private void OnDisable()
+    {
+        UIManager.Instance.onTimerExpired -= RestartMatch;
     }
 
     private void OnCollisionEnter(Collision other)
@@ -59,14 +65,27 @@ public class InvisibleWall : MonoBehaviour
         }
     }
 
+    private void RestartMatch(bool isExpired)
+    {
+        if (isExpired)
+        {
+            StartCoroutine(RestartGame());
+        }
+    }
+
     private IEnumerator RestartGame()
     {
+        Time.timeScale = 0.5f;
+        UIManager.Instance.countdownActive = false;
         yield return new WaitForSeconds(1.5f);
+        Time.timeScale = 1f;
         col.enabled = true;
         Player1.transform.position = startPosPlayer1;
-        Player1.PercentageCount = 0f;
+        Player1.ResetPercentage();
         Player2.transform.position = startPosPlayer2;
-        Player2.PercentageCount = 0f;
+        Player2.ResetPercentage();
+        UIManager.Instance.remainingMatchTime = UIManager.Instance.matchTime;
+        UIManager.Instance.countdownActive = true;
         //LoadSceneManager.instance.SwitchScene(GameStateManager.fightingScene1, false);
     }
 }

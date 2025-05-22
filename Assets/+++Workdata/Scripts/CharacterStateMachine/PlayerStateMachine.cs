@@ -25,6 +25,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     [SerializeField] private BoxCollider[] hurtboxes;
 
     //public Variables
+    public event Action<float> onPercentageChanged; 
 
     //private Variables
     // private float jumpCancelBufferTimer = -1f;
@@ -362,6 +363,10 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         {
             InHitStun = true;
             PercentageCount += damageAmount;
+            if (onPercentageChanged != null)
+            {
+                onPercentageChanged(PercentageCount);
+            }
             HitStunDuration = stunDuration;
             HitStopDuration = hitStopDuration;
             IsComboPossible = isComboPossible;
@@ -375,6 +380,10 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         {
             InComboHit = true;
             PercentageCount += damageAmount;
+            if (onPercentageChanged != null)
+            {
+                onPercentageChanged(PercentageCount);
+            }
             HitStunDuration = stunDuration;
             HitStopDuration = hitStopDuration;
             IsComboPossible = isComboPossible;
@@ -493,6 +502,15 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public int GetPlayerIndex()
     {
         return playerIndex;
+    }
+
+    public void ResetPercentage()
+    {
+        PercentageCount = 0f;
+        if (onPercentageChanged != null)
+        {
+            onPercentageChanged(PercentageCount);
+        }
     }
 
     #endregion

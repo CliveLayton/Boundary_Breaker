@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +9,18 @@ public class PlayerConfigurationManager : MonoBehaviour
     private List<PlayerConfiguration> playerConfigs = new List<PlayerConfiguration>();
 
     public static PlayerConfigurationManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     public void HandlePlayerJoined(PlayerInput pi)
     {
@@ -32,6 +45,6 @@ public class PlayerConfiguration
     public PlayerInput Input { get; set; }
     
     public int PlayerIndex { get; set; }
-    
+
     public bool IsReady { get; set; }
 }

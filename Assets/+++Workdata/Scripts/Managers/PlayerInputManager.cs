@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerInputManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerInputManager : MonoBehaviour
     private GameInput gameInput;
     //private PlayerController playerController;
     private PlayerStateMachine playerStateMachine;
+    private int index;
 
     #endregion
 
@@ -20,13 +22,13 @@ public class PlayerInputManager : MonoBehaviour
         //var characterControlsArray = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
         var characterControlsArray = FindObjectsByType<PlayerStateMachine>(FindObjectsSortMode.None);
         var playerInput = GetComponent<PlayerInput>();
-        var index = playerInput.playerIndex;
+        index = playerInput.playerIndex;
         //playerController = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
         playerStateMachine = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
         
         //We create a new ControllerMap and assign it to the right player
         gameInput = new GameInput();
-        
+
         InputDevice joinedDevice = playerInput.devices.FirstOrDefault();
 
         //if the joined device is a Keyboard or Mouse, assign both Keyboard & Mouse
@@ -41,64 +43,29 @@ public class PlayerInputManager : MonoBehaviour
             gameInput.devices = new[] { joinedDevice };
         }
 
+        gameInput.Enable();
         GameStateManager.Instance.onStateChanged += HandleInputActivation;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDestroy()
     {
+        gameInput.Disable();
         GameStateManager.Instance.onStateChanged -= HandleInputActivation;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    /// <summary>
-    /// Enable the ControllerMap
-    /// Subscribe methods to certain buttons
-    /// </summary>
-    private void OnEnable()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
     {
-        // gameInput.Enable();
-        //
-        // gameInput.Player.Move.performed += playerStateMachine.OnMove;
-        // gameInput.Player.Move.canceled += playerStateMachine.OnMove;
-        //
-        // gameInput.Player.Jump.started += playerStateMachine.OnJump;
-        // gameInput.Player.Jump.canceled += playerStateMachine.OnJump;
-        //
-        // gameInput.Player.Dash.performed += playerStateMachine.OnDash;
-        // gameInput.Player.Dash.canceled += playerStateMachine.OnDash;
-        //
-        // gameInput.Player.Jab.performed += playerStateMachine.OnLightAttack;
-        //
-        // gameInput.Player.HeavyAttack.performed += playerStateMachine.OnHeavyAttack;
-        //
-        // gameInput.Player.SpecialAttack.performed += playerStateMachine.OnSpecialAttack;
-        //
-        // gameInput.Player.Grab.performed += playerStateMachine.OnGrab;
-    }
-
-    /// <summary>
-    /// Disable the ControllerMap
-    /// Desubscribe methods to certain buttons
-    /// </summary>
-    private void OnDisable()
-    {
-        // gameInput.Disable();
-        //
-        // gameInput.Player.Move.performed -= playerStateMachine.OnMove;
-        // gameInput.Player.Move.canceled -= playerStateMachine.OnMove;
-        //
-        // gameInput.Player.Jump.started -= playerStateMachine.OnJump;
-        // gameInput.Player.Jump.canceled -= playerStateMachine.OnJump;
-        //
-        // gameInput.Player.Dash.performed -= playerStateMachine.OnDash;
-        // gameInput.Player.Dash.canceled -= playerStateMachine.OnDash;
-        //
-        // gameInput.Player.Jab.performed -= playerStateMachine.OnLightAttack;
-        //
-        // gameInput.Player.HeavyAttack.performed -= playerStateMachine.OnHeavyAttack;
-        //
-        // gameInput.Player.SpecialAttack.performed -= playerStateMachine.OnSpecialAttack;
-        //
-        // gameInput.Player.Grab.performed -= playerStateMachine.OnGrab;
+        //disable and unsubscribe all old playerstatemachines
+        UnsubscribePlayerInput();
+        
+        if (scene.name == LoadSceneManager.instance.currentScene)
+        {
+            var characterControlsArray = FindObjectsByType<PlayerStateMachine>(FindObjectsSortMode.None);
+            playerStateMachine = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
+            HandleInputActivation(GameStateManager.Instance.currentState);
+        }
     }
 
     private void HandleInputActivation(GameStateManager.GameState newState)
@@ -106,44 +73,65 @@ public class PlayerInputManager : MonoBehaviour
         switch (newState)
         {
             case GameStateManager.GameState.InMainMenu:
-                gameInput.Disable();
-                gameInput.Player.Move.performed -= playerStateMachine.OnMove;
-                gameInput.Player.Move.canceled -= playerStateMachine.OnMove;
-
-                gameInput.Player.Jump.started -= playerStateMachine.OnJump;
-                gameInput.Player.Jump.canceled -= playerStateMachine.OnJump;
-
-                gameInput.Player.Dash.performed -= playerStateMachine.OnDash;
-                gameInput.Player.Dash.canceled -= playerStateMachine.OnDash;
-
-                gameInput.Player.Jab.performed -= playerStateMachine.OnLightAttack;
-
-                gameInput.Player.HeavyAttack.performed -= playerStateMachine.OnHeavyAttack;
-
-                gameInput.Player.SpecialAttack.performed -= playerStateMachine.OnSpecialAttack;
-        
-                gameInput.Player.Grab.performed -= playerStateMachine.OnGrab;
+                UnsubscribePlayerInput();
                 break;
             case GameStateManager.GameState.InGame:
-                gameInput.Enable();
-                gameInput.Player.Move.performed += playerStateMachine.OnMove;
-                gameInput.Player.Move.canceled += playerStateMachine.OnMove;
-
-                gameInput.Player.Jump.started += playerStateMachine.OnJump;
-                gameInput.Player.Jump.canceled += playerStateMachine.OnJump;
-
-                gameInput.Player.Dash.performed += playerStateMachine.OnDash;
-                gameInput.Player.Dash.canceled += playerStateMachine.OnDash;
-
-                gameInput.Player.Jab.performed += playerStateMachine.OnLightAttack;
-
-                gameInput.Player.HeavyAttack.performed += playerStateMachine.OnHeavyAttack;
-
-                gameInput.Player.SpecialAttack.performed += playerStateMachine.OnSpecialAttack;
-
-                gameInput.Player.Grab.performed += playerStateMachine.OnGrab;
+                SubscribePlayerInput();
                 break;
         }
+    }
+
+    /// <summary>
+    /// disable the Controllermap
+    /// desubscribe methods to certain buttons
+    /// </summary>
+    private void UnsubscribePlayerInput()
+    {
+        gameInput.Player.Move.performed -= playerStateMachine.OnMove;
+        gameInput.Player.Move.canceled -= playerStateMachine.OnMove;
+
+        gameInput.Player.Jump.started -= playerStateMachine.OnJump;
+        gameInput.Player.Jump.canceled -= playerStateMachine.OnJump;
+
+        gameInput.Player.Dash.performed -= playerStateMachine.OnDash;
+        gameInput.Player.Dash.canceled -= playerStateMachine.OnDash;
+
+        gameInput.Player.Jab.performed -= playerStateMachine.OnLightAttack;
+
+        gameInput.Player.HeavyAttack.performed -= playerStateMachine.OnHeavyAttack;
+
+        gameInput.Player.SpecialAttack.performed -= playerStateMachine.OnSpecialAttack;
+        
+        gameInput.Player.Grab.performed -= playerStateMachine.OnGrab;
+    }
+
+    /// <summary>
+    /// enable ControllerMap
+    /// subscribe methods to certain Buttons
+    /// </summary>
+    private void SubscribePlayerInput()
+    {
+        gameInput.Player.Move.performed += playerStateMachine.OnMove;
+        gameInput.Player.Move.canceled += playerStateMachine.OnMove;
+
+        gameInput.Player.Jump.started += playerStateMachine.OnJump;
+        gameInput.Player.Jump.canceled += playerStateMachine.OnJump;
+
+        gameInput.Player.Dash.performed += playerStateMachine.OnDash;
+        gameInput.Player.Dash.canceled += playerStateMachine.OnDash;
+
+        gameInput.Player.Jab.performed += playerStateMachine.OnLightAttack;
+
+        gameInput.Player.HeavyAttack.performed += playerStateMachine.OnHeavyAttack;
+
+        gameInput.Player.SpecialAttack.performed += playerStateMachine.OnSpecialAttack;
+
+        gameInput.Player.Grab.performed += playerStateMachine.OnGrab;
+    }
+
+    public int GetInputIndex()
+    {
+        return index;
     }
 
     #endregion

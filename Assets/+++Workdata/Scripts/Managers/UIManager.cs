@@ -14,15 +14,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CanvasGroup winningScreen;
     [SerializeField] private CanvasGroup optionMenu;
     [SerializeField] private CanvasGroup quitMenu;
+    [SerializeField] private GameObject eventSystem;
+
+    [SerializeField] private CanvasGroup characterSelectionP1;
+    [SerializeField] private CanvasGroup characterSelectionP2;
 
     [SerializeField] private GameObject startMatchButton;
     [SerializeField] private TextMeshProUGUI player1Percentage;
     [SerializeField] private TextMeshProUGUI player2Percentage;
     [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private float matchTime;
     
-    public float matchTime;
-    public float remainingMatchTime;
     public bool countdownActive;
+    
+    private float remainingMatchTime;
 
     public event Action<bool> onTimerExpired;
 
@@ -86,8 +91,11 @@ public class UIManager : MonoBehaviour
 
     public void EnterMainMenu()
     {
+        eventSystem.SetActive(true);
         mainMenu.ShowCanvasGroup();
         characterSelection.HideCanvasGroup();
+        characterSelectionP1.HideCanvasGroup();
+        characterSelectionP2.HideCanvasGroup();
         inGame.HideCanvasGroup();
         pauseMenu.HideCanvasGroup();
         winningScreen.HideCanvasGroup();
@@ -97,7 +105,10 @@ public class UIManager : MonoBehaviour
 
     public void EnterCharacterSelection()
     {
-        characterSelection.ShowCanvasGroup();
+        eventSystem.SetActive(false);
+        characterSelection.DisableInteraction();
+        characterSelectionP1.ShowCanvasGroup();
+        characterSelectionP2.ShowCanvasGroup();
         mainMenu.HideCanvasGroup();
     }
 
@@ -115,6 +126,7 @@ public class UIManager : MonoBehaviour
 
     public void CharacterSelected()
     {
+        eventSystem.SetActive(true);
         startMatchButton.SetActive(true);
     }
 

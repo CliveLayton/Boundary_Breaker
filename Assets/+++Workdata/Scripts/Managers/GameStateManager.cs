@@ -39,6 +39,7 @@ public class GameStateManager : MonoBehaviour
         Instance = this;
         //use "Screen.currentResolution.refreshRate" to check for the max refreshrate the monitor of the player has
         Application.targetFrameRate = 60;
+        SceneManager.sceneLoaded += ReloadFightScene;
 
 #if UNITY_EDITOR
     
@@ -58,6 +59,11 @@ public class GameStateManager : MonoBehaviour
     {
         //when we start the game, we first want to enter the main menu
         GoToMainMenu(false);
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= ReloadFightScene;
     }
 
     #endregion
@@ -92,6 +98,17 @@ public class GameStateManager : MonoBehaviour
         LoadSceneManager.instance.SwitchScene(fightingScene1, false);
         //MusicManager.Instance.PlayMusic(MusicManager.Instance.forestMusic, 0.1f);
         //Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void ReloadFightScene(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        if (scene.name == fightingScene1)
+        {
+            if (onStateChanged != null)
+            {
+                onStateChanged(currentState);
+            }
+        }
     }
 
     public void LoadNewGameplayScene(string sceneName)

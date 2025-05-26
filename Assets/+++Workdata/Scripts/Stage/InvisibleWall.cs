@@ -16,14 +16,10 @@ public class InvisibleWall : MonoBehaviour
     
     private BoxCollider col;
     private bool isOnWall;
-    private Vector3 startPosPlayer1;
-    private Vector3 startPosPlayer2;
 
     private void Awake()
     {
         col = GetComponent<BoxCollider>();
-        startPosPlayer1 = Player1.transform.position;
-        startPosPlayer2 = Player2.transform.position;
         UIManager.Instance.onTimerExpired += RestartMatch;
     }
 
@@ -79,13 +75,8 @@ public class InvisibleWall : MonoBehaviour
         UIManager.Instance.countdownActive = false;
         yield return new WaitForSeconds(1.5f);
         Time.timeScale = 1f;
-        col.enabled = true;
-        Player1.transform.position = startPosPlayer1;
         Player1.ResetPercentage();
-        Player2.transform.position = startPosPlayer2;
         Player2.ResetPercentage();
-        UIManager.Instance.remainingMatchTime = UIManager.Instance.matchTime;
-        UIManager.Instance.countdownActive = true;
-        //LoadSceneManager.instance.SwitchScene(GameStateManager.fightingScene1, false);
+        LoadSceneManager.instance.SwitchScene(GameStateManager.fightingScene1, false);
     }
 }

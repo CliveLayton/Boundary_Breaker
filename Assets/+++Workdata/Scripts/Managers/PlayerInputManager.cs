@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 
 public class PlayerInputManager : MonoBehaviour
@@ -23,12 +24,23 @@ public class PlayerInputManager : MonoBehaviour
         var characterControlsArray = FindObjectsByType<PlayerStateMachine>(FindObjectsSortMode.None);
         var playerInput = GetComponent<PlayerInput>();
         index = playerInput.playerIndex;
+        playerInput.enabled = false;
         //playerController = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
         playerStateMachine = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
         
         //We create a new ControllerMap and assign it to the right player
         gameInput = new GameInput();
+        playerInput.actions = gameInput.asset;
+        var uiModule = GetComponent<InputSystemUIInputModule>();
+        uiModule.actionsAsset = gameInput.asset;
+        uiModule.point = InputActionReference.Create(gameInput.UI.Point);
+        uiModule.move = InputActionReference.Create(gameInput.UI.Navigate);
+        uiModule.submit = InputActionReference.Create(gameInput.UI.Submit);
+        uiModule.cancel = InputActionReference.Create(gameInput.UI.Cancel);
+        playerInput.uiInputModule = uiModule;
 
+        gameInput.Enable();
+        playerInput.enabled = true;
         InputDevice joinedDevice = playerInput.devices.FirstOrDefault();
 
         //if the joined device is a Keyboard or Mouse, assign both Keyboard & Mouse
@@ -42,8 +54,7 @@ public class PlayerInputManager : MonoBehaviour
             //Otherwise, keep the default device
             gameInput.devices = new[] { joinedDevice };
         }
-
-        gameInput.Enable();
+        
         GameStateManager.Instance.onStateChanged += HandleInputActivation;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }

@@ -41,10 +41,10 @@ public class CharacterSelect : MonoBehaviour
         currentSelectedCharIndex = index;
     }
 
-    public void OnConfirmSelection()
+    private void OnConfirmSelection()
     {
         PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].IsReady = true;
-        PlayerConfigurationManager.Instance.CheckAllPlayerReady();
+        UIManager.Instance.CheckAllPlayerReady();
     }
 
     #endregion

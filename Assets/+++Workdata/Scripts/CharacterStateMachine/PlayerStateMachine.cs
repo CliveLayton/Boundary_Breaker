@@ -40,6 +40,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     [field: SerializeField] public float SpeedChangeRate { get; private set; }
     [field: SerializeField] public float DashPower { get; private set; }
     [field: SerializeField] public float JumpPower { get; private set; }
+    [field: SerializeField] public float JumpBrake { get; private set; }
     [field: SerializeField] public float FallMultiplier { get; private set; }
     [field: SerializeField] public float InputForce { get; private set; }
     [field: SerializeField] public AnimationCurve KnockBackForceCurve { get; private set; }

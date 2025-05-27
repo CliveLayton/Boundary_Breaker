@@ -350,6 +350,7 @@ MonoBehaviour:
   <SpeedChangeRate>k__BackingField: 5
   <DashPower>k__BackingField: 5
   <JumpPower>k__BackingField: 7
+  <JumpBrake>k__BackingField: 7
   <FallMultiplier>k__BackingField: 2
   <InputForce>k__BackingField: 4.5
   <KnockBackForceCurve>k__BackingField:

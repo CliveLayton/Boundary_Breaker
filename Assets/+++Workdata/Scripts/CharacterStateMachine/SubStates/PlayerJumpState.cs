@@ -47,7 +47,7 @@ public class PlayerJumpState : PlayerBaseState
 
         if (!Ctx.IsJumpedPressed && Ctx.Rb.linearVelocity.y > 0)
         {
-            Ctx.Rb.linearVelocity = new Vector2(Ctx.Rb.linearVelocity.x, Ctx.Rb.linearVelocity.y * 0.5f);
+            Ctx.Rb.linearVelocity += Vector3.down * (Ctx.JumpBrake * Time.deltaTime);
         }
 
         if (Ctx.Rb.linearVelocity.y < 0)

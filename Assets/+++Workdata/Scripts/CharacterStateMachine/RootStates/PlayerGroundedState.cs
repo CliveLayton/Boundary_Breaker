@@ -46,6 +46,8 @@ public class PlayerGroundedState : PlayerBaseState
     {
         if (Ctx.IsJumpedPressed && !Ctx.RequireNewJumpPress && !Ctx.InHitStun && !Ctx.InGrab && !Ctx.IsAttacking && Ctx.CanDash)
         {
+            //unfreeze the rb if currently in attack state
+            Ctx.HandleRbFreeze(false);
             SwitchState(Factory.InAir());
         }
         else if(Ctx.InHitStun || Ctx.InGrab)

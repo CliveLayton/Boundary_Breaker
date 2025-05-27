@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,11 +17,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CanvasGroup winningScreen;
     [SerializeField] private CanvasGroup optionMenu;
     [SerializeField] private CanvasGroup quitMenu;
-    [SerializeField] private GameObject eventSystem;
+    [SerializeField] private EventSystem eventSystem;
+    [SerializeField] private InputSystemUIInputModule mainInputModule;
 
     [SerializeField] private CanvasGroup characterSelectionP1;
     [SerializeField] private CanvasGroup characterSelectionP2;
 
+    [SerializeField] private GameObject versusButton;
     [SerializeField] private GameObject startMatchButton;
     [SerializeField] private TextMeshProUGUI player1Percentage;
     [SerializeField] private TextMeshProUGUI player2Percentage;
@@ -34,6 +39,8 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        EventSystem.current.SetSelectedGameObject(versusButton);
 
         GameStateManager.Instance.onStateChanged += ActivateInGameUI;
     }
@@ -91,7 +98,7 @@ public class UIManager : MonoBehaviour
 
     public void EnterMainMenu()
     {
-        eventSystem.SetActive(true);
+        eventSystem.enabled = true;
         mainMenu.ShowCanvasGroup();
         characterSelection.HideCanvasGroup();
         characterSelectionP1.HideCanvasGroup();
@@ -105,7 +112,14 @@ public class UIManager : MonoBehaviour
 
     public void EnterCharacterSelection()
     {
-        eventSystem.SetActive(false);
+        eventSystem.enabled = false;
+        mainInputModule.enabled = false;
+        for (int i = 0; i < PlayerConfigurationManager.Instance.PlayerConfigs.Count; i++)
+        {
+            PlayerConfigurationManager.Instance.PlayerConfigs[i].PlayerEvent.enabled = true;
+            PlayerConfigurationManager.Instance.PlayerConfigs[i].UIInputModule.enabled = true;
+        }
+        PlayerConfigurationManager.Instance.hasEnteredCharSelection = true;
         characterSelection.DisableInteraction();
         characterSelectionP1.ShowCanvasGroup();
         characterSelectionP2.ShowCanvasGroup();
@@ -123,11 +137,56 @@ public class UIManager : MonoBehaviour
         quitMenu.ShowCanvasGroup();
         mainMenu.HideCanvasGroup();
     }
+    
+    public void CheckAllPlayerReady()
+    {
+        bool player1Ready = false;
+        bool player2Ready = false;
+        
+        for (int i = 0; i < PlayerConfigurationManager.Instance.PlayerConfigs.Count; i++)
+        {
+            if (i == 0)
+            {
+                player1Ready = PlayerConfigurationManager.Instance.PlayerConfigs[i].IsReady;
+            }
+
+            if (i == 1)
+            {
+                player2Ready = PlayerConfigurationManager.Instance.PlayerConfigs[i].IsReady;
+            }
+        }
+
+        if (player1Ready && player2Ready)
+        {
+            CharacterSelected();
+        }
+    }
 
     public void CharacterSelected()
     {
-        eventSystem.SetActive(true);
+        characterSelectionP1.HideCanvasGroup();
+        characterSelectionP2.HideCanvasGroup();
+        characterSelection.ShowCanvasGroup();
         startMatchButton.SetActive(true);
+        //use coroutine to wait for frames to let unity intern system correctly handle the eventsystem 
+        StartCoroutine(SwitchEventSystems());
+    }
+
+    IEnumerator SwitchEventSystems()
+    {
+        PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.SetSelectedGameObject(null);
+        PlayerConfigurationManager.Instance.PlayerConfigs[1].UIInputModule.enabled = false;
+        PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.enabled = false;
+
+        yield return null;
+        
+        eventSystem.enabled = true;
+        mainInputModule.enabled = true;
+
+        yield return null;
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(startMatchButton);
     }
 
     public void EnterGame()

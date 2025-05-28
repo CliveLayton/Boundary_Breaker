@@ -289,6 +289,14 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         }
     }
 
+    public void OnPauseGame(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            UIManager.Instance.EnterPauseMenu(playerIndex);
+        }
+    }
+
     #endregion
     
     #region Player Movement

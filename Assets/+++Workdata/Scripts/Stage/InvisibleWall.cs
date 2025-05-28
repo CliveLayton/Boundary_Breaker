@@ -74,7 +74,6 @@ public class InvisibleWall : MonoBehaviour
         Time.timeScale = 0.5f;
         UIManager.Instance.countdownActive = false;
         yield return new WaitForSeconds(1.5f);
-        Time.timeScale = 1f;
         Player1.ResetPercentage();
         Player2.ResetPercentage();
         LoadSceneManager.instance.SwitchScene(GameStateManager.fightingScene1, false);

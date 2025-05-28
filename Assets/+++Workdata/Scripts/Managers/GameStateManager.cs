@@ -22,7 +22,8 @@ public class GameStateManager : MonoBehaviour
     public enum GameState
     {
         InMainMenu = 0,
-        InGame = 1
+        InGame = 1,
+        InGameMenus = 2
     }
 
     //this event notifies any objects that need to know about the changing of the game state.
@@ -101,10 +102,21 @@ public class GameStateManager : MonoBehaviour
         //Cursor.lockState = CursorLockMode.Locked;
     }
 
+    public void SwitchGameState(GameState state)
+    {
+        currentState = state;
+        if (onStateChanged != null)
+        {
+            onStateChanged(currentState);
+        }
+    }
+
     private void ReloadFightScene(Scene scene, LoadSceneMode loadSceneMode)
     {
         if (scene.name == fightingScene1)
         {
+            UIManager.Instance.RemainingMatchTime = UIManager.Instance.MatchTime;
+            currentState = GameState.InGame;
             if (onStateChanged != null)
             {
                 onStateChanged(currentState);

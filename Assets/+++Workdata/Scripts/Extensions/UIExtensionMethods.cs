@@ -30,7 +30,6 @@ public static class UIExtensionMethods
     /// <param name="myCanvasGroup"></param>
     public static void DisableInteraction(this CanvasGroup myCanvasGroup)
     {
-        myCanvasGroup.alpha = 1f;
         myCanvasGroup.interactable = false;
         myCanvasGroup.blocksRaycasts = false;
     }

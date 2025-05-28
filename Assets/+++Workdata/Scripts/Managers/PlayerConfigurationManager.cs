@@ -10,8 +10,8 @@ public class PlayerConfigurationManager : MonoBehaviour
 {
     [SerializeField] private GameObject player1Canvas;
     [SerializeField] private GameObject player2Canvas;
-    [SerializeField] private GameObject FirstSelectedP1;
-    [SerializeField] private GameObject FirstSelectedP2;
+    [SerializeField] private GameObject firstSelectedP1;
+    [SerializeField] private GameObject firstSelectedP2;
 
     public readonly List<PlayerConfiguration> PlayerConfigs = new List<PlayerConfiguration>();
     public static PlayerConfigurationManager Instance { get; private set; }
@@ -41,26 +41,40 @@ public class PlayerConfigurationManager : MonoBehaviour
 
         MultiplayerEventSystem multiplayerEventSystem = pi.gameObject.AddComponent<MultiplayerEventSystem>();
         pi.uiInputModule = pi.gameObject.AddComponent<InputSystemUIInputModule>();
+        
         if (!hasEnteredCharSelection)
         {
             multiplayerEventSystem.enabled = false;
             pi.uiInputModule.enabled = false;
+            
+            if (pi.playerIndex == 0)
+            {
+                multiplayerEventSystem.SetSelectedGameObject(null);
+                multiplayerEventSystem.playerRoot = player1Canvas;
+            }
+            else if (pi.playerIndex == 1)
+            {
+                multiplayerEventSystem.SetSelectedGameObject(null);
+                multiplayerEventSystem.playerRoot = player2Canvas;
+            }
+        }
+        else
+        {
+            if (pi.playerIndex == 0)
+            {
+                multiplayerEventSystem.SetSelectedGameObject(null);
+                multiplayerEventSystem.SetSelectedGameObject(firstSelectedP1);
+                multiplayerEventSystem.playerRoot = player1Canvas;
+            }
+            else if (pi.playerIndex == 1)
+            {
+                multiplayerEventSystem.SetSelectedGameObject(null);
+                multiplayerEventSystem.SetSelectedGameObject(firstSelectedP2);
+                multiplayerEventSystem.playerRoot = player2Canvas;
+            }
         }
 
         PlayerConfigs.Add(new PlayerConfiguration(pi, multiplayerEventSystem, pi.uiInputModule));
-
-        if (pi.playerIndex == 0)
-        {
-            multiplayerEventSystem.SetSelectedGameObject(null);
-            multiplayerEventSystem.SetSelectedGameObject(FirstSelectedP1);
-            multiplayerEventSystem.playerRoot = player1Canvas;
-        }
-        else if (pi.playerIndex == 1)
-        {
-            multiplayerEventSystem.SetSelectedGameObject(null);
-            multiplayerEventSystem.SetSelectedGameObject(FirstSelectedP2);
-            multiplayerEventSystem.playerRoot = player2Canvas;
-        }
     }
 }
 
@@ -80,7 +94,19 @@ public class PlayerConfiguration
     
     public InputSystemUIInputModule UIInputModule { get; set; }
     
+    public GameInput GameInputMap { get; set; }
+    
     public int PlayerIndex { get; set; }
 
     public bool IsReady { get; set; }
+
+    public void ReassignUIActions()
+    {
+        UIInputModule.actionsAsset = GameInputMap.asset;
+        UIInputModule.point = InputActionReference.Create(GameInputMap.UI.Point);
+        UIInputModule.move = InputActionReference.Create(GameInputMap.UI.Navigate);
+        UIInputModule.submit = InputActionReference.Create(GameInputMap.UI.Submit);
+        UIInputModule.cancel = InputActionReference.Create(GameInputMap.UI.Cancel);
+        Input.uiInputModule = UIInputModule;
+    }
 }

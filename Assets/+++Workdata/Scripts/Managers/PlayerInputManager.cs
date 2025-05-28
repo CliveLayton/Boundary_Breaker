@@ -30,6 +30,7 @@ public class PlayerInputManager : MonoBehaviour
         
         //We create a new ControllerMap and assign it to the right player
         gameInput = new GameInput();
+        PlayerConfigurationManager.Instance.PlayerConfigs[index].GameInputMap = gameInput;
         playerInput.actions = gameInput.asset;
         var uiModule = GetComponent<InputSystemUIInputModule>();
         uiModule.actionsAsset = gameInput.asset;
@@ -54,7 +55,11 @@ public class PlayerInputManager : MonoBehaviour
             //Otherwise, keep the default device
             gameInput.devices = new[] { joinedDevice };
         }
-        
+
+        if (index == 0)
+        {
+            UIManager.Instance.ReassignUIActions();
+        }
         GameStateManager.Instance.onStateChanged += HandleInputActivation;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -84,6 +89,7 @@ public class PlayerInputManager : MonoBehaviour
         switch (newState)
         {
             case GameStateManager.GameState.InMainMenu:
+            case GameStateManager.GameState.InGameMenus:
                 UnsubscribePlayerInput();
                 break;
             case GameStateManager.GameState.InGame:
@@ -114,6 +120,8 @@ public class PlayerInputManager : MonoBehaviour
         gameInput.Player.SpecialAttack.performed -= playerStateMachine.OnSpecialAttack;
         
         gameInput.Player.Grab.performed -= playerStateMachine.OnGrab;
+
+        gameInput.UI.Pause.performed -= playerStateMachine.OnPauseGame;
     }
 
     /// <summary>
@@ -138,6 +146,8 @@ public class PlayerInputManager : MonoBehaviour
         gameInput.Player.SpecialAttack.performed += playerStateMachine.OnSpecialAttack;
 
         gameInput.Player.Grab.performed += playerStateMachine.OnGrab;
+
+        gameInput.UI.Pause.performed += playerStateMachine.OnPauseGame;
     }
 
     public int GetInputIndex()

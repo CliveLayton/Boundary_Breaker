@@ -1,9 +1,7 @@
-using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
-using UnityEngine.SceneManagement;
 
 public class PlayerInputManager : MonoBehaviour
 {
@@ -20,14 +18,10 @@ public class PlayerInputManager : MonoBehaviour
     
     private void Awake()
     {
-        //var characterControlsArray = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
-        var characterControlsArray = FindObjectsByType<PlayerStateMachine>(FindObjectsSortMode.None);
         var playerInput = GetComponent<PlayerInput>();
         index = playerInput.playerIndex;
         playerInput.enabled = false;
-        //playerController = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
-        playerStateMachine = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
-        
+
         //We create a new ControllerMap and assign it to the right player
         gameInput = new GameInput();
         PlayerConfigurationManager.Instance.PlayerConfigs[index].GameInputMap = gameInput;
@@ -61,27 +55,12 @@ public class PlayerInputManager : MonoBehaviour
             UIManager.Instance.ReassignUIActions();
         }
         GameStateManager.Instance.onStateChanged += HandleInputActivation;
-        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDestroy()
     {
         gameInput.Disable();
         GameStateManager.Instance.onStateChanged -= HandleInputActivation;
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
-    {
-        //disable and unsubscribe all old playerstatemachines
-        UnsubscribePlayerInput();
-        
-        if (scene.name == LoadSceneManager.instance.currentScene)
-        {
-            var characterControlsArray = FindObjectsByType<PlayerStateMachine>(FindObjectsSortMode.None);
-            playerStateMachine = characterControlsArray.FirstOrDefault(m => m.GetPlayerIndex() == index);
-            HandleInputActivation(GameStateManager.Instance.currentState);
-        }
     }
 
     private void HandleInputActivation(GameStateManager.GameState newState)
@@ -90,9 +69,14 @@ public class PlayerInputManager : MonoBehaviour
         {
             case GameStateManager.GameState.InMainMenu:
             case GameStateManager.GameState.InGameMenus:
-                UnsubscribePlayerInput();
+                if (playerStateMachine != null)
+                {
+                    UnsubscribePlayerInput(); 
+                }
                 break;
             case GameStateManager.GameState.InGame:
+                var characterControlsArray = FindObjectsByType<PlayerStateMachine>(FindObjectsSortMode.None);
+                playerStateMachine = characterControlsArray.FirstOrDefault(m => m.PlayerIndex == index);
                 SubscribePlayerInput();
                 break;
         }

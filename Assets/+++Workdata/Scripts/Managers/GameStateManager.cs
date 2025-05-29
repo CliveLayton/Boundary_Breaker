@@ -41,7 +41,6 @@ public class GameStateManager : MonoBehaviour
         Instance = this;
         //use "Screen.currentResolution.refreshRate" to check for the max refreshrate the monitor of the player has
         Application.targetFrameRate = 60;
-        SceneManager.sceneLoaded += ReloadFightScene;
 
 #if UNITY_EDITOR
     
@@ -61,6 +60,7 @@ public class GameStateManager : MonoBehaviour
     {
         //when we start the game, we first want to enter the main menu
         GoToMainMenu(false);
+        SceneManager.sceneLoaded += ReloadFightScene;
     }
 
     private void OnDestroy()
@@ -76,14 +76,10 @@ public class GameStateManager : MonoBehaviour
     /// called to enter the main menu. Also changes the game state
     /// </summary>
     /// <param name="showLoadingScreen">with or without loading screen</param>
-    public void GoToMainMenu(bool showLoadingScreen = true)
+    private void GoToMainMenu(bool showLoadingScreen = true)
     {
         currentState = GameState.InMainMenu;
-        if (onStateChanged != null)
-        {
-            onStateChanged(currentState);
-        }
-        //LoadSceneManager.instance.SwitchScene(mainMenuSceneName,showLoadingScreen);
+        LoadSceneManager.instance.SwitchScene(fightingScene1,showLoadingScreen);
         //MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
         Cursor.lockState = CursorLockMode.None;
     }
@@ -97,7 +93,7 @@ public class GameStateManager : MonoBehaviour
             onStateChanged(currentState);
         }
 
-        LoadSceneManager.instance.SwitchScene(fightingScene1, false);
+        //LoadSceneManager.instance.SwitchScene(fightingScene1, false);
         //MusicManager.Instance.PlayMusic(MusicManager.Instance.forestMusic, 0.1f);
         //Cursor.lockState = CursorLockMode.Locked;
     }
@@ -115,23 +111,35 @@ public class GameStateManager : MonoBehaviour
     {
         if (scene.name == fightingScene1)
         {
+            GameObject parentP1 = GameObject.Find("Player1");
+            GameObject parentP2 = GameObject.Find("Player2");
+            Transform player1 = UIManager.Instance.Player1.transform;
+            Transform player2 = UIManager.Instance.Player2.transform;
+            player1.SetParent(parentP1.transform);
+            player1.localPosition = Vector3.zero;
+            player2.SetParent(parentP2.transform);
+            player2.localPosition = Vector3.zero;
+            
             UIManager.Instance.RemainingMatchTime = UIManager.Instance.MatchTime;
             currentState = GameState.InGame;
             if (onStateChanged != null)
             {
+                Debug.Log("StateChanged");
                 onStateChanged(currentState);
             }
         }
     }
 
-    public void LoadNewGameplayScene(string sceneName)
+    public void LoadGameplayScene(string sceneName)
     {
         if (currentState == GameState.InMainMenu)
         {
             return;
         }
         
-        LoadSceneManager.instance.SwitchScene(sceneName);
+        UIManager.Instance.Player1.transform.SetParent(CharacterPool.Instance.Player1PoolParent);
+        UIManager.Instance.Player2.transform.SetParent(CharacterPool.Instance.Player2PoolParent);
+        LoadSceneManager.instance.SwitchScene(sceneName, false);
     }
 
     #endregion

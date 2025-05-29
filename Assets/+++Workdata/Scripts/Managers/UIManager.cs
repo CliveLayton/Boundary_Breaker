@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -60,6 +61,11 @@ public class UIManager : MonoBehaviour
 
     public event Action<bool> onTimerExpired;
 
+    public PlayerStateMachine Player1 { get; private set; }
+    public PlayerStateMachine Player2 { get; private set; }
+    
+    private CinemachineTargetGroup cmTargetGroup;
+
     private void Awake()
     {
         Instance = this;
@@ -67,6 +73,11 @@ public class UIManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(versusButton);
 
         GameStateManager.Instance.onStateChanged += ActivateInGameUI;
+    }
+
+    private void Start()
+    {
+        cmTargetGroup = FindAnyObjectByType<CinemachineTargetGroup>();
     }
 
     private void Update()
@@ -99,30 +110,35 @@ public class UIManager : MonoBehaviour
 
     private void ActivateInGameUI(GameStateManager.GameState newState)
     {
-        PlayerStateMachine player1 = GameObject.Find("TestPlayer1").GetComponent<PlayerStateMachine>();
-        PlayerStateMachine player2 = GameObject.Find("TestPlayer2").GetComponent<PlayerStateMachine>();
-        
         switch (newState)
         {
             case GameStateManager.GameState.InGame:
+                cmTargetGroup = FindAnyObjectByType<CinemachineTargetGroup>();
+                cmTargetGroup.Targets.Clear();
+                cmTargetGroup.AddMember(Player1.transform, 1f, 1f);
+                cmTargetGroup.AddMember(Player2.transform, 1f, 1f);
                 Time.timeScale = 1f;
                 inGame.ShowCanvasGroup();
-                player1.onPercentageChanged += Player1Percentage;
-                player2.onPercentageChanged += Player2Percentage;
+                Player1.onPercentageChanged += Player1Percentage;
+                Player2.onPercentageChanged += Player2Percentage;
                 countdownActive = true;
                 break;
             case GameStateManager.GameState.InMainMenu:
+                cmTargetGroup.Targets.Clear();
+                cmTargetGroup.AddMember(GameObject.Find("Player1").transform, 1f, 1f);
+                cmTargetGroup.AddMember(GameObject.Find("Player2").transform, 1f, 1f);
                 Time.timeScale = 1f;
                 inGame.HideCanvasGroup();
-                player1.onPercentageChanged -= Player1Percentage;
-                player2.onPercentageChanged -= Player2Percentage;
+                if (Player1 != null && Player2 != null)
+                {
+                    Player1.onPercentageChanged -= Player1Percentage;
+                    Player2.onPercentageChanged -= Player2Percentage; 
+                }
                 countdownActive = false;
                 RemainingMatchTime = MatchTime;
                 break;
             case GameStateManager.GameState.InGameMenus:
                 Time.timeScale = 0f;
-                player1.onPercentageChanged -= Player1Percentage;
-                player2.onPercentageChanged -= Player2Percentage;
                 countdownActive = false;
                 break;
         }
@@ -145,6 +161,7 @@ public class UIManager : MonoBehaviour
         {
             StartCoroutine(SwitchToSingleEventSystem(versusButton)); 
         }
+        GameStateManager.Instance.SwitchGameState(GameStateManager.GameState.InMainMenu);
     }
 
     public void EnterCharacterSelection()
@@ -177,6 +194,7 @@ public class UIManager : MonoBehaviour
         pauseMenuP2.HideCanvasGroup();
         winningScreenP1.HideCanvasGroup();
         winningScreenP2.HideCanvasGroup();
+        GameStateManager.Instance.SwitchGameState(GameStateManager.GameState.InMainMenu);
     }
 
     public void EnterPauseMenu(int index)
@@ -306,12 +324,40 @@ public class UIManager : MonoBehaviour
 
     public void EnterGame()
     {
+        var characterArray = FindObjectsByType<PlayerStateMachine>(FindObjectsSortMode.None);
+        for (int i = 0; i < characterArray.Length; i++)
+        {
+            if (characterArray[i].PlayerIndex == 0)
+            {
+                Player1 = characterArray[i];
+            }
+
+            if (characterArray[i].PlayerIndex == 1)
+            {
+                Player2 = characterArray[i];
+            }
+        }
+
+        cmTargetGroup.Targets.Clear();
+        cmTargetGroup.AddMember(Player1.transform, 1f, 1f);
+        cmTargetGroup.AddMember(Player2.transform, 1f, 1f);
+        
+        Player1.Opponent = Player2;
+        Player2.Opponent = Player1;
+        Player1.SetLayers(0);
+        Player2.SetLayers(1);
+        Player1.ResetPercentage();
+        Player2.ResetPercentage();
+        Player1Percentage(0);
+        Player2Percentage(0);
+        
         for (int i = 0; i < PlayerConfigurationManager.Instance.PlayerConfigs.Count; i++)
         {
             PlayerConfigurationManager.Instance.PlayerConfigs[i].IsReady = false;
         }
         startMatchButton.SetActive(false);
         characterSelection.HideCanvasGroup();
+        RemainingMatchTime = MatchTime;
         GameStateManager.Instance.StartNewGame();
     }
 
@@ -332,7 +378,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         Player1Percentage(0);
         Player2Percentage(0);
-        LoadSceneManager.instance.SwitchScene(GameStateManager.fightingScene1, false);
+        GameStateManager.Instance.LoadGameplayScene(GameStateManager.fightingScene1);
     }
 
     public void QuitGame()

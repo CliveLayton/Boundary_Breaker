@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,8 @@ public class CharacterSelect : MonoBehaviour
     [SerializeField] private ButtonEvents[] charButtons;
     [SerializeField] private Image characterIcon;
     [SerializeField] private int playerIndex;
-    
+
+    private GameObject chosedPlayer;
     private int currentSelectedCharIndex;
 
     #endregion
@@ -39,10 +41,59 @@ public class CharacterSelect : MonoBehaviour
     {
         characterIcon.sprite = charSprites[index];
         currentSelectedCharIndex = index;
+
+        if (chosedPlayer != null)
+        {
+            chosedPlayer.SetActive(false);
+            if (playerIndex == 0)
+            {
+                chosedPlayer.transform.SetParent(CharacterPool.Instance.Player1PoolParent);
+            }
+
+            if (playerIndex == 1)
+            {
+                chosedPlayer.transform.SetParent(CharacterPool.Instance.Player2PoolParent);
+            }
+        }
+
+        if (playerIndex == 0)
+        {
+            if (index == 2)
+            {
+                chosedPlayer = CharacterPool.Instance.GetP1PooledObject(Random.Range(0, 1));
+            }
+            else
+            {
+                chosedPlayer = CharacterPool.Instance.GetP1PooledObject(index);
+            }
+
+            GameObject parent = GameObject.Find("Player1");
+            chosedPlayer.transform.SetParent(parent.transform);
+            chosedPlayer.transform.localPosition = Vector3.zero;
+            chosedPlayer.SetActive(true);
+        }
+
+        if (playerIndex == 1)
+        {
+            if (index == 2)
+            {
+                chosedPlayer = CharacterPool.Instance.GetP2PooledObject(Random.Range(0, 1));
+            }
+            else
+            {
+                chosedPlayer = CharacterPool.Instance.GetP2PooledObject(index);
+            }
+
+            GameObject parent = GameObject.Find("Player2");
+            chosedPlayer.transform.SetParent(parent.transform);
+            chosedPlayer.transform.localPosition = Vector3.zero;
+            chosedPlayer.SetActive(true);
+        }
     }
 
     private void OnConfirmSelection()
     {
+        chosedPlayer.GetComponent<PlayerStateMachine>().PlayerIndex = playerIndex;
         PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].IsReady = true;
         UIManager.Instance.CheckAllPlayerReady();
     }

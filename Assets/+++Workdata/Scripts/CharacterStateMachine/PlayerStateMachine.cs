@@ -10,9 +10,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     #region Variables
 
     //Inspector Variables
-    [Header("Player Index")] 
-    [SerializeField] private int playerIndex;
-
     [Header("SawFighter Behavior Variables")]
     [SerializeField] private Quaternion lookDirectionToLeft;
     [SerializeField] private Quaternion lookDirectionToRight;
@@ -20,9 +17,18 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     //[SerializeField] private float knockbackPower = 10f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask pushboxLayer;
+    [SerializeField] private LayerMask p1HurtboxLayer;
+    [SerializeField] private LayerMask p2HurtboxLayer;
+    [SerializeField] private int p1HitboxLayerNumber;
+    [SerializeField] private int p2HitboxLayerNumber;
+    [SerializeField] private int p1HurtboxLayerNumber;
+    [SerializeField] private int p2HurtboxLayerNumber;
 
     [Header("Hurtboxes")] 
     [SerializeField] private BoxCollider[] hurtboxes;
+
+    [Header("Hitboxes")] 
+    [SerializeField] private Hitbox[] hitboxes;
 
     //public Variables
     public event Action<float> onPercentageChanged; 
@@ -46,12 +52,13 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     [field: SerializeField] public AnimationCurve KnockBackForceCurve { get; private set; }
     [field: SerializeField] public CapsuleCollider Pushbox { get; set; }
     [field: SerializeField] public Transform GrabPosition { get; private set; }
-    [field: SerializeField] public PlayerStateMachine Opponent { get; private set; }
-    [field: SerializeField] public CinemachineImpulseSource CmImpulse { get; private set; }
 
     public PlayerBaseState CurrentState { get; set; }
+    public int PlayerIndex { get; set; }
     public Rigidbody Rb { get; private set; }
     public  Animator Anim { get; private set; }
+    public PlayerStateMachine Opponent { get; set; }
+    public CinemachineImpulseSource CmImpulse { get; private set; }
     public ECurrentMove CurrentMove { get; set; }
     public  Vector2 MoveInput { get; private set; }
     public float Speed { get; set; }
@@ -131,6 +138,12 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         states = new PlayerStateFactory(this);
         CurrentState = states.Grounded();
         CurrentState.EnterState();
+        GameStateManager.Instance.onStateChanged += GetCinemachineListener;
+    }
+
+    private void Start()
+    {
+        CmImpulse = FindAnyObjectByType<CinemachineImpulseSource>();
     }
 
     private void Update()
@@ -140,7 +153,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
 
     private void FixedUpdate()
     {
-        if (!IsAttacking)
+        if (!IsAttacking && GameStateManager.Instance.currentState == GameStateManager.GameState.InGame)
         {
             RotateToOpponent();
         }
@@ -149,6 +162,11 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     private void LateUpdate()
     {
         PlayerAnimations();
+    }
+
+    private void OnDestroy()
+    {
+        GameStateManager.Instance.onStateChanged -= GetCinemachineListener;
     }
 
     #endregion
@@ -293,7 +311,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     {
         if (context.performed)
         {
-            UIManager.Instance.EnterPauseMenu(playerIndex);
+            UIManager.Instance.EnterPauseMenu(PlayerIndex);
         }
     }
 
@@ -507,10 +525,36 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     {
         return Anim.transform.forward.x > 0;
     }
-    
-    public int GetPlayerIndex()
+
+    public void SetLayers(int index)
     {
-        return playerIndex;
+        switch (index)
+        {
+            case 0:
+                foreach (var hurtbox in hurtboxes)
+                {
+                    hurtbox.gameObject.layer = p1HurtboxLayerNumber;
+                }
+
+                foreach (var hitbox in hitboxes)
+                {
+                    hitbox.layerToCheck = p2HurtboxLayer;
+                    hitbox.gameObject.layer = p1HitboxLayerNumber;
+                }
+                break;
+            case 1:
+                foreach (var hurtbox in hurtboxes)
+                {
+                    hurtbox.gameObject.layer = p2HurtboxLayerNumber;
+                }
+
+                foreach (var hitbox in hitboxes)
+                {
+                    hitbox.layerToCheck = p1HurtboxLayer;
+                    hitbox.gameObject.layer = p2HitboxLayerNumber;
+                }
+                break;
+        }
     }
 
     public void ResetPercentage()
@@ -519,6 +563,14 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         if (onPercentageChanged != null)
         {
             onPercentageChanged(PercentageCount);
+        }
+    }
+
+    private void GetCinemachineListener(GameStateManager.GameState newState)
+    {
+        if (newState == GameStateManager.GameState.InGame)
+        {
+            CmImpulse = FindAnyObjectByType<CinemachineImpulseSource>();
         }
     }
 

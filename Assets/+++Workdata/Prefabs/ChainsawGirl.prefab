@@ -49,7 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f371c2e06e0768a49be9863b5da1aa7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerIndex: 0
   lookDirectionToLeft: {x: 0, y: 0.76604444, z: 0, w: -0.64278764}
   lookDirectionToRight: {x: 0, y: 0.76604444, z: 0, w: 0.64278764}
   rotationSpeed: 60
@@ -59,16 +58,29 @@ MonoBehaviour:
   pushboxLayer:
     serializedVersion: 2
     m_Bits: 256
+  p1HitboxLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  p2HitboxLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  p1HurtboxLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  p2HurtboxLayer:
+    serializedVersion: 2
+    m_Bits: 128
   hurtboxes:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 5045581317974646017}
+  hitboxes:
+  - {fileID: 750763394057639654}
   <PercentageCount>k__BackingField: 0
   <ForwardSpeed>k__BackingField: 4
   <BackwardSpeed>k__BackingField: 2
   <SpeedChangeRate>k__BackingField: 5
   <DashPower>k__BackingField: 5
   <JumpPower>k__BackingField: 7
+  <JumpBrake>k__BackingField: 0
   <FallMultiplier>k__BackingField: 2
   <InputForce>k__BackingField: 4.5
   <KnockBackForceCurve>k__BackingField:
@@ -97,8 +109,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   <Pushbox>k__BackingField: {fileID: 5521619992279901878}
   <GrabPosition>k__BackingField: {fileID: 6261576785664847989}
-  <Opponent>k__BackingField: {fileID: 0}
-  <CmImpulse>k__BackingField: {fileID: 0}
   <IsAttacking>k__BackingField: 0
   <IsGrabbing>k__BackingField: 0
   <Moves>k__BackingField:
@@ -1845,8 +1855,68 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -1173051235430498056, guid: 48ea305350f0d4849aca7063ee6a835f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5045581317974646017}
+    - targetCorrespondingSourceObject: {fileID: -1536222905915960133, guid: 48ea305350f0d4849aca7063ee6a835f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 750763394057639654}
   m_SourcePrefab: {fileID: 100100000, guid: 48ea305350f0d4849aca7063ee6a835f, type: 3}
+--- !u!1 &4240711361018145391 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1173051235430498056, guid: 48ea305350f0d4849aca7063ee6a835f, type: 3}
+  m_PrefabInstance: {fileID: 6152608264718002839}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5045581317974646017
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4240711361018145391}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &4597130642321948204 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1536222905915960133, guid: 48ea305350f0d4849aca7063ee6a835f, type: 3}
+  m_PrefabInstance: {fileID: 6152608264718002839}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &750763394057639654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4597130642321948204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitboxSize: {x: 1, y: 1, z: 1}
+  hitboxOffset: {x: 0, y: 0, z: 0}
+  useSphere: 0
+  radius: 0.5
+  colliderColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
+  layerToCheck:
+    serializedVersion: 2
+    m_Bits: 0
+  inactiveColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
+  collisionOpenColor: {r: 0.6, g: 0.2, b: 0.2, a: 1}
+  collidingColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!4 &5974251280852012412 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 48ea305350f0d4849aca7063ee6a835f, type: 3}

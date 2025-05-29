@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class InvisibleWall : MonoBehaviour
 {
@@ -11,8 +9,9 @@ public class InvisibleWall : MonoBehaviour
     [SerializeField] private float knockBackTime = 0.2f;
     [SerializeField] private Vector2 attackForce = new Vector2(1.5f,-2f);
     [SerializeField] private bool applyKnockDown;
-    [SerializeField] private PlayerStateMachine Player1;
-    [SerializeField] private PlayerStateMachine Player2;
+    
+    private PlayerStateMachine player1;
+    private PlayerStateMachine player2;
     
     private BoxCollider col;
     private bool isOnWall;
@@ -21,11 +20,13 @@ public class InvisibleWall : MonoBehaviour
     {
         col = GetComponent<BoxCollider>();
         UIManager.Instance.onTimerExpired += RestartMatch;
+        GameStateManager.Instance.onStateChanged += GetPlayers;
     }
 
     private void OnDisable()
     {
         UIManager.Instance.onTimerExpired -= RestartMatch;
+        GameStateManager.Instance.onStateChanged -= GetPlayers;
     }
 
     private void OnCollisionEnter(Collision other)
@@ -69,13 +70,33 @@ public class InvisibleWall : MonoBehaviour
         }
     }
 
+    private void GetPlayers(GameStateManager.GameState newState)
+    {
+        if (newState == GameStateManager.GameState.InGame)
+        {
+            var characterArray = FindObjectsByType<PlayerStateMachine>(FindObjectsSortMode.None);
+            for (int i = 0; i < characterArray.Length; i++)
+            {
+                if (characterArray[i].PlayerIndex == 0)
+                {
+                    player1 = characterArray[i];
+                }
+
+                if (characterArray[i].PlayerIndex == 1)
+                {
+                    player2 = characterArray[i];
+                }
+            }
+        }
+    }
+
     private IEnumerator RestartGame()
     {
         Time.timeScale = 0.5f;
         UIManager.Instance.countdownActive = false;
         yield return new WaitForSeconds(1.5f);
-        Player1.ResetPercentage();
-        Player2.ResetPercentage();
-        LoadSceneManager.instance.SwitchScene(GameStateManager.fightingScene1, false);
+        player1.ResetPercentage();
+        player2.ResetPercentage();
+        GameStateManager.Instance.LoadGameplayScene(GameStateManager.fightingScene1);
     }
 }

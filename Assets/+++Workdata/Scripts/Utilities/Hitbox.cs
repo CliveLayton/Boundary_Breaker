@@ -9,12 +9,12 @@ public class Hitbox : MonoBehaviour
     public bool useSphere = false;
     public float radius = 0.5f;
     public Color colliderColor;
+    public LayerMask layerToCheck;
     
     private ColliderState state = ColliderState.Closed;
     private IHitboxResponder responder = null;
     private bool collided;
-
-    [SerializeField] private LayerMask layerToCheck;
+    
     [SerializeField] private Color inactiveColor = new Color(0.6f, 0.2f, 0.2f, 0.2f);
     [SerializeField] private Color collisionOpenColor = new Color(0.6f, 0.2f, 0.2f, 1);
     [SerializeField] private Color collidingColor = Color.red;

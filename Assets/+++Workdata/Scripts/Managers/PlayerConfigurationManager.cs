@@ -99,6 +99,8 @@ public class PlayerConfiguration
     public int PlayerIndex { get; set; }
 
     public bool IsReady { get; set; }
+    
+    public int Wins { get; set; }
 
     public void ReassignUIActions()
     {

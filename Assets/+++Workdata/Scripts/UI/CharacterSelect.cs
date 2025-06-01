@@ -47,13 +47,24 @@ public class CharacterSelect : MonoBehaviour
             chosedPlayer.SetActive(false);
             if (playerIndex == 0)
             {
+                chosedPlayer.GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles = new Vector3(
+                    chosedPlayer.GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles.x, 100,
+                    chosedPlayer.GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles.z);
                 chosedPlayer.transform.SetParent(CharacterPool.Instance.Player1PoolParent);
             }
 
             if (playerIndex == 1)
             {
+                chosedPlayer.GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles = new Vector3(
+                    chosedPlayer.GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles.x, 260,
+                    chosedPlayer.GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles.z);
                 chosedPlayer.transform.SetParent(CharacterPool.Instance.Player2PoolParent);
             }
+        }
+        
+        if (GameStateManager.Instance.currentState != GameStateManager.GameState.InMainMenu)
+        {
+            return;
         }
 
         if (playerIndex == 0)

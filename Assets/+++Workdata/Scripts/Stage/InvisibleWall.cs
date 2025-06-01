@@ -9,6 +9,11 @@ public class InvisibleWall : MonoBehaviour
     [SerializeField] private float knockBackTime = 0.2f;
     [SerializeField] private Vector2 attackForce = new Vector2(1.5f,-2f);
     [SerializeField] private bool applyKnockDown;
+
+    [SerializeField] private Vector3 position1;
+    [SerializeField] private Vector3 position2;
+    [SerializeField] private Vector3 position3;
+    [SerializeField] private bool isRightWall;
     
     private PlayerStateMachine player1;
     private PlayerStateMachine player2;
@@ -21,6 +26,7 @@ public class InvisibleWall : MonoBehaviour
         col = GetComponent<BoxCollider>();
         UIManager.Instance.onTimerExpired += RestartMatch;
         GameStateManager.Instance.onStateChanged += GetPlayers;
+        SetupWall();
     }
 
     private void OnDisable()
@@ -33,17 +39,23 @@ public class InvisibleWall : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            //PlayerController fighter = other.gameObject.GetComponent<PlayerController>();
             PlayerStateMachine fighter = other.gameObject.GetComponent<PlayerStateMachine>();
             IDamageable iDamageable = other.gameObject.GetComponent<IDamageable>();
 
-            if (fighter.CombinedForce.magnitude > 6f && !isOnWall) //fighter.combinedForce.magnitude
+            if (fighter.CombinedForce.magnitude > 6f && !isOnWall)
             {
                 col.enabled = false;
                 isOnWall = true;
                 iDamageable?.Damage(damage, 0.5f, 0.5f, 
                     new Vector2(3,0.8f), 0.4f, false, false, false, false, false);
-                StartCoroutine(RestartGame());
+                if (fighter.PlayerIndex == 0)
+                {
+                    StartCoroutine(RestartGame(1));
+                }
+                else
+                {
+                    StartCoroutine(RestartGame(0));
+                }
             }
             else if(!isOnWall)
             {
@@ -62,11 +74,52 @@ public class InvisibleWall : MonoBehaviour
         }
     }
 
+    private void SetupWall()
+    {
+        if (isRightWall)
+        {
+            switch (GameStateManager.Instance.wallBreakCountR)
+            {
+                case 0:
+                    transform.position = position1;
+                    break;
+                case 1:
+                    transform.position = position2;
+                    break;
+                case 2:
+                    transform.position = position3;
+                    break;
+            }
+        }
+        else
+        {
+            switch (GameStateManager.Instance.wallBreakCountL)
+            {
+                case 0:
+                    transform.position = position1;
+                    break;
+                case 1:
+                    transform.position = position2;
+                    break;
+                case 2:
+                    transform.position = position3;
+                    break;
+            }
+        }
+    }
+
     private void RestartMatch(bool isExpired)
     {
         if (isExpired)
         {
-            StartCoroutine(RestartGame());
+            if (player1.PercentageCount > player2.PercentageCount)
+            {
+                StartCoroutine(RestartGame(1)); 
+            }
+            else
+            {
+                StartCoroutine(RestartGame(0));
+            }
         }
     }
 
@@ -90,13 +143,35 @@ public class InvisibleWall : MonoBehaviour
         }
     }
 
-    private IEnumerator RestartGame()
+    private IEnumerator RestartGame(int playerIndex)
     {
+        if (PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].Wins < 2)
+        {
+            PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].Wins += 1; 
+        }
+
+        if (isRightWall)
+        {
+            GameStateManager.Instance.wallBreakCountR += 1;
+        }
+        else
+        {
+            GameStateManager.Instance.wallBreakCountL += 1;
+        }
+        
         Time.timeScale = 0.5f;
         UIManager.Instance.countdownActive = false;
         yield return new WaitForSeconds(1.5f);
         player1.ResetPercentage();
         player2.ResetPercentage();
-        GameStateManager.Instance.LoadGameplayScene(GameStateManager.fightingScene1);
+        
+        if (PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].Wins == 2)
+        {
+            UIManager.Instance.EnterWinningScreen(playerIndex);
+        }
+        else
+        {
+            GameStateManager.Instance.LoadGameplayScene(GameStateManager.fightingScene1);
+        }
     }
 }

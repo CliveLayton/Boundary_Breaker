@@ -32,6 +32,9 @@ public class GameStateManager : MonoBehaviour
     //the current state
     public GameState currentState { get; private set; } = GameState.InMainMenu;
 
+    public int wallBreakCountR;
+    public int wallBreakCountL;
+
     #endregion
 
     #region Unity Methods
@@ -59,7 +62,10 @@ public class GameStateManager : MonoBehaviour
     private void Start()
     {
         //when we start the game, we first want to enter the main menu
-        GoToMainMenu(false);
+        currentState = GameState.InMainMenu;
+        LoadSceneManager.instance.SwitchScene(fightingScene1,false);
+        //MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.sceneLoaded += ReloadFightScene;
     }
 
@@ -76,9 +82,21 @@ public class GameStateManager : MonoBehaviour
     /// called to enter the main menu. Also changes the game state
     /// </summary>
     /// <param name="showLoadingScreen">with or without loading screen</param>
-    private void GoToMainMenu(bool showLoadingScreen = true)
+    public void GoToMainMenu(bool showLoadingScreen = true)
     {
+        foreach (var player in PlayerConfigurationManager.Instance.PlayerConfigs)
+        {
+            player.Wins = 0;
+        }
+        wallBreakCountR = 0;
+        wallBreakCountL = 0;
+        UIManager.Instance.Player1.transform.SetParent(CharacterPool.Instance.Player1PoolParent);
+        UIManager.Instance.Player2.transform.SetParent(CharacterPool.Instance.Player2PoolParent);
         currentState = GameState.InMainMenu;
+        if (onStateChanged != null)
+        {
+            onStateChanged(currentState);
+        }
         LoadSceneManager.instance.SwitchScene(fightingScene1,showLoadingScreen);
         //MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
         Cursor.lockState = CursorLockMode.None;
@@ -87,6 +105,11 @@ public class GameStateManager : MonoBehaviour
     //called to start a new game. Also changes the game state.
     public void StartNewGame()
     {
+        foreach (var player in PlayerConfigurationManager.Instance.PlayerConfigs)
+        {
+            player.Wins = 0;
+        }
+        
         currentState = GameState.InGame;
         if (onStateChanged != null)
         {
@@ -109,24 +132,26 @@ public class GameStateManager : MonoBehaviour
 
     private void ReloadFightScene(Scene scene, LoadSceneMode loadSceneMode)
     {
-        if (scene.name == fightingScene1)
+        if (currentState != GameState.InMainMenu)
         {
-            GameObject parentP1 = GameObject.Find("Player1");
-            GameObject parentP2 = GameObject.Find("Player2");
-            Transform player1 = UIManager.Instance.Player1.transform;
-            Transform player2 = UIManager.Instance.Player2.transform;
-            player1.SetParent(parentP1.transform);
-            player1.localPosition = Vector3.zero;
-            player2.SetParent(parentP2.transform);
-            player2.localPosition = Vector3.zero;
-            
-            UIManager.Instance.RemainingMatchTime = UIManager.Instance.MatchTime;
-            currentState = GameState.InGame;
-            if (onStateChanged != null)
+            if (scene.name == fightingScene1)
             {
-                Debug.Log("StateChanged");
-                onStateChanged(currentState);
-            }
+                GameObject parentP1 = GameObject.Find("Player1");
+                GameObject parentP2 = GameObject.Find("Player2");
+                Transform player1 = UIManager.Instance.Player1.transform;
+                Transform player2 = UIManager.Instance.Player2.transform;
+                player1.SetParent(parentP1.transform);
+                player1.localPosition = Vector3.zero;
+                player2.SetParent(parentP2.transform);
+                player2.localPosition = Vector3.zero;
+            
+                UIManager.Instance.RemainingMatchTime = UIManager.Instance.MatchTime;
+                currentState = GameState.InGame;
+                if (onStateChanged != null)
+                {
+                    onStateChanged(currentState);
+                }
+            } 
         }
     }
 

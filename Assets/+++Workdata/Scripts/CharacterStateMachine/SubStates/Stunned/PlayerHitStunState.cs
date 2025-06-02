@@ -6,6 +6,7 @@ public class PlayerHitStunState : PlayerBaseState
     private Coroutine hitStopCoroutine;
     private Coroutine hitStunCoroutine;
     private bool hasJumpCanceled = false;
+    private bool inHitStop;
 
     public PlayerHitStunState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
@@ -13,6 +14,9 @@ public class PlayerHitStunState : PlayerBaseState
 
     public override void EnterState()
     {
+        Ctx.DidDI = false;
+        inHitStop = false;
+        Ctx.InputForce = Ctx.DefaultInputForce;
         Ctx.Anim.Play("HitReactionHeavy");
         //Apply HitStop Before Knockback
         hitStopCoroutine = Ctx.StartCoroutine(HitStop());
@@ -20,6 +24,18 @@ public class PlayerHitStunState : PlayerBaseState
 
     public override void UpdateState()
     {
+        if (inHitStop && Ctx.IsFacingRight() && Ctx.MoveInput.x > 0)
+        {
+            Ctx.DidDI = true;
+            Ctx.InputForce = new Vector2(Ctx.DefaultInputForce.x * Ctx.MoveInput.x,
+                Ctx.DefaultInputForce.y * Ctx.MoveInput.x);
+        }
+        else if (inHitStop && !Ctx.IsFacingRight() && Ctx.MoveInput.x < 0)
+        {
+            Ctx.DidDI = true;
+            Ctx.InputForce = new Vector2(Ctx.DefaultInputForce.x * Mathf.Abs(Ctx.MoveInput.x),
+                Ctx.DefaultInputForce.x * Mathf.Abs(Ctx.MoveInput.x));
+        }
         CheckSwitchStates();
     }
 
@@ -30,6 +46,8 @@ public class PlayerHitStunState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
+        //Debug.Log("Check States");
+        //Debug.Log(Ctx.InHitStun + " ; " + Ctx.InGrab + " ; " + Ctx.InComboHit);
         if (!Ctx.InHitStun && !Ctx.InGrab)
         {
             SwitchState(Factory.KnockBack());
@@ -49,6 +67,7 @@ public class PlayerHitStunState : PlayerBaseState
     
     private IEnumerator HitStop()
     {
+        inHitStop = true;
         Time.timeScale = 0f; //freeze game time
         if (Ctx.IsComboPossible)
         {
@@ -62,6 +81,7 @@ public class PlayerHitStunState : PlayerBaseState
         {
             Ctx.Opponent.HandleCombo(false, hasJumpCanceled);
         }
+        inHitStop = false;
         Time.timeScale = 1f; //resume game time
     }
     
@@ -83,7 +103,6 @@ public class PlayerHitStunState : PlayerBaseState
         }
 
         Ctx.transform.localPosition = originalPosition; // reset position
-        
         Ctx.InHitStun = false;
     }
 

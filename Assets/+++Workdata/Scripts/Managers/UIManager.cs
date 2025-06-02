@@ -62,7 +62,7 @@ public class UIManager : MonoBehaviour
     
     public bool countdownActive;
 
-    public event Action<bool> onTimerExpired;
+    public event Action onTimerExpired;
 
     public PlayerStateMachine Player1 { get; private set; }
     public PlayerStateMachine Player2 { get; private set; }
@@ -96,7 +96,7 @@ public class UIManager : MonoBehaviour
                 RemainingMatchTime = 0;
                 if (onTimerExpired != null)
                 {
-                    onTimerExpired(true);
+                    onTimerExpired();
                 }
             }
             

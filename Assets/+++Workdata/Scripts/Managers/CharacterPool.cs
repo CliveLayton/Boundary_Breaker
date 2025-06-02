@@ -38,8 +38,14 @@ public class CharacterPool : MonoBehaviour
         for (int i = 0; i < charsToPool.Length; i++)
         {
             player1Pool[i] = Instantiate(charsToPool[i], Player1PoolParent);
+            player1Pool[i].GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles = new Vector3(
+                player1Pool[i].GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles.x, 100,
+                player1Pool[i].GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles.z);
             player1Pool[i].SetActive(false);
             player2Pool[i] = Instantiate(charsToPool[i], Player2PoolParent);
+            player2Pool[i].GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles = new Vector3(
+                player2Pool[i].GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles.x, 260,
+                player2Pool[i].GetComponent<PlayerStateMachine>().Anim.transform.eulerAngles.z);
             player2Pool[i].SetActive(false);
         }
     }

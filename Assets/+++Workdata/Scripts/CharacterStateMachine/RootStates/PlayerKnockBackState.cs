@@ -90,21 +90,35 @@ public class PlayerKnockBackState : PlayerBaseState
         {
             //iterate the timer
             elapsedTime += Time.fixedDeltaTime;
+
+            //if the player did DI in Hitstop calculate inputforce to knockback otherwise not
+            if (Ctx.DidDI)
+            {
+                //update hitForce (x force)
+                hitForce = hitDirection * ((Ctx.AttackForce.x - Ctx.InputForce.x) *
+                                           Ctx.KnockBackForceCurve.Evaluate(elapsedTime / Ctx.KnockBackTime));
             
-            //update hitForce (x force)
-            hitForce = hitDirection * (Ctx.AttackForce.x * Ctx.KnockBackForceCurve.Evaluate(elapsedTime / Ctx.KnockBackTime));
+                //update y force
+                constantKnockBackForce = constantForceDirection * ((Ctx.AttackForce.y + Ctx.InputForce.y) *
+                                                                   Ctx.KnockBackForceCurve.Evaluate(elapsedTime / Ctx.KnockBackTime));
+            }
+            else
+            {
+                //update hitForce (x force)
+                hitForce = hitDirection * (Ctx.AttackForce.x * Ctx.KnockBackForceCurve.Evaluate(elapsedTime / Ctx.KnockBackTime));
             
-            //update y force
-            constantKnockBackForce = constantForceDirection * (Ctx.AttackForce.y * Ctx.KnockBackForceCurve.Evaluate(elapsedTime / Ctx.KnockBackTime));
-            
+                //update y force
+                constantKnockBackForce = constantForceDirection * (Ctx.AttackForce.y * Ctx.KnockBackForceCurve.Evaluate(elapsedTime / Ctx.KnockBackTime));
+            }
+
             //combine hitForce and constantForce
             knockBackForce = hitForce + constantKnockBackForce;
             
             //combine knockBackForce with Input Force
             if (Ctx.MoveInput.x != 0 && !Ctx.GetFixedKnockBack)
             {
-                Ctx.CombinedForce = new Vector2(knockBackForce.x * (1 + Ctx.PercentageCount/100),
-                    knockBackForce.y * (1 + Ctx.PercentageCount/100)) + new Vector2(Ctx.MoveInput.x * Ctx.InputForce, 0f);
+                Ctx.CombinedForce = new Vector2(knockBackForce.x * (1 + Ctx.PercentageCount / 100),
+                    knockBackForce.y * (1 + Ctx.PercentageCount / 100));
             }
             else if(!Ctx.GetFixedKnockBack)
             {
@@ -113,14 +127,13 @@ public class PlayerKnockBackState : PlayerBaseState
             }
             else if (Ctx.MoveInput.x != 0 && Ctx.GetFixedKnockBack)
             {
-                Ctx.CombinedForce = knockBackForce + new Vector2(Ctx.MoveInput.x * Ctx.InputForce, 0);
+                Ctx.CombinedForce = knockBackForce;
             }
             else
             {
                 Ctx.CombinedForce = knockBackForce;
             }
-
-            //Debug.Log(Ctx.CombinedForce);
+            
             //apply knockBack
             Ctx.Rb.linearVelocity = Ctx.CombinedForce;
 
@@ -133,21 +146,5 @@ public class PlayerKnockBackState : PlayerBaseState
             Ctx.InKnockdown = applyKnockdown;
         }
         Ctx.IsBeingKnockedBack = false;
-        //Ctx.StartCoroutine(KnockbackDecay());
     }
-    
-    // private IEnumerator KnockbackDecay()
-    // {
-    //     float decayTime = 0.3f; // Time to stop knockback
-    //     float elapsedTime = 0f;
-    //
-    //     while (elapsedTime < decayTime)
-    //     {
-    //         Ctx.Rb.linearVelocity = new Vector2(Ctx.Rb.linearVelocity.x * 0.9f, Ctx.Rb.linearVelocity.y * -0.4f);
-    //         elapsedTime += Time.deltaTime;
-    //         yield return null;
-    //     }
-    //
-    //     Ctx.IsBeingKnockedBack = false;
-    // }
 }

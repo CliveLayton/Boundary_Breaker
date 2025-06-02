@@ -48,7 +48,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     [field: SerializeField] public float JumpPower { get; private set; }
     [field: SerializeField] public float JumpBrake { get; private set; }
     [field: SerializeField] public float FallMultiplier { get; private set; }
-    [field: SerializeField] public float InputForce { get; private set; }
+    [field: SerializeField] public Vector2 InputForce { get; set; }
     [field: SerializeField] public AnimationCurve KnockBackForceCurve { get; private set; }
     [field: SerializeField] public CapsuleCollider Pushbox { get; set; }
     [field: SerializeField] public Transform GrabPosition { get; private set; }
@@ -87,6 +87,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public bool IsBeingKnockedBack { get; set; }
     public bool InKnockdown { get; set; }
     public bool CanDash { get; set; } = true;
+    public bool DidDI { get; set; }
+    public Vector2 DefaultInputForce { get; private set; }
     [field: SerializeField] public CharacterMoves[] Moves { get; private set; }
 
 
@@ -133,6 +135,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         Rb = GetComponent<Rigidbody>();
         Anim = GetComponentInChildren<Animator>();
         Speed = ForwardSpeed;
+        DefaultInputForce = InputForce;
         
         //setup states
         states = new PlayerStateFactory(this);
@@ -389,37 +392,25 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         if (!InHitStun)
         {
             InHitStun = true;
-            PercentageCount += damageAmount;
-            if (onPercentageChanged != null)
-            {
-                onPercentageChanged(PercentageCount);
-            }
-            HitStunDuration = stunDuration;
-            HitStopDuration = hitStopDuration;
-            IsComboPossible = isComboPossible;
-            GetKnockBackToOpponent = getKnockBackToOpponent;
-            KnockBackTime = knockBackTime;
-            AttackForce = attackForce;
-            GetFixedKnockBack = hasFixedKnockBack;
-            InKnockdown = applyKnockDown;
         }
         else if (InHitStun && isPlayerAttack && !InComboHit)
         {
             InComboHit = true;
-            PercentageCount += damageAmount;
-            if (onPercentageChanged != null)
-            {
-                onPercentageChanged(PercentageCount);
-            }
-            HitStunDuration = stunDuration;
-            HitStopDuration = hitStopDuration;
-            IsComboPossible = isComboPossible;
-            GetKnockBackToOpponent = getKnockBackToOpponent;
-            KnockBackTime = knockBackTime;
-            AttackForce = attackForce;
-            GetFixedKnockBack = hasFixedKnockBack;
-            InKnockdown = applyKnockDown;
         }
+        
+        PercentageCount += damageAmount;
+        if (onPercentageChanged != null)
+        {
+            onPercentageChanged(PercentageCount);
+        }
+        HitStunDuration = stunDuration;
+        HitStopDuration = hitStopDuration;
+        IsComboPossible = isComboPossible;
+        GetKnockBackToOpponent = getKnockBackToOpponent;
+        KnockBackTime = knockBackTime;
+        AttackForce = attackForce;
+        GetFixedKnockBack = hasFixedKnockBack;
+        InKnockdown = applyKnockDown;
     }
     
     /// <summary>

@@ -71,7 +71,7 @@ public class CharacterSelect : MonoBehaviour
         {
             if (index == 2)
             {
-                chosedPlayer = CharacterPool.Instance.GetP1PooledObject(Random.Range(0, 1));
+                chosedPlayer = CharacterPool.Instance.GetP1PooledObject(Random.Range(0, 2));
             }
             else
             {
@@ -88,7 +88,7 @@ public class CharacterSelect : MonoBehaviour
         {
             if (index == 2)
             {
-                chosedPlayer = CharacterPool.Instance.GetP2PooledObject(Random.Range(0, 1));
+                chosedPlayer = CharacterPool.Instance.GetP2PooledObject(Random.Range(0, 2));
             }
             else
             {

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class InvisibleWall : MonoBehaviour
 {
+    [SerializeField] private GameReferee referee;
     [SerializeField] private float damage;
     [SerializeField] private float stunDuration = 0.5f;
     [SerializeField] private float hitStopDuration = 0.3f;
@@ -14,24 +15,22 @@ public class InvisibleWall : MonoBehaviour
     [SerializeField] private Vector3 position2;
     [SerializeField] private Vector3 position3;
     [SerializeField] private bool isRightWall;
-    
+
     private PlayerStateMachine player1;
     private PlayerStateMachine player2;
     
     private BoxCollider col;
-    private bool isOnWall;
+    private bool isOnWall1, isOnWall2;
 
     private void Awake()
     {
         col = GetComponent<BoxCollider>();
-        UIManager.Instance.onTimerExpired += RestartMatch;
         GameStateManager.Instance.onStateChanged += GetPlayers;
         SetupWall();
     }
 
     private void OnDisable()
     {
-        UIManager.Instance.onTimerExpired -= RestartMatch;
         GameStateManager.Instance.onStateChanged -= GetPlayers;
     }
 
@@ -39,29 +38,13 @@ public class InvisibleWall : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            PlayerStateMachine fighter = other.gameObject.GetComponent<PlayerStateMachine>();
-            IDamageable iDamageable = other.gameObject.GetComponent<IDamageable>();
-
-            if (fighter.CombinedForce.magnitude > 6f && !isOnWall)
+            if (player1.gameObject == other.gameObject)
             {
-                col.enabled = false;
-                isOnWall = true;
-                iDamageable?.Damage(damage, 0.5f, 0.5f, 
-                    new Vector2(3,0.8f), 0.4f, false, false, false, false, false);
-                if (fighter.PlayerIndex == 0)
-                {
-                    StartCoroutine(RestartGame(1));
-                }
-                else
-                {
-                    StartCoroutine(RestartGame(0));
-                }
+                Player1OnWall();
             }
-            else if(!isOnWall)
+            else if (player2.gameObject == other.gameObject)
             {
-                isOnWall = true;
-                iDamageable?.Damage(damage, stunDuration, hitStopDuration, 
-                    attackForce, knockBackTime, false, false, true, false, applyKnockDown);
+                Player2OnWall();
             }
         }
     }
@@ -70,7 +53,60 @@ public class InvisibleWall : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            isOnWall = false;
+            if (player1.gameObject == other.gameObject && !player1.InHitStun)
+            {
+                isOnWall1 = false;
+            }
+            else if (player2.gameObject == other.gameObject & !player2.InHitStun)
+            {
+                isOnWall2 = false;
+            }
+        }
+    }
+
+    private void Player1OnWall()
+    {
+        if (player1.InHitStun)
+        {
+            return;
+        }
+
+        if (player1.CombinedForce.magnitude > 10f && !isOnWall1)
+        {
+            col.enabled = false;
+            isOnWall1 = true;
+            player1.Damage(damage, 0.5f, 0.5f, 
+                new Vector2(3,0.8f), 0.4f, false, false, false, false, false);
+            WallBreak(1);
+        }
+        else if(!isOnWall1)
+        {
+            isOnWall1 = true;
+            player1.Damage(damage, stunDuration, hitStopDuration, 
+                attackForce, knockBackTime, false, false, true, false, applyKnockDown);
+        }
+    }
+
+    private void Player2OnWall()
+    {
+        if (player2.InHitStun)
+        {
+            return;
+        }
+
+        if (player2.CombinedForce.magnitude > 10f && !isOnWall2)
+        {
+            col.enabled = false;
+            isOnWall2 = true;
+            player2.Damage(damage, 0.5f, 0.5f, 
+                new Vector2(3,0.8f), 0.4f, false, false, false, false, false);
+            WallBreak(0);
+        }
+        else if(!isOnWall2)
+        {
+            isOnWall2 = true;
+            player2.Damage(damage, stunDuration, hitStopDuration, 
+                attackForce, knockBackTime, false, false, true, false, applyKnockDown);
         }
     }
 
@@ -107,22 +143,7 @@ public class InvisibleWall : MonoBehaviour
             }
         }
     }
-
-    private void RestartMatch(bool isExpired)
-    {
-        if (isExpired)
-        {
-            if (player1.PercentageCount > player2.PercentageCount)
-            {
-                StartCoroutine(RestartGame(1)); 
-            }
-            else
-            {
-                StartCoroutine(RestartGame(0));
-            }
-        }
-    }
-
+    
     private void GetPlayers(GameStateManager.GameState newState)
     {
         if (newState == GameStateManager.GameState.InGame)
@@ -143,13 +164,8 @@ public class InvisibleWall : MonoBehaviour
         }
     }
 
-    private IEnumerator RestartGame(int playerIndex)
+    private void WallBreak(int index)
     {
-        if (PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].Wins < 2)
-        {
-            PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].Wins += 1; 
-        }
-
         if (isRightWall)
         {
             GameStateManager.Instance.wallBreakCountR += 1;
@@ -158,20 +174,7 @@ public class InvisibleWall : MonoBehaviour
         {
             GameStateManager.Instance.wallBreakCountL += 1;
         }
-        
-        Time.timeScale = 0.5f;
-        UIManager.Instance.countdownActive = false;
-        yield return new WaitForSeconds(1.5f);
-        player1.ResetPercentage();
-        player2.ResetPercentage();
-        
-        if (PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].Wins == 2)
-        {
-            UIManager.Instance.EnterWinningScreen(playerIndex);
-        }
-        else
-        {
-            GameStateManager.Instance.LoadGameplayScene(GameStateManager.fightingScene1);
-        }
+
+        StartCoroutine(referee.RestartGame(index));
     }
 }

@@ -1602,7 +1602,7 @@ MonoBehaviour:
   winScoreGame: {fileID: 152450908}
   player1WinScore: {fileID: 2029378991}
   player2WinScore: {fileID: 235432134}
-  <MatchTime>k__BackingField: 180
+  <MatchTime>k__BackingField: 90
   countdownActive: 0
 --- !u!4 &212358008
 Transform:
@@ -17009,9 +17009,9 @@ SceneRoots:
   m_Roots:
   - {fileID: 190148779}
   - {fileID: 2136948348}
+  - {fileID: 212358008}
   - {fileID: 1464151875}
   - {fileID: 907176268}
-  - {fileID: 212358008}
   - {fileID: 1721158423}
   - {fileID: 1557256825}
   - {fileID: 503618981}

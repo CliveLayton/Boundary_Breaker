@@ -43,7 +43,7 @@ public class PlayerInAirState : PlayerBaseState
     
     public override void InitializeSubState()
     {
-        if (Ctx.IsJumpedPressed && !Ctx.IsDashing)
+        if (Ctx.IsJumpedPressed && !Ctx.IsDashing && Ctx.IsGrounded())
         {
             SetSubState(Factory.Jump());
         }

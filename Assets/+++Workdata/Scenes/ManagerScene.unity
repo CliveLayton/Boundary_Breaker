@@ -7772,7 +7772,37 @@ MonoBehaviour:
   musicAudio: {fileID: 1512201303}
   uiSFXAudio: {fileID: 878483040}
   inGameSFXAudio: {fileID: 1682053016}
-  mainMenuMusic: {fileID: 0}
+  mainMenuMusic: {fileID: 8300000, guid: 39e4489b90a065f47ad6727d00f1036d, type: 3}
+  fightingMusic:
+  - {fileID: 8300000, guid: 0b65a56bb4baadb45bca55fea6f878a9, type: 3}
+  - {fileID: 8300000, guid: 65b3493c85fb7494487df12744a8b644, type: 3}
+  - {fileID: 8300000, guid: adfa589c6a33214468d32f1039ade37a, type: 3}
+  onBlockedSounds:
+  - {fileID: 8300000, guid: 6ca582e8a1aff964ea5fa35d33e56336, type: 3}
+  - {fileID: 8300000, guid: e9a0395bc9a23fa42bbea45f3bad4318, type: 3}
+  - {fileID: 8300000, guid: 11cd0bdabbab8994b99031b8e892b3c4, type: 3}
+  - {fileID: 8300000, guid: 9a75e8b29804dbc4fa11a8c81efb8490, type: 3}
+  - {fileID: 8300000, guid: 3717f29652f7dba4abf66d5ec51ab520, type: 3}
+  - {fileID: 8300000, guid: 76aab17f467c9784f8592bc4bca3d4ea, type: 3}
+  onHitSounds:
+  - {fileID: 8300000, guid: 853b9dc56bf57fb4e8a5b78d26c82e2b, type: 3}
+  - {fileID: 8300000, guid: 8428d3893a3cfad4292aaae56f48251f, type: 3}
+  - {fileID: 8300000, guid: 8b47d3208ce44234e839f9c13af2c7e8, type: 3}
+  - {fileID: 8300000, guid: e6c25ddc8a8449a42938922bf1344562, type: 3}
+  - {fileID: 8300000, guid: 596d9cb671f1e0f44a46fc37ea787bee, type: 3}
+  - {fileID: 8300000, guid: 9c3b6b86e8f03284cbe8f3e74fd8dc39, type: 3}
+  - {fileID: 8300000, guid: b9e13289bdc753040b453bcd8a0c6942, type: 3}
+  - {fileID: 8300000, guid: 1b0cd81750c3c1444be595f442e2f97c, type: 3}
+  - {fileID: 8300000, guid: ccb3e66cb7b57b746b64efba9c6d013e, type: 3}
+  - {fileID: 8300000, guid: 95cd7be7762615449a407e3ee76b94b8, type: 3}
+  onMissedSounds:
+  - {fileID: 8300000, guid: 89558ea4ada950341b5303eb9dac3cb6, type: 3}
+  - {fileID: 8300000, guid: c88d334a5004d9941a247c7cd3656d63, type: 3}
+  - {fileID: 8300000, guid: 7b241df76d712ff4aa11af874b2d8c1e, type: 3}
+  - {fileID: 8300000, guid: b48048889da83314bbf554ad499eae65, type: 3}
+  - {fileID: 8300000, guid: b48048889da83314bbf554ad499eae65, type: 3}
+  - {fileID: 8300000, guid: f5636b64497ebcc46ae7773ceda1d52a, type: 3}
+  - {fileID: 8300000, guid: e04f8dd92695e6d44a522dc4f2df0883, type: 3}
   buttonHover: {fileID: 0}
   buttonPress: {fileID: 0}
 --- !u!81 &907176267

@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// The GameStateManager lies at the heart of our code.
@@ -64,7 +65,7 @@ public class GameStateManager : MonoBehaviour
         //when we start the game, we first want to enter the main menu
         currentState = GameState.InMainMenu;
         LoadSceneManager.instance.SwitchScene(fightingScene1,false);
-        //MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
+        MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
         Cursor.lockState = CursorLockMode.None;
         SceneManager.sceneLoaded += ReloadFightScene;
     }
@@ -98,7 +99,7 @@ public class GameStateManager : MonoBehaviour
             onStateChanged(currentState);
         }
         LoadSceneManager.instance.SwitchScene(fightingScene1,showLoadingScreen);
-        //MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
+        MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
         Cursor.lockState = CursorLockMode.None;
     }
 
@@ -117,7 +118,7 @@ public class GameStateManager : MonoBehaviour
         }
 
         //LoadSceneManager.instance.SwitchScene(fightingScene1, false);
-        //MusicManager.Instance.PlayMusic(MusicManager.Instance.forestMusic, 0.1f);
+        MusicManager.Instance.PlayMusic(MusicManager.Instance.fightingMusic[Random.Range(0,MusicManager.Instance.fightingMusic.Length)], 0.1f);
         //Cursor.lockState = CursorLockMode.Locked;
     }
 

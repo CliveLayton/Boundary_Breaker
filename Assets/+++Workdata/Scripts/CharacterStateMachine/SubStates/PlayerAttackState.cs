@@ -29,6 +29,7 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
         }
 
         Ctx.Anim.Play(Ctx.CurrentMove.ToString());
+        MusicManager.Instance.PlayInGameSFX(MusicManager.Instance.onMissedSounds[Random.Range(0, MusicManager.Instance.onMissedSounds.Length)]);
         currentMove = Ctx.Moves[(int)Ctx.CurrentMove];
         for (int i = 0; i < currentMove.hitbox.Length; i++)
         {

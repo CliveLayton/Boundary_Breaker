@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 using Unity.Cinemachine;
-using UnityEditor;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
 {
@@ -52,6 +52,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     [field: SerializeField] public AnimationCurve KnockBackForceCurve { get; private set; }
     [field: SerializeField] public CapsuleCollider Pushbox { get; set; }
     [field: SerializeField] public Transform GrabPosition { get; private set; }
+    [field: SerializeField] public Transform CameraPoint { get; private set; }
 
     public PlayerBaseState CurrentState { get; set; }
     public int PlayerIndex { get; set; }
@@ -183,10 +184,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        // if (context.started)
-        // {
-        //     jumpCancelBufferTimer = Time.unscaledTime + jumpCancelBufferDuration;
-        // }
         IsJumpedPressed = context.ReadValueAsButton();
         RequireNewJumpPress = false;
     }
@@ -379,12 +376,14 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     {
         if (IsFacingRight() && MoveInput.x < 0 && !InGrab && CanDash && isPlayerAttack)
         {
+            MusicManager.Instance.PlayInGameSFX(MusicManager.Instance.onBlockedSounds[Random.Range(0, MusicManager.Instance.onBlockedSounds.Length)]);
             InBlock = true;
             return;
         }
 
         if (!IsFacingRight() && MoveInput.x > 0 && !InGrab && CanDash && isPlayerAttack)
         {
+            MusicManager.Instance.PlayInGameSFX(MusicManager.Instance.onBlockedSounds[Random.Range(0, MusicManager.Instance.onBlockedSounds.Length)]);
             InBlock = true;
             return;
         }
@@ -411,6 +410,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         AttackForce = attackForce;
         GetFixedKnockBack = hasFixedKnockBack;
         InKnockdown = applyKnockDown;
+        MusicManager.Instance.PlayInGameSFX(MusicManager.Instance.onHitSounds[Random.Range(0, MusicManager.Instance.onHitSounds.Length)]);
     }
     
     /// <summary>

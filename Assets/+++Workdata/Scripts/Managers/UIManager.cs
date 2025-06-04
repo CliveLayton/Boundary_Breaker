@@ -118,8 +118,8 @@ public class UIManager : MonoBehaviour
             case GameStateManager.GameState.InGame:
                 cmTargetGroup = FindAnyObjectByType<CinemachineTargetGroup>();
                 cmTargetGroup.Targets.Clear();
-                cmTargetGroup.AddMember(Player1.transform, 1f, 1f);
-                cmTargetGroup.AddMember(Player2.transform, 1f, 1f);
+                cmTargetGroup.AddMember(Player1.CameraPoint, 1f, 1f);
+                cmTargetGroup.AddMember(Player2.CameraPoint, 1f, 1f);
                 Time.timeScale = 1f;
                 winScoreGame.text = PlayerConfigurationManager.Instance.PlayerConfigs[0].Wins + " - " +
                                PlayerConfigurationManager.Instance.PlayerConfigs[1].Wins;
@@ -130,8 +130,8 @@ public class UIManager : MonoBehaviour
                 break;
             case GameStateManager.GameState.InMainMenu:
                 cmTargetGroup.Targets.Clear();
-                cmTargetGroup.AddMember(GameObject.Find("Player1").transform, 1f, 1f);
-                cmTargetGroup.AddMember(GameObject.Find("Player2").transform, 1f, 1f);
+                cmTargetGroup.AddMember(GameObject.Find("CameraPoint1").transform, 1f, 1f);
+                cmTargetGroup.AddMember(GameObject.Find("CameraPoint2").transform, 1f, 1f);
                 Time.timeScale = 1f;
                 inGame.HideCanvasGroup();
                 if (Player1 != null && Player2 != null)
@@ -384,8 +384,8 @@ public class UIManager : MonoBehaviour
         }
 
         cmTargetGroup.Targets.Clear();
-        cmTargetGroup.AddMember(Player1.transform, 1f, 1f);
-        cmTargetGroup.AddMember(Player2.transform, 1f, 1f);
+        cmTargetGroup.AddMember(Player1.CameraPoint, 1f, 1f);
+        cmTargetGroup.AddMember(Player2.CameraPoint, 1f, 1f);
         
         Player1.Opponent = Player2;
         Player2.Opponent = Player1;

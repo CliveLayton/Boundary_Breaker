@@ -14,11 +14,16 @@ public class MusicManager : MonoBehaviour
     [Header("Music")] 
     public AudioClip mainMenuMusic;
 
-    [Header("VoiceLines")]
+    public AudioClip[] fightingMusic;
 
-    [Header("Player Footsteps")]
-
+    [Header("VoiceLines")] 
+    
+    [Header("Player Footsteps")] 
+    
     [Header("InGame SFX")]
+    public AudioClip[] onBlockedSounds;
+    public AudioClip[] onHitSounds;
+    public AudioClip[] onMissedSounds;
 
     [Header("UI SFX")] 
     public AudioClip buttonHover;

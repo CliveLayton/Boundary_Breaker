@@ -7,7 +7,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     private void Start()
     {
-        player = GetComponentInParent<PlayerStateMachine>();
+        player = GetComponent<PlayerStateMachine>();
     }
 
     public void SetPlayerHurtbox(int indicator)

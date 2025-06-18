@@ -11147,8 +11147,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   charsToPool:
-  - {fileID: 538305244322742685, guid: 38123942f648da2499300413777cbcc5, type: 3}
-  - {fileID: 7035289111777747631, guid: 52e6b30931d0ad048bba135d5faf2333, type: 3}
+  - {fileID: 6645782294281088558, guid: 2b415ca840217d1468d9330a02028bbd, type: 3}
+  - {fileID: 845011116741254028, guid: c8d71406afc1af24380bd7c8f0d61d1b, type: 3}
   <Player1PoolParent>k__BackingField: {fileID: 1703610710}
   <Player2PoolParent>k__BackingField: {fileID: 881590713}
 --- !u!4 &1464151875

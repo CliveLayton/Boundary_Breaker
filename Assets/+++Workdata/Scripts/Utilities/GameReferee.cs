@@ -64,8 +64,8 @@ public class GameReferee : MonoBehaviour
         Time.timeScale = 0.5f;
         UIManager.Instance.countdownActive = false;
         yield return new WaitForSeconds(restartDelay);
-        player1.ResetPercentage();
-        player2.ResetPercentage();
+        player1.ResetCharacter();
+        player2.ResetCharacter();
         
         if (playerIndex != -1 && PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].Wins == 2)
         {

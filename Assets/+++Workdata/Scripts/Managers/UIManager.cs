@@ -391,8 +391,6 @@ public class UIManager : MonoBehaviour
         Player2.Opponent = Player1;
         Player1.SetLayers(0);
         Player2.SetLayers(1);
-        Player1.ResetPercentage();
-        Player2.ResetPercentage();
         Player1Percentage(0);
         Player2Percentage(0);
         

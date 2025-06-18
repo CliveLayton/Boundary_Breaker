@@ -49,7 +49,7 @@ public class PlayerConfigurationManager : MonoBehaviour
             
             if (pi.playerIndex == 0)
             {
-                multiplayerEventSystem.SetSelectedGameObject(null);
+                //multiplayerEventSystem.SetSelectedGameObject(null);
                 multiplayerEventSystem.playerRoot = player1Canvas;
             }
             else if (pi.playerIndex == 1)

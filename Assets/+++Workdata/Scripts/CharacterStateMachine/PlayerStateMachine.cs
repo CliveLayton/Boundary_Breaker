@@ -98,16 +98,10 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public enum ECurrentMove
     {
         Attack1,
-        Attack1Lw,
-        Attack1S,
         Attack1Air,
         Attack2,
-        Attack2Lw,
-        Attack2S,
         Attack2Air,
         SpecialN,
-        SpecialLw,
-        SpecialS,
         SpecialAir,
         Grab,
         Throw
@@ -134,7 +128,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     private void Awake()
     {
         Rb = GetComponent<Rigidbody>();
-        Anim = GetComponentInChildren<Animator>();
+        Anim = GetComponent<Animator>();
         Speed = ForwardSpeed;
         DefaultInputForce = InputForce;
         
@@ -166,6 +160,12 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     private void LateUpdate()
     {
         PlayerAnimations();
+        //just for backup if a player falls through the stage
+        if (transform.position.y <= -1)
+        {
+            GameReferee gameReferee = FindAnyObjectByType<GameReferee>();
+            StartCoroutine(gameReferee.RestartGame(-1, 0.2f));
+        }
     }
 
     private void OnDestroy()
@@ -207,21 +207,21 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
                 CurrentMove = ECurrentMove.Attack1;
                 IsAttacking = true;
             }
-            else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
-            {
-                CurrentMove = ECurrentMove.Attack1Lw;
-                IsAttacking = true;
-            }
-            else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
-            {
-                CurrentMove = ECurrentMove.Attack1S;
-                IsAttacking = true;
-            }
-            else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
-            {
-                CurrentMove = ECurrentMove.Attack1S;
-                IsAttacking = true;
-            }
+            // else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
+            // {
+            //     CurrentMove = ECurrentMove.Attack1Lw;
+            //     IsAttacking = true;
+            // }
+            // else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
+            // {
+            //     CurrentMove = ECurrentMove.Attack1S;
+            //     IsAttacking = true;
+            // }
+            // else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
+            // {
+            //     CurrentMove = ECurrentMove.Attack1S;
+            //     IsAttacking = true;
+            // }
         } else if (context.performed && !IsAttacking && !InBlock
                    && !InHitStun && !IsBeingKnockedBack && !IsGrounded())
         {
@@ -240,21 +240,21 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
                 CurrentMove = ECurrentMove.Attack2;
                 IsAttacking = true;
             }
-            else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
-            {
-                CurrentMove = ECurrentMove.Attack2Lw;
-                IsAttacking = true;
-            }
-            else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
-            {
-                CurrentMove = ECurrentMove.Attack2S;
-                IsAttacking = true;
-            }
-            else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
-            {
-                CurrentMove = ECurrentMove.Attack2S;
-                IsAttacking = true;
-            }
+            // else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
+            // {
+            //     CurrentMove = ECurrentMove.Attack2Lw;
+            //     IsAttacking = true;
+            // }
+            // else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
+            // {
+            //     CurrentMove = ECurrentMove.Attack2S;
+            //     IsAttacking = true;
+            // }
+            // else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
+            // {
+            //     CurrentMove = ECurrentMove.Attack2S;
+            //     IsAttacking = true;
+            // }
         } else if (context.performed && !IsAttacking && !InBlock
                   && !InHitStun && !IsBeingKnockedBack && !IsGrounded())
         {
@@ -273,21 +273,21 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
                 CurrentMove = ECurrentMove.SpecialN;
                 IsAttacking = true;
             }
-            else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
-            {
-                CurrentMove = ECurrentMove.SpecialLw;
-                IsAttacking = true;
-            }
-            else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
-            {
-                CurrentMove = ECurrentMove.SpecialS;
-                IsAttacking = true;
-            }
-            else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
-            {
-                CurrentMove = ECurrentMove.SpecialS;
-                IsAttacking = true;
-            }
+            // else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
+            // {
+            //     CurrentMove = ECurrentMove.SpecialLw;
+            //     IsAttacking = true;
+            // }
+            // else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
+            // {
+            //     CurrentMove = ECurrentMove.SpecialS;
+            //     IsAttacking = true;
+            // }
+            // else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
+            // {
+            //     CurrentMove = ECurrentMove.SpecialS;
+            //     IsAttacking = true;
+            // }
         } else if (context.performed && !IsAttacking && !InBlock
                    && !InHitStun && !IsBeingKnockedBack && !IsGrounded())
         {
@@ -483,7 +483,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     /// <returns></returns>
     public bool IsGrounded()
     {
-        bool hitGround = Physics.Raycast(transform.position, Vector3.down, 0.1f, groundLayer);
+        bool hitGround = Physics.Raycast(transform.position + new Vector3(0,0.1f,0), Vector3.down, 0.2f, groundLayer);
         
         return hitGround;
     }
@@ -548,12 +548,23 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         }
     }
 
-    public void ResetPercentage()
+    public void ResetCharacter()
     {
+        LastMovementX = 0;
+        MoveInput = Vector2.zero;
+        Rb.linearVelocity = Vector3.zero;
         PercentageCount = 0f;
         if (onPercentageChanged != null)
         {
             onPercentageChanged(PercentageCount);
+        }
+        if (PlayerIndex == 0)
+        {
+            transform.SetParent(CharacterPool.Instance.Player1PoolParent);
+        }
+        else
+        {
+            transform.SetParent(CharacterPool.Instance.Player2PoolParent);
         }
     }
 

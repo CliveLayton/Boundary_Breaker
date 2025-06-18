@@ -66,7 +66,7 @@ public class GameStateManager : MonoBehaviour
         currentState = GameState.InMainMenu;
         LoadSceneManager.instance.SwitchScene(fightingScene1,false);
         MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Locked;
         SceneManager.sceneLoaded += ReloadFightScene;
     }
 
@@ -91,8 +91,8 @@ public class GameStateManager : MonoBehaviour
         }
         wallBreakCountR = 0;
         wallBreakCountL = 0;
-        UIManager.Instance.Player1.transform.SetParent(CharacterPool.Instance.Player1PoolParent);
-        UIManager.Instance.Player2.transform.SetParent(CharacterPool.Instance.Player2PoolParent);
+        UIManager.Instance.Player1.ResetCharacter();
+        UIManager.Instance.Player2.ResetCharacter();
         currentState = GameState.InMainMenu;
         if (onStateChanged != null)
         {
@@ -100,7 +100,7 @@ public class GameStateManager : MonoBehaviour
         }
         LoadSceneManager.instance.SwitchScene(fightingScene1,showLoadingScreen);
         MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
-        Cursor.lockState = CursorLockMode.None;
+        //Cursor.lockState = CursorLockMode.None;
     }
 
     //called to start a new game. Also changes the game state.
@@ -162,9 +162,8 @@ public class GameStateManager : MonoBehaviour
         {
             return;
         }
-        
-        UIManager.Instance.Player1.transform.SetParent(CharacterPool.Instance.Player1PoolParent);
-        UIManager.Instance.Player2.transform.SetParent(CharacterPool.Instance.Player2PoolParent);
+        UIManager.Instance.Player1.ResetCharacter();
+        UIManager.Instance.Player2.ResetCharacter();
         LoadSceneManager.instance.SwitchScene(sceneName, false);
     }
 

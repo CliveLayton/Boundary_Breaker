@@ -56,15 +56,15 @@ Material:
     m_Ints: []
     m_Floats:
     - _Depth_Sample_Offset: 0.0053
-    - _Foam_Distance: 0.95
-    - _Foam_Scale: 250
+    - _Foam_Distance: 3.8
+    - _Foam_Scale: 1500
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Wave_Speed: 1
-    - _Wave_Strength: 0.2
+    - _Wave_Strength: 0.3
     m_Colors:
-    - _Base_Color: {r: 0, g: 0.25693083, b: 0.9119496, a: 0.5882353}
+    - _Base_Color: {r: 0, g: 0.750831, b: 0.9137255, a: 0.5882353}
     - _Foam_Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Foam_Velocity: {r: 0.02, g: 0.01, b: 0, a: 0}
+    - _Foam_Velocity: {r: 0.001, g: 0.001, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

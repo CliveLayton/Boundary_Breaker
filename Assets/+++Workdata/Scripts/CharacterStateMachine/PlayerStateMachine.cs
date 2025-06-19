@@ -388,6 +388,17 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
             return;
         }
 
+        if (!isPlayerAttack && IsFacingRight())
+        {
+            RaycastHit hit;
+            Physics.Raycast(transform.position + Vector3.up, Vector3.left, out hit, 10f, groundLayer);
+            var holoWall = hit.transform.GetComponent<HoloWall>();
+            if (holoWall != null)
+            {
+                holoWall.GetImpact(hit);
+            }
+        }
+
         if (!InHitStun)
         {
             InHitStun = true;

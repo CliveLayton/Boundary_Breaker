@@ -3307,8 +3307,8 @@
     "m_ObjectId": "7070fc75f5174e4699c606f0bd5dede1",
     "m_Title": "Detect edges based on world-space normals",
     "m_Position": {
-        "x": -3579.333740234375,
-        "y": -649.3333740234375
+        "x": -3579.333251953125,
+        "y": -649.333251953125
     }
 }
 
@@ -3792,8 +3792,8 @@
     "m_ObjectId": "87fd21bad38143bfb20cd2773f26773e",
     "m_Title": "Detect edges based on colors",
     "m_Position": {
-        "x": -3558.667236328125,
-        "y": 459.3331298828125
+        "x": -3558.666748046875,
+        "y": 459.3333740234375
     }
 }
 

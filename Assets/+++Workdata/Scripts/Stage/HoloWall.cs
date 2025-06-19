@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class InvisibleWall : MonoBehaviour
+public class HoloWall : MonoBehaviour
 {
     [SerializeField] private GameReferee referee;
     [SerializeField] private float damage;
@@ -16,17 +18,37 @@ public class InvisibleWall : MonoBehaviour
     [SerializeField] private Vector3 position3;
     [SerializeField] private bool isRightWall;
 
+    [Header("Impact Values")] 
+    [SerializeField] private float shakeStrength = 0.03f;
+    [SerializeField] private float shakeDuration = 0.25f;
+    [SerializeField] private float rippleCooldown = 0.4f;
+
+    private Material material;
+    private float rippleTime = 100f;
+    private float desolveValue = -1.2f;
+    private Coroutine shakeRoutine;
+    private Vector3 originalPosition;
+    private bool wallIsBroken;
+
     private PlayerStateMachine player1;
     private PlayerStateMachine player2;
     
-    private BoxCollider col;
+    private MeshCollider col;
     private bool isOnWall1, isOnWall2;
 
     private void Awake()
     {
-        col = GetComponent<BoxCollider>();
+        col = GetComponent<MeshCollider>();
+        material = GetComponent<Renderer>().material;
+        material.DisableKeyword("_USE_DESOLVE");
         GameStateManager.Instance.onStateChanged += GetPlayers;
         SetupWall();
+    }
+
+    private void Update()
+    {
+        rippleTime += Time.deltaTime;
+        material.SetFloat("_Ripple_Time", rippleTime);
     }
 
     private void OnDisable()
@@ -64,6 +86,73 @@ public class InvisibleWall : MonoBehaviour
         }
     }
 
+    public void GetImpact(RaycastHit hit)
+    {
+        if (rippleTime < rippleCooldown)
+        {
+            return;
+        }
+        
+        material.SetVector("_Ripple_Origin", hit.textureCoord);
+        if (wallIsBroken)
+        {
+            desolveValue = -1.1f;
+            material.SetFloat("_Desolve_Value", -1.1f);
+            material.EnableKeyword("_USE_DESOLVE");
+            StartCoroutine(LerpDesolve());
+        }
+        rippleTime = material.GetFloat("_Ripple_Thickness") * -2f;
+
+        if (shakeRoutine != null)
+        {
+            StopCoroutine(shakeRoutine);
+            transform.position = originalPosition;
+        }
+
+        originalPosition = transform.position;
+        shakeRoutine = StartCoroutine(Shake(hit));
+    }
+
+    private IEnumerator Shake(RaycastHit hit)
+    {
+        for (float t = 0f; t < shakeDuration; t += Time.deltaTime)
+        {
+            transform.position = originalPosition + Random.insideUnitSphere * shakeStrength;
+            yield return null;
+        }
+
+        transform.position = originalPosition;
+    }
+
+    private IEnumerator LerpDesolve()
+    {
+        float elapsed = 0f;
+
+        while (elapsed < hitStopDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = elapsed / hitStopDuration;
+            desolveValue = Mathf.Lerp(-1.1f, -0.7f, t);
+            material.SetFloat("_Desolve_Value", desolveValue);
+
+            yield return null;
+        }
+
+        elapsed = 0f;
+
+        while (elapsed < stunDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / stunDuration;
+            desolveValue = Mathf.Lerp(-0.7f, 0.4f, t);
+            material.SetFloat("_Desolve_Value", desolveValue);
+
+            yield return null;
+        }
+
+        desolveValue = 0.4f;
+    }
+
     private void Player1OnWall()
     {
         if (player1.InHitStun)
@@ -73,10 +162,11 @@ public class InvisibleWall : MonoBehaviour
 
         if (player1.CombinedForce.magnitude > 10f && !isOnWall1)
         {
-            col.enabled = false;
+            wallIsBroken = true;
             isOnWall1 = true;
             player1.Damage(damage, 0.5f, 0.5f, 
                 new Vector2(3,0.8f), 0.4f, false, false, false, false, false);
+            col.enabled = false;
             WallBreak(1);
         }
         else if(!isOnWall1)
@@ -96,10 +186,11 @@ public class InvisibleWall : MonoBehaviour
 
         if (player2.CombinedForce.magnitude > 10f && !isOnWall2)
         {
-            col.enabled = false;
+            wallIsBroken = true;
             isOnWall2 = true;
             player2.Damage(damage, 0.5f, 0.5f, 
                 new Vector2(3,0.8f), 0.4f, false, false, false, false, false);
+            col.enabled = false;
             WallBreak(0);
         }
         else if(!isOnWall2)

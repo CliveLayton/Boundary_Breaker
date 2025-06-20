@@ -7,13 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HoloWall
+  m_Name: HoloWallTop
   m_Shader: {fileID: -6465566751694194690, guid: ea923447f0a3666468e14e8b2ab4bc6d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _USE_BIG_SCANLINE
-  - _USE_COLLISION_RIPPLES
   - _USE_HEXAGON_GLOW
   - _USE_INTERSECTION
   - _USE_SCANLINES
@@ -51,14 +50,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Aspect_Ratio: 0.65
+    - _Aspect_Ratio: 0.5
     - _Big_Scanline_Speed: 0.3
     - _Big_Scanline_Strength: 1
     - _Big_Scanline_Thickness: 0.08
-    - _Cutoff_Height: 0
-    - _Desolve_Speed: 1
-    - _Desolve_Value: -1.57
-    - _Edge_Glow_Strength: 0.8
+    - _Desolve_Value: 0
+    - _Edge_Glow_Strength: 1
     - _Edge_Width: 0.05
     - _Glow_Noise_Scale: 1
     - _Glow_Speed: 0.3
@@ -70,31 +67,30 @@ Material:
     - _Noise_Strength: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Ripple_Speed: 0.4
-    - _Ripple_Thickness: 0.03
-    - _Ripple_Time: 0.4
+    - _Ripple_Speed: 0.5
+    - _Ripple_Thickness: 0.2
+    - _Ripple_Time: 0.8
     - _Scanline_Strength: 0.5
     - _Smoothness: 0.2
     - _USE_BIG_SCANLINE: 1
-    - _USE_COLLISION_RIPPLES: 1
+    - _USE_COLLISION_RIPPLES: 0
     - _USE_DESOLVE: 0
     - _USE_EDGE_GLOW: 0
     - _USE_HEXAGON_GLOW: 1
     - _USE_INTERSECTION: 1
     - _USE_SCANLINES: 1
     m_Colors:
-    - _Base_Color: {r: 0, g: 0.2715746, b: 0.899371, a: 0.78431374}
-    - _Edge_Color: {r: 3.795317, g: 0, b: 0.106557965, a: 1}
+    - _Base_Color: {r: 0, g: 0.27058825, b: 0.8980392, a: 0.78431374}
+    - _Edge_Color: {r: 0, g: 0, b: 0, a: 0}
     - _Edge_Glow_Thickness: {r: 0.05, g: 0.05, b: 0, a: 0}
-    - _Emission_Color: {r: 0, g: 0.456661, b: 1, a: 1}
+    - _Emission_Color: {r: 0, g: 0.45490196, b: 1, a: 1}
     - _Glow_Strength_MinMax: {r: 0.05, g: 0.3, b: 0, a: 0}
     - _Ripple_Origin: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _Scroll_Velocity: {r: 0, g: 0.05, b: 0, a: 0}
-    - _Tiling: {r: 3, g: 2, b: 0, a: 0}
-    - _UVScale: {r: 2, g: 1, b: 0, a: 0}
+    - _Tiling: {r: 5.5, g: 3, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &3089025464471447906
+--- !u!114 &7801214581251942500
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

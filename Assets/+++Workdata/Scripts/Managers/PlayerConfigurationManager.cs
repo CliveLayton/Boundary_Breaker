@@ -74,18 +74,21 @@ public class PlayerConfigurationManager : MonoBehaviour
             }
         }
 
-        PlayerConfigs.Add(new PlayerConfiguration(pi, multiplayerEventSystem, pi.uiInputModule));
+        PlayerConfigs.Add(new PlayerConfiguration(pi, multiplayerEventSystem, pi.uiInputModule,
+            pi.gameObject.GetComponent<PlayerInputManager>()));
     }
 }
 
 public class PlayerConfiguration
 {
-    public PlayerConfiguration(PlayerInput pi, MultiplayerEventSystem mes, InputSystemUIInputModule uIModule)
+    public PlayerConfiguration(PlayerInput pi, MultiplayerEventSystem mes, InputSystemUIInputModule uIModule,
+        PlayerInputManager manager)
     {
         PlayerIndex = pi.playerIndex;
         Input = pi;
         PlayerEvent = mes;
         UIInputModule = uIModule;
+        InputManager = manager;
     }
     
     public PlayerInput Input { get; set; }
@@ -95,6 +98,8 @@ public class PlayerConfiguration
     public InputSystemUIInputModule UIInputModule { get; set; }
     
     public GameInput GameInputMap { get; set; }
+    
+    public PlayerInputManager InputManager { get; set; }
     
     public int PlayerIndex { get; set; }
 

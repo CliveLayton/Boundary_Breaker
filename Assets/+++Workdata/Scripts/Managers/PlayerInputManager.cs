@@ -10,6 +10,8 @@ public class PlayerInputManager : MonoBehaviour
     private GameInput gameInput;
     //private PlayerController playerController;
     private PlayerStateMachine playerStateMachine;
+    private CharacterSelect characterSelect1;
+    private CharacterSelect characterSelect2;
     private int index;
 
     #endregion
@@ -18,6 +20,8 @@ public class PlayerInputManager : MonoBehaviour
     
     private void Awake()
     {
+        characterSelect1 = GameObject.Find("CharacterSelectionP1").GetComponent<CharacterSelect>();
+        characterSelect2 = GameObject.Find("CharacterSelectionP2").GetComponent<CharacterSelect>();
         var playerInput = GetComponent<PlayerInput>();
         index = playerInput.playerIndex;
         playerInput.enabled = false;
@@ -55,6 +59,15 @@ public class PlayerInputManager : MonoBehaviour
             UIManager.Instance.ReassignUIActions();
         }
         GameStateManager.Instance.onStateChanged += HandleInputActivation;
+
+        if (index == 0)
+        {
+            gameInput.UI.Cancel.performed += characterSelect1.OnDeselect;
+        }
+        else if (index == 1)
+        {
+            gameInput.UI.Cancel.performed += characterSelect2.OnDeselect;
+        }
     }
 
     private void OnDestroy()
@@ -79,6 +92,30 @@ public class PlayerInputManager : MonoBehaviour
                 playerStateMachine = characterControlsArray.FirstOrDefault(m => m.PlayerIndex == index);
                 SubscribePlayerInput();
                 break;
+        }
+    }
+
+    public void SubscribeDeselect()
+    {
+        if (index == 0)
+        {
+            gameInput.UI.Cancel.performed += characterSelect1.OnDeselect;
+        }
+        else if (index == 1)
+        {
+            gameInput.UI.Cancel.performed += characterSelect2.OnDeselect;
+        }
+    }
+
+    public void UnsubscribeDeselect()
+    {
+        if (index == 0)
+        {
+            gameInput.UI.Cancel.performed -= characterSelect1.OnDeselect;
+        }
+        else if (index == 1)
+        {
+            gameInput.UI.Cancel.performed -= characterSelect2.OnDeselect;
         }
     }
 

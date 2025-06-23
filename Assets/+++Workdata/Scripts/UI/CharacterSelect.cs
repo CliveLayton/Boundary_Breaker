@@ -1,5 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class CharacterSelect : MonoBehaviour
@@ -77,11 +78,6 @@ public class CharacterSelect : MonoBehaviour
             {
                 chosedPlayer = CharacterPool.Instance.GetP1PooledObject(index);
             }
-
-            GameObject parent = GameObject.Find("Player1");
-            chosedPlayer.transform.SetParent(parent.transform);
-            chosedPlayer.transform.localPosition = Vector3.zero;
-            chosedPlayer.SetActive(true);
         }
 
         if (playerIndex == 1)
@@ -94,20 +90,35 @@ public class CharacterSelect : MonoBehaviour
             {
                 chosedPlayer = CharacterPool.Instance.GetP2PooledObject(index);
             }
-
-            GameObject parent = GameObject.Find("Player2");
-            chosedPlayer.transform.SetParent(parent.transform);
-            chosedPlayer.transform.localPosition = Vector3.zero;
-            chosedPlayer.SetActive(true);
         }
     }
 
     private void OnConfirmSelection()
     {
-        chosedPlayer.GetComponent<PlayerStateMachine>().PlayerIndex = playerIndex;
+        PlayerStateMachine player = chosedPlayer.GetComponent<PlayerStateMachine>();
+        if (playerIndex == 0)
+        {
+            UIManager.Instance.Player1 = player;
+        }
+        else if (playerIndex == 1)
+        {
+            UIManager.Instance.Player2 = player;
+        }
+        player.PlayerIndex = playerIndex;
         PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].IsReady = true;
+        UIManager.Instance.PlayerSelectionUI(playerIndex, true);
         UIManager.Instance.CheckAllPlayerReady();
     }
+
+    public void OnDeselect(InputAction.CallbackContext context)
+    {
+        if (context.performed && chosedPlayer != null)
+        {
+            PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].IsReady = false;
+            UIManager.Instance.PlayerSelectionUI(playerIndex, false); 
+        }
+    }
+    
 
     #endregion
 }

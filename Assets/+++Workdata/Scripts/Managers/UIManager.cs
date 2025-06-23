@@ -64,8 +64,8 @@ public class UIManager : MonoBehaviour
 
     public event Action onTimerExpired;
 
-    public PlayerStateMachine Player1 { get; private set; }
-    public PlayerStateMachine Player2 { get; private set; }
+    public PlayerStateMachine Player1 { get; set; }
+    public PlayerStateMachine Player2 { get; set; }
     
     private CinemachineTargetGroup cmTargetGroup;
 
@@ -227,6 +227,11 @@ public class UIManager : MonoBehaviour
         pauseMenuP2.HideCanvasGroup();
         winningScreenP1.HideCanvasGroup();
         winningScreenP2.HideCanvasGroup();
+        
+        foreach (var player in PlayerConfigurationManager.Instance.PlayerConfigs)
+        {
+            player.InputManager.SubscribeDeselect();
+        }
 
         if (fromGame)
         {
@@ -353,11 +358,11 @@ public class UIManager : MonoBehaviour
 
         if (player1Ready && player2Ready)
         {
-            CharacterSelected();
+            CharactersSelected();
         }
     }
 
-    public void CharacterSelected()
+    public void CharactersSelected()
     {
         characterSelectionP1.HideCanvasGroup();
         characterSelectionP2.HideCanvasGroup();
@@ -367,8 +372,66 @@ public class UIManager : MonoBehaviour
         StartCoroutine(SwitchToSingleEventSystem(startMatchButton));
     }
 
+    public void PlayerSelectionUI(int index, bool hasSelected)
+    {
+        if (index == 0 && hasSelected)
+        {
+            characterSelectionP1.HideCanvasGroup();
+        }
+        else if (index == 1 && hasSelected)
+        {
+            characterSelectionP2.HideCanvasGroup();
+        }
+        else if (index == 0 && !hasSelected)
+        {
+            characterSelectionP1.ShowCanvasGroup();
+        }
+        else if (index == 1 && !hasSelected)
+        {
+            characterSelectionP2.ShowCanvasGroup();
+        }
+
+        if (startMatchButton.activeSelf & !hasSelected)
+        {
+            startMatchButton.SetActive(false);
+            eventSystem.enabled = false;
+            mainInputModule.enabled = false;
+            for (int i = 0; i < PlayerConfigurationManager.Instance.PlayerConfigs.Count; i++)
+            {
+                PlayerConfigurationManager.Instance.PlayerConfigs[i].PlayerEvent.enabled = true;
+                PlayerConfigurationManager.Instance.PlayerConfigs[i].UIInputModule.enabled = true;
+
+                if (i == 0)
+                {
+                    PlayerConfigurationManager.Instance.PlayerConfigs[i].ReassignUIActions();
+                    PlayerConfigurationManager.Instance.PlayerConfigs[i].PlayerEvent.SetSelectedGameObject(charSelectP1);
+                }
+
+                if (i == 1)
+                {
+                    PlayerConfigurationManager.Instance.PlayerConfigs[i].ReassignUIActions();
+                    PlayerConfigurationManager.Instance.PlayerConfigs[i].PlayerEvent.SetSelectedGameObject(charSelectP2);
+                }
+            }
+        }
+    }
+
     public void EnterGame()
     {
+        GameObject parent1 = GameObject.Find("Player1");
+        Player1.transform.SetParent(parent1.transform);
+        Player1.gameObject.transform.localPosition = Vector3.zero;
+        Player1.gameObject.SetActive(true);
+        GameObject parent2 = GameObject.Find("Player2");
+        Player2.transform.SetParent(parent2.transform);
+        Player2.gameObject.transform.localPosition = Vector3.zero;
+        Player2.gameObject.SetActive(true);
+        
+        foreach (var player in PlayerConfigurationManager.Instance.PlayerConfigs)
+        {
+            player.InputManager.UnsubscribeDeselect();
+        }
+        
         var characterArray = FindObjectsByType<PlayerStateMachine>(FindObjectsSortMode.None);
         for (int i = 0; i < characterArray.Length; i++)
         {

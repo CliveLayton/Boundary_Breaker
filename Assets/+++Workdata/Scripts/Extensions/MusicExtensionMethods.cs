@@ -3,15 +3,15 @@ using System.Collections;
 
 public static class MusicExtensionMethods
 {
-    /// <summary>
+   /// <summary>
    /// Fades out the current audio clip and fades in the new audio clip
    /// </summary>
    /// <param name="aSource">the audio source</param>
    /// <param name="clip">the clip to play</param>
    /// <param name="duration">the duration to fade</param>
-   public static void FadingInOut(this AudioSource aSource, AudioClip clip, float duration)
+   public static void FadingInOut(this AudioSource aSource, AudioClip clip, float duration, bool lowerAudio = false)
    {
-      aSource.GetComponentInParent<MonoBehaviour>().StartCoroutine(FadeOutAudio(aSource, clip, duration));
+      aSource.GetComponentInParent<MonoBehaviour>().StartCoroutine(FadeOutAudio(aSource, clip, duration, lowerAudio));
    }
 
    /// <summary>
@@ -22,7 +22,7 @@ public static class MusicExtensionMethods
    /// <param name="clip">the clip to play</param>
    /// <param name="duration">the duration to fade</param>
    /// <returns></returns>
-   private static IEnumerator FadeOutAudio(AudioSource aSource, AudioClip clip, float duration)
+   private static IEnumerator FadeOutAudio(AudioSource aSource, AudioClip clip, float duration, bool lowerAudio)
    {
       //use the stopwatch to be independent to the time set in unity
       float startVolume = aSource.volume; //save the initial volume
@@ -41,6 +41,14 @@ public static class MusicExtensionMethods
       aSource.Stop();
       aSource.clip = clip;
       aSource.volume = 1f;
+      if (lowerAudio)
+      {
+         startVolume = 0.3f;
+      }
+      else
+      {
+         startVolume = 1f;
+      }
       aSource.GetComponentInParent<MonoBehaviour>().StartCoroutine(FadeInAudio(aSource, duration, startVolume));
    }
 

@@ -551,9 +551,6 @@
             "m_Id": "9e354f2d4e1949a7bc42637e8dccc8da"
         },
         {
-            "m_Id": "4333640cd9f74e079e56b9b7369d98a8"
-        },
-        {
             "m_Id": "5542f6aceb5a4ae59a4c4b72a97f98d3"
         },
         {
@@ -3682,8 +3679,8 @@
     "m_ObjectId": "0b5be7521a184d9d98ffb08999509d7a",
     "m_Title": "Combine Ripples and Glowing with Hexagons",
     "m_Position": {
-        "x": -3751.333251953125,
-        "y": 920.666748046875
+        "x": -3751.333740234375,
+        "y": 920.6666259765625
     }
 }
 
@@ -5443,21 +5440,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "28df7bcb633e4d628c5d377b0df509a3",
-    "m_Id": 3,
-    "m_DisplayName": "Delta Time",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Delta Time",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "293273afe1aa4582afebbd9327e999b7",
     "m_Id": 0,
@@ -6370,8 +6352,8 @@
     "m_ObjectId": "34547359429e49a8aa9de037688640a1",
     "m_Title": "Intersections with Other Objects",
     "m_Position": {
-        "x": -2762.666748046875,
-        "y": 1298.66650390625
+        "x": -2762.6669921875,
+        "y": 1298.6666259765625
     }
 }
 
@@ -6814,8 +6796,8 @@
     "m_ObjectId": "3a1e85e7580c4e2ea9d36687cc6bfae6",
     "m_Title": "Edge Glow",
     "m_Position": {
-        "x": -5680.66650390625,
-        "y": -1101.3333740234375
+        "x": -5680.66748046875,
+        "y": -1101.33349609375
     }
 }
 
@@ -7358,51 +7340,6 @@
     "m_RangeValues": {
         "x": 0.0,
         "y": 1.0
-    }
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.TimeNode",
-    "m_ObjectId": "4333640cd9f74e079e56b9b7369d98a8",
-    "m_Group": {
-        "m_Id": ""
-    },
-    "m_Name": "Time",
-    "m_DrawState": {
-        "m_Expanded": true,
-        "m_Position": {
-            "serializedVersion": "2",
-            "x": -1070.0,
-            "y": -1156.666748046875,
-            "width": 125.33331298828125,
-            "height": 174.66668701171876
-        }
-    },
-    "m_Slots": [
-        {
-            "m_Id": "b18bd21a2778497f9785d40b9385053c"
-        },
-        {
-            "m_Id": "5d88e192e25c4d5783b5c50328a41b28"
-        },
-        {
-            "m_Id": "bde468693a9046acb2d9774bcb59a44e"
-        },
-        {
-            "m_Id": "28df7bcb633e4d628c5d377b0df509a3"
-        },
-        {
-            "m_Id": "8433fce0c62347eca6fa007181fa4db6"
-        }
-    ],
-    "synonyms": [],
-    "m_Precision": 0,
-    "m_PreviewExpanded": true,
-    "m_DismissedVersion": 0,
-    "m_PreviewMode": 0,
-    "m_CustomColors": {
-        "m_SerializableColors": []
     }
 }
 
@@ -8921,24 +8858,9 @@
     "m_ObjectId": "5cf1119efaf840b991281c176e7fb721",
     "m_Title": "Combine Ripples and Glowing with Hexagons",
     "m_Position": {
-        "x": -3628.666748046875,
-        "y": 87.3333740234375
+        "x": -3628.6669921875,
+        "y": 87.33332824707031
     }
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "5d88e192e25c4d5783b5c50328a41b28",
-    "m_Id": 1,
-    "m_DisplayName": "Sine Time",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Sine Time",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
 }
 
 {
@@ -11840,21 +11762,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "8433fce0c62347eca6fa007181fa4db6",
-    "m_Id": 4,
-    "m_DisplayName": "Smooth Delta",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Smooth Delta",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DistanceNode",
     "m_ObjectId": "84837e75212b4dc4bb80285680bba2fa",
     "m_Group": {
@@ -12475,8 +12382,8 @@
     "m_ObjectId": "8bca0ae28606410c86a4c1157fecb917",
     "m_Title": "Collision Ripples for a reactive shield",
     "m_Position": {
-        "x": -6770.0,
-        "y": 922.0001220703125
+        "x": -6770.0009765625,
+        "y": 922.0000610351563
     }
 }
 
@@ -15050,8 +14957,8 @@
     "m_ObjectId": "b16285976a364584b15e313fabfd87ae",
     "m_Title": "Scanlines for a bit of detail",
     "m_Position": {
-        "x": -2715.333251953125,
-        "y": 564.0001220703125
+        "x": -2715.33349609375,
+        "y": 563.9999389648438
     }
 }
 
@@ -15064,21 +14971,6 @@
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "R",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "b18bd21a2778497f9785d40b9385053c",
-    "m_Id": 0,
-    "m_DisplayName": "Time",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Time",
     "m_StageCapability": 3,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
@@ -15955,21 +15847,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "bde468693a9046acb2d9774bcb59a44e",
-    "m_Id": 2,
-    "m_DisplayName": "Cosine Time",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Cosine Time",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicValueMaterialSlot",
     "m_ObjectId": "bdf44786f08d4849ad7683b639b93e48",
     "m_Id": 2,
@@ -16717,8 +16594,8 @@
     "m_ObjectId": "c4f450da65b34b5ea2a0bc451930b0a2",
     "m_Title": "Big Scanline for lots of idle movement",
     "m_Position": {
-        "x": -2897.333251953125,
-        "y": -742.6666870117188
+        "x": -2897.33349609375,
+        "y": -742.666748046875
     }
 }
 
@@ -20611,8 +20488,8 @@
     "m_ObjectId": "ffe76a3918be4c9dbf294e6513a56cc3",
     "m_Title": "Glowing noise for a bit of idle movement",
     "m_Position": {
-        "x": -5338.66650390625,
-        "y": 146.00006103515626
+        "x": -5338.6669921875,
+        "y": 146.0
     }
 }
 

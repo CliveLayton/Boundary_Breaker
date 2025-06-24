@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class UIManager : MonoBehaviour
     [Header("Main Canvases")]
     [SerializeField] private CanvasGroup mainMenu;
     [SerializeField] private CanvasGroup characterSelection;
+    [SerializeField] private CanvasGroup startScreen;
     [SerializeField] private CanvasGroup inGame;
     [SerializeField] private CanvasGroup optionMenu;
     [SerializeField] private CanvasGroup quitMenu;
@@ -68,10 +70,12 @@ public class UIManager : MonoBehaviour
     public PlayerStateMachine Player2 { get; set; }
     
     private CinemachineTargetGroup cmTargetGroup;
+    private Animator startAnim;
 
     private void Awake()
     {
         Instance = this;
+        startAnim = startScreen.GetComponent<Animator>();
 
         EventSystem.current.SetSelectedGameObject(versusButton);
 
@@ -462,9 +466,11 @@ public class UIManager : MonoBehaviour
             PlayerConfigurationManager.Instance.PlayerConfigs[i].IsReady = false;
         }
         startMatchButton.SetActive(false);
-        characterSelection.HideCanvasGroup();
         RemainingMatchTime = MatchTime;
-        GameStateManager.Instance.StartNewGame();
+        startScreen.ShowCanvasGroup();
+        characterSelection.HideCanvasGroup();
+        startAnim.SetTrigger("StartMatch");
+        MusicManager.Instance.PlayMusic(MusicManager.Instance.fightingMusic[Random.Range(0,MusicManager.Instance.fightingMusic.Length)], 0.1f, true);
     }
 
     public void ReloadGameplayScene(int index)

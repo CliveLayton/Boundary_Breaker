@@ -38,7 +38,8 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     // private float jumpCancelBufferDuration = 0.5f;
     private Quaternion targetRotation;
     private PlayerStateFactory states;
-    
+    private bool isReloading;
+
     //getters and setters
     [field: SerializeField] public float PercentageCount { get; set; }
     [field: SerializeField] public float ForwardSpeed { get; private set; }
@@ -48,6 +49,10 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     [field: SerializeField] public float JumpPower { get; private set; }
     [field: SerializeField] public float JumpBrake { get; private set; }
     [field: SerializeField] public float FallMultiplier { get; private set; }
+    [field: SerializeField] public float MaxShieldDurability { get; private set; }
+    [field: SerializeField] public float ShieldRefreshRate { get; private set; }
+    [field: SerializeField] public float ShieldRefreshTime { get; private set; }
+    [field: SerializeField] public GameObject Shield { get; set; }
     [field: SerializeField] public Vector2 InputForce { get; set; }
     [field: SerializeField] public AnimationCurve KnockBackForceCurve { get; private set; }
     [field: SerializeField] public CapsuleCollider Pushbox { get; set; }
@@ -70,6 +75,9 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     //public bool BufferedJumpCancel => Time.unscaledTime <= jumpCancelBufferTimer;
     public bool IsDashing { get; set; }
     public bool InBlock { get; set; }
+    public float ShieldDurability { get; set; }
+    public float ShieldTimer { get; set; }
+    public Material ShieldMaterial { get; set; }
     [field: SerializeField] public bool IsAttacking { get; set; }
     [field: SerializeField] public bool IsGrabbing { get; set; }
     public bool InGrab { get; set; }
@@ -131,6 +139,9 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         Anim = GetComponent<Animator>();
         Speed = ForwardSpeed;
         DefaultInputForce = InputForce;
+        ShieldDurability = MaxShieldDurability;
+        ShieldMaterial = Shield.GetComponent<Renderer>().material;
+        ShieldMaterial.SetFloat("_Desolve_MaxValue", ShieldDurability);
         
         //setup states
         states = new PlayerStateFactory(this);
@@ -147,6 +158,18 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     private void Update()
     {
         CurrentState.UpdateStates();
+        if (CurrentState != states.Block() && ShieldDurability < MaxShieldDurability)
+        {
+            ShieldTimer += Time.deltaTime;
+            if (ShieldTimer > ShieldRefreshTime && ShieldDurability < MaxShieldDurability)
+            {
+                ShieldDurability += ShieldRefreshRate * Time.deltaTime;
+            }
+            else if (ShieldTimer > ShieldRefreshTime && ShieldDurability >= MaxShieldDurability)
+            {
+                ShieldDurability = MaxShieldDurability;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -161,8 +184,9 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     {
         PlayerAnimations();
         //just for backup if a player falls through the stage
-        if (transform.position.y <= -1)
+        if (transform.position.y <= -1 && !isReloading)
         {
+            isReloading = true;
             GameReferee gameReferee = FindAnyObjectByType<GameReferee>();
             StartCoroutine(gameReferee.RestartGame(-1, 0.2f));
         }
@@ -374,14 +398,23 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public void Damage(float damageAmount, float stunDuration, float hitStopDuration, Vector2 attackForce, float knockBackTime, 
         bool hasFixedKnockBack, bool isComboPossible, bool getKnockBackToOpponent, bool isPlayerAttack, bool applyKnockDown)
     {
-        if (IsFacingRight() && MoveInput.x < 0 && !InGrab && CanDash && isPlayerAttack)
+        HitStunDuration = stunDuration;
+        HitStopDuration = hitStopDuration;
+        IsComboPossible = isComboPossible;
+        GetKnockBackToOpponent = getKnockBackToOpponent;
+        KnockBackTime = knockBackTime;
+        AttackForce = attackForce;
+        GetFixedKnockBack = hasFixedKnockBack;
+        InKnockdown = applyKnockDown;
+        
+        if (IsFacingRight() && MoveInput.x < 0 && !InGrab && CanDash && isPlayerAttack && ShieldDurability > 0)
         {
             MusicManager.Instance.PlayInGameSFX(MusicManager.Instance.onBlockedSounds[Random.Range(0, MusicManager.Instance.onBlockedSounds.Length)]);
             InBlock = true;
             return;
         }
 
-        if (!IsFacingRight() && MoveInput.x > 0 && !InGrab && CanDash && isPlayerAttack)
+        if (!IsFacingRight() && MoveInput.x > 0 && !InGrab && CanDash && isPlayerAttack && ShieldDurability > 0)
         {
             MusicManager.Instance.PlayInGameSFX(MusicManager.Instance.onBlockedSounds[Random.Range(0, MusicManager.Instance.onBlockedSounds.Length)]);
             InBlock = true;
@@ -423,14 +456,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         {
             onPercentageChanged(PercentageCount);
         }
-        HitStunDuration = stunDuration;
-        HitStopDuration = hitStopDuration;
-        IsComboPossible = isComboPossible;
-        GetKnockBackToOpponent = getKnockBackToOpponent;
-        KnockBackTime = knockBackTime;
-        AttackForce = attackForce;
-        GetFixedKnockBack = hasFixedKnockBack;
-        InKnockdown = applyKnockDown;
         MusicManager.Instance.PlayInGameSFX(MusicManager.Instance.onHitSounds[Random.Range(0, MusicManager.Instance.onHitSounds.Length)]);
     }
     

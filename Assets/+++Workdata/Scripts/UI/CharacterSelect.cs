@@ -1,6 +1,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class CharacterSelect : MonoBehaviour
@@ -10,7 +11,9 @@ public class CharacterSelect : MonoBehaviour
     //0 is ChainsawGirl, 1 is TigerBoy
     [SerializeField] private Sprite[] charSprites;
     [SerializeField] private ButtonEvents[] charButtons;
-    [SerializeField] private Image characterIcon;
+    [SerializeField] private Image characterIconSelection;
+    [SerializeField] private Image characterIconVS;
+    [SerializeField] private Image characterIconInGame;
     [SerializeField] private int playerIndex;
 
     private GameObject chosedPlayer;
@@ -23,7 +26,9 @@ public class CharacterSelect : MonoBehaviour
     private void Awake()
     {
         currentSelectedCharIndex = 0;
-        characterIcon.sprite = charSprites[0];
+        characterIconSelection.sprite = charSprites[0];
+        characterIconVS.sprite = charSprites[0];
+        characterIconInGame.sprite = charSprites[0];
         for (int i = 0; i < charButtons.Length; i++)
         {
             int index = i;
@@ -40,7 +45,7 @@ public class CharacterSelect : MonoBehaviour
 
     private void ChangePlayer(int index)
     {
-        characterIcon.sprite = charSprites[index];
+        characterIconSelection.sprite = charSprites[index];
         currentSelectedCharIndex = index;
 
         if (chosedPlayer != null)
@@ -67,16 +72,22 @@ public class CharacterSelect : MonoBehaviour
         {
             return;
         }
+        
+        int randomCharNumber = Random.Range(0, 2);
 
         if (playerIndex == 0)
         {
             if (index == 2)
             {
-                chosedPlayer = CharacterPool.Instance.GetP1PooledObject(Random.Range(0, 2));
+                chosedPlayer = CharacterPool.Instance.GetP1PooledObject(randomCharNumber);
+                characterIconVS.sprite = charSprites[randomCharNumber];
+                characterIconInGame.sprite = charSprites[randomCharNumber];
             }
             else
             {
                 chosedPlayer = CharacterPool.Instance.GetP1PooledObject(index);
+                characterIconVS.sprite = charSprites[index];
+                characterIconInGame.sprite = charSprites[index];
             }
         }
 
@@ -84,11 +95,15 @@ public class CharacterSelect : MonoBehaviour
         {
             if (index == 2)
             {
-                chosedPlayer = CharacterPool.Instance.GetP2PooledObject(Random.Range(0, 2));
+                chosedPlayer = CharacterPool.Instance.GetP2PooledObject(randomCharNumber);
+                characterIconVS.sprite = charSprites[randomCharNumber];
+                characterIconInGame.sprite = charSprites[randomCharNumber];
             }
             else
             {
                 chosedPlayer = CharacterPool.Instance.GetP2PooledObject(index);
+                characterIconVS.sprite = charSprites[index];
+                characterIconInGame.sprite = charSprites[index];
             }
         }
     }

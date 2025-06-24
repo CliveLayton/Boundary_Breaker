@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 1296567057090583553}
   - component: {fileID: 1337923472578547747}
   m_Layer: 8
-  m_Name: TigerBoy
+  m_Name: TigerBoyTest
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -214,6 +214,7 @@ Transform:
   - {fileID: 3200026813074949137}
   - {fileID: 6628131682120454931}
   - {fileID: 6311816670304405498}
+  - {fileID: 4034477972179096504}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7384263884460149145
@@ -267,6 +268,10 @@ MonoBehaviour:
   <JumpPower>k__BackingField: 7
   <JumpBrake>k__BackingField: 7
   <FallMultiplier>k__BackingField: 2
+  <MaxShieldDurability>k__BackingField: 40
+  <ShieldRefreshRate>k__BackingField: 10
+  <ShieldRefreshTime>k__BackingField: 10
+  <Shield>k__BackingField: {fileID: 8429985421151169737}
   <InputForce>k__BackingField: {x: 1, y: 0.5}
   <KnockBackForceCurve>k__BackingField:
     serializedVersion: 2
@@ -320,12 +325,12 @@ MonoBehaviour:
     hitbox:
     - {fileID: 5960401163611524438}
     frameChecker:
-      hitFrameStart: 3
-      hitFrameEnd: 4
-      totalFrames: 7
+      hitFrameStart: 6
+      hitFrameEnd: 12
+      totalFrames: 25
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
-        clip: {fileID: 7400000, guid: 94c060cc1001786439b6d82c6efe164f, type: 2}
+        clip: {fileID: 7400000, guid: ed2bdf76beaa738408c6d650c28b614c, type: 2}
         animatorStateName: Attack1
         layerNumber: 0
   - name: Attack1Air
@@ -341,12 +346,12 @@ MonoBehaviour:
     hitbox:
     - {fileID: 2884057063882500886}
     frameChecker:
-      hitFrameStart: 4
-      hitFrameEnd: 6
-      totalFrames: 11
+      hitFrameStart: 3
+      hitFrameEnd: 7
+      totalFrames: 18
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
-        clip: {fileID: 7400000, guid: 7a386048272090546b36913766da6a54, type: 2}
+        clip: {fileID: 7400000, guid: 8f8fcd702797f6a488869940a77cf0b1, type: 2}
         animatorStateName: Attack1Air
         layerNumber: 0
   - name: Attack2
@@ -362,12 +367,12 @@ MonoBehaviour:
     hitbox:
     - {fileID: 5087678736246976759}
     frameChecker:
-      hitFrameStart: 4
-      hitFrameEnd: 6
-      totalFrames: 9
+      hitFrameStart: 10
+      hitFrameEnd: 17
+      totalFrames: 30
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
-        clip: {fileID: 7400000, guid: a4b6054c8ab3bea40b33464c386021eb, type: 2}
+        clip: {fileID: 7400000, guid: 0a8e0d39259865744b7a3a4dea25f475, type: 2}
         animatorStateName: Attack2
         layerNumber: 0
   - name: Attack2Air
@@ -383,12 +388,12 @@ MonoBehaviour:
     hitbox:
     - {fileID: 2865061503840752065}
     frameChecker:
-      hitFrameStart: 4
-      hitFrameEnd: 7
-      totalFrames: 11
+      hitFrameStart: 7
+      hitFrameEnd: 9
+      totalFrames: 26
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
-        clip: {fileID: 7400000, guid: 120a41a90e024dc4c8db5bccace1d78c, type: 2}
+        clip: {fileID: 7400000, guid: 998d24b7163d91e4b94aee02104df389, type: 2}
         animatorStateName: Attack2Air
         layerNumber: 0
   - name: SpecialN
@@ -404,12 +409,12 @@ MonoBehaviour:
     hitbox:
     - {fileID: 1960462067031622525}
     frameChecker:
-      hitFrameStart: 15
-      hitFrameEnd: 36
-      totalFrames: 53
+      hitFrameStart: 41
+      hitFrameEnd: 55
+      totalFrames: 64
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
-        clip: {fileID: 7400000, guid: 24bf3a2651ba0b240974d9927c79b9ae, type: 2}
+        clip: {fileID: 7400000, guid: dd151914d4789cd4b8239b84933ef4fc, type: 2}
         animatorStateName: SpecialN
         layerNumber: 0
   - name: SpecialAir
@@ -426,11 +431,11 @@ MonoBehaviour:
     - {fileID: 5935293257748141811}
     frameChecker:
       hitFrameStart: 6
-      hitFrameEnd: 10
-      totalFrames: 14
+      hitFrameEnd: 8
+      totalFrames: 28
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
-        clip: {fileID: 7400000, guid: 4856647cba724ee4fa02a018962cb9a1, type: 2}
+        clip: {fileID: 7400000, guid: e0f0573155c4faa40a7ea0575973d6e0, type: 2}
         animatorStateName: SpecialAir
         layerNumber: 0
   - name: Grab
@@ -512,7 +517,7 @@ Animator:
   m_GameObject: {fileID: 845011116741254028}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 020c94d76c064424096adcc78c6a4308, type: 3}
-  m_Controller: {fileID: 9100000, guid: 3a2af0fb483113341a2c7d18944a6dc8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 20ba6d0cd9b41f44fad5b1b79af83a12, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1089,6 +1094,114 @@ MonoBehaviour:
   inactiveColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
   collisionOpenColor: {r: 0.6, g: 0.2, b: 0.2, a: 1}
   collidingColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!1 &8429985421151169737
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4034477972179096504}
+  - component: {fileID: 1127095470738084802}
+  - component: {fileID: 3758624821098206770}
+  - component: {fileID: 8644348042743823361}
+  m_Layer: 14
+  m_Name: Shield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4034477972179096504
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429985421151169737}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.258819, z: 0, w: 0.9659259}
+  m_LocalPosition: {x: 0, y: 0.9642, z: 0.421}
+  m_LocalScale: {x: 1, y: 1.4938115, z: 0.1223}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3744043692268334432}
+  m_LocalEulerAnglesHint: {x: 0, y: -30, z: 0}
+--- !u!33 &1127095470738084802
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429985421151169737}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &3758624821098206770
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429985421151169737}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 835a4643bda64f349a1b93c8ff21c8fa, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8644348042743823361
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429985421151169737}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &3162228512324297722
 PrefabInstance:
   m_ObjectHideFlags: 0

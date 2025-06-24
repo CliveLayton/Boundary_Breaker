@@ -46,9 +46,14 @@ public class MusicManager : MonoBehaviour
     /// stops current music and plays the new clip
     /// </summary>
     /// <param name="clip">audio clip to play</param>
-    public void PlayMusic(AudioClip clip, float fadeDuration)
+    public void PlayMusic(AudioClip clip, float fadeDuration, bool lowerAudio = false)
     {
-        musicAudio.FadingInOut(clip, fadeDuration);
+        musicAudio.FadingInOut(clip, fadeDuration, lowerAudio);
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        musicAudio.volume = volume;
     }
 
     /// <summary>

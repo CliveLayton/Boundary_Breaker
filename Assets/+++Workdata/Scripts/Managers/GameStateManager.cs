@@ -118,7 +118,7 @@ public class GameStateManager : MonoBehaviour
         }
 
         //LoadSceneManager.instance.SwitchScene(fightingScene1, false);
-        MusicManager.Instance.PlayMusic(MusicManager.Instance.fightingMusic[Random.Range(0,MusicManager.Instance.fightingMusic.Length)], 0.1f);
+        MusicManager.Instance.SetMusicVolume(1f);
         //Cursor.lockState = CursorLockMode.Locked;
     }
 

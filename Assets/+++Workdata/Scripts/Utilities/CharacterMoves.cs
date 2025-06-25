@@ -15,5 +15,6 @@ public class CharacterMoves
     public bool applyKnockDown;
     public bool getKnockBackToOpponent;
     public Hitbox[] hitbox;
+    public BoxCollider[] hurtbox;
     public FrameChecker frameChecker;
 }

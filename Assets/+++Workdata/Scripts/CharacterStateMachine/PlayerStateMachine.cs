@@ -142,7 +142,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         ShieldDurability = MaxShieldDurability;
         ShieldMaterial = Shield.GetComponent<Renderer>().material;
         ShieldMaterial.SetFloat("_Desolve_MaxValue", ShieldDurability);
-        
+
         //setup states
         states = new PlayerStateFactory(this);
         CurrentState = states.Grounded();

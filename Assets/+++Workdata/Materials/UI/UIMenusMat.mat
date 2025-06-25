@@ -7,14 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HoloWallTop
+  m_Name: UIMenusMat
   m_Shader: {fileID: -6465566751694194690, guid: ea923447f0a3666468e14e8b2ab4bc6d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _IN_EDIT_MODE
   - _USE_BIG_SCANLINE
   - _USE_HEXAGON_GLOW
-  - _USE_INTERSECTION
   - _USE_SCANLINES
   m_InvalidKeywords: []
   m_LightmapFlags: 2
@@ -33,7 +33,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Hexagon_Texture:
-        m_Texture: {fileID: 2800000, guid: f6d5c0807b78a0b4a87e688ec0e598a9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 62f1efbf400a5d144940af4e9898d150, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Scanline_Texture:
@@ -54,52 +54,49 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Aspect_Ratio: 0.65
-    - _Big_Scanline_Speed: 0.3
-    - _Big_Scanline_Strength: 0.4
-    - _Big_Scanline_Thickness: 0.08
-    - _Cutoff_Height: 0
-    - _Desolve_Speed: 1
-    - _Desolve_Value: -1.57
-    - _Edge_Glow_Strength: 0.8
+    - _Aspect_Ratio: 0.5
+    - _Big_Scanline_Speed: 0.1
+    - _Big_Scanline_Strength: 1
+    - _Big_Scanline_Thickness: 0.05
+    - _Desolve_Value: 0
+    - _Edge_Glow_Strength: 1
     - _Edge_Width: 0.05
     - _Glow_Noise_Scale: 1
     - _Glow_Speed: 0.3
-    - _Heightmap_Strength: 0.02
-    - _IN_EDIT_MODE: 0
-    - _Intersection_Strength: 2
+    - _Heightmap_Strength: 0.05
+    - _IN_EDIT_MODE: 1
+    - _Intersection_Strength: 0.5
     - _Intersection_Thickness: 1
-    - _Metallic: 0.4
+    - _Metallic: 0
     - _Noise_Scale: 50
     - _Noise_Strength: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Ripple_Speed: 0.4
-    - _Ripple_Thickness: 0.03
-    - _Ripple_Time: 0.4
-    - _Scanline_Strength: 0.05
-    - _Smoothness: 0.2
+    - _Ripple_Speed: 0.5
+    - _Ripple_Thickness: 0.2
+    - _Ripple_Time: 0.8
+    - _Scanline_Strength: 1
+    - _Smoothness: 0
     - _USE_BIG_SCANLINE: 1
     - _USE_COLLISION_RIPPLES: 0
     - _USE_DESOLVE: 0
     - _USE_EDGE_GLOW: 0
     - _USE_HEXAGON_GLOW: 1
-    - _USE_INTERSECTION: 1
+    - _USE_INTERSECTION: 0
     - _USE_SCANLINES: 1
     m_Colors:
-    - _Base_Color: {r: 0, g: 0.4326567, b: 0.9528302, a: 0.78431374}
-    - _Edge_Color: {r: 3.795317, g: 0, b: 0.106557965, a: 1}
+    - _Base_Color: {r: 0.3584906, g: 0, b: 0.3010031, a: 0.5882353}
+    - _Edge_Color: {r: 0, g: 0, b: 0, a: 0}
     - _Edge_Glow_Thickness: {r: 0.05, g: 0.05, b: 0, a: 0}
-    - _Emblem_Scroll_Velocity: {r: 0.1, g: 0.2, b: 0, a: 0}
-    - _Emission_Color: {r: 0, g: 0.456661, b: 1, a: 1}
+    - _Emblem_Scroll_Velocity: {r: 0, g: 0.1, b: 0, a: 0}
+    - _Emission_Color: {r: 0.25078362, g: 0, b: 0.836478, a: 1}
     - _Glow_Strength_MinMax: {r: 0.05, g: 0.3, b: 0, a: 0}
     - _Ripple_Origin: {r: 0.5, g: 0.5, b: 0, a: 0}
-    - _Scroll_Velocity: {r: 0, g: 0.1, b: 0, a: 0}
-    - _Tiling: {r: 35, g: 16, b: 0, a: 0}
-    - _UVScale: {r: 2, g: 1, b: 0, a: 0}
+    - _Scroll_Velocity: {r: 0, g: 0.01, b: 0, a: 0}
+    - _Tiling: {r: 5, g: 5.5, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &3089025464471447906
+--- !u!114 &4088604969071835077
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

@@ -9,6 +9,7 @@ public class PlayerBlockState : PlayerBaseState
 
     public override void EnterState()
     {
+        Ctx.Shield.transform.localRotation = Ctx.IsFacingRight() ? Quaternion.Euler(0, 30, 0) : Quaternion.Euler(0, -30, 0);
         Ctx.Anim.Play("Blocking");
         Ctx.ShieldTimer = 0;
         Ctx.ShieldDurability -= Mathf.Abs(Ctx.AttackForce.x) + Mathf.Abs(Ctx.AttackForce.y);

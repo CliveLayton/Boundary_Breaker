@@ -89,6 +89,10 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        //Set a global shader variable because I want to use unscaledTime to move texture
+        //because they should also work in a pause menu when timescale is 0
+        Shader.SetGlobalFloat("_UnscaledTime", Time.unscaledTime);
+        
         if (countdownActive)
         {
             if (RemainingMatchTime > 0)

@@ -111,8 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitboxSize: {x: 1, y: 1, z: 1}
-  hitboxOffset: {x: 0, y: 0, z: 0}
+  hitboxSize: {x: 1, y: 0.44, z: 1.13}
+  hitboxOffset: {x: 0.000000088092555, y: -1.143923, z: 1.0076612}
   useSphere: 0
   radius: 0.5
   colliderColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
@@ -251,6 +251,12 @@ MonoBehaviour:
   hurtboxes:
   - {fileID: 1774223177782799544}
   - {fileID: 710491504991389748}
+  - {fileID: 5461737694716770916}
+  - {fileID: 6740196390087738063}
+  - {fileID: 7116741741124539377}
+  - {fileID: 5392374640829544539}
+  - {fileID: 6476895431842477661}
+  - {fileID: 1839699154643665914}
   hitboxes:
   - {fileID: 8374272392029017432}
   - {fileID: 5960401163611524438}
@@ -324,9 +330,11 @@ MonoBehaviour:
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 5960401163611524438}
+    hurtbox:
+    - {fileID: 5461737694716770916}
     frameChecker:
       hitFrameStart: 6
-      hitFrameEnd: 12
+      hitFrameEnd: 10
       totalFrames: 25
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
@@ -345,9 +353,11 @@ MonoBehaviour:
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 2884057063882500886}
+    hurtbox:
+    - {fileID: 6740196390087738063}
     frameChecker:
-      hitFrameStart: 3
-      hitFrameEnd: 7
+      hitFrameStart: 6
+      hitFrameEnd: 10
       totalFrames: 18
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
@@ -366,9 +376,11 @@ MonoBehaviour:
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 5087678736246976759}
+    hurtbox:
+    - {fileID: 7116741741124539377}
     frameChecker:
-      hitFrameStart: 10
-      hitFrameEnd: 17
+      hitFrameStart: 12
+      hitFrameEnd: 18
       totalFrames: 30
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
@@ -387,9 +399,11 @@ MonoBehaviour:
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 2865061503840752065}
+    hurtbox:
+    - {fileID: 5392374640829544539}
     frameChecker:
       hitFrameStart: 7
-      hitFrameEnd: 9
+      hitFrameEnd: 10
       totalFrames: 26
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
@@ -408,9 +422,11 @@ MonoBehaviour:
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 1960462067031622525}
+    hurtbox:
+    - {fileID: 6476895431842477661}
     frameChecker:
-      hitFrameStart: 41
-      hitFrameEnd: 55
+      hitFrameStart: 40
+      hitFrameEnd: 53
       totalFrames: 64
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
@@ -429,9 +445,11 @@ MonoBehaviour:
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 5935293257748141811}
+    hurtbox:
+    - {fileID: 1839699154643665914}
     frameChecker:
-      hitFrameStart: 6
-      hitFrameEnd: 8
+      hitFrameStart: 7
+      hitFrameEnd: 11
       totalFrames: 28
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
@@ -450,9 +468,10 @@ MonoBehaviour:
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 8374272392029017432}
+    hurtbox: []
     frameChecker:
-      hitFrameStart: 4
-      hitFrameEnd: 7
+      hitFrameStart: 1
+      hitFrameEnd: 1
       totalFrames: 10
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
@@ -471,9 +490,10 @@ MonoBehaviour:
     getKnockBackToOpponent: 0
     hitbox:
     - {fileID: 2428419708153152565}
+    hurtbox: []
     frameChecker:
-      hitFrameStart: 9
-      hitFrameEnd: 15
+      hitFrameStart: 8
+      hitFrameEnd: 10
       totalFrames: 30
       animationFrameInfo:
         animator: {fileID: 2617819357437520711}
@@ -639,8 +659,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitboxSize: {x: 1, y: 1, z: 1}
-  hitboxOffset: {x: 0, y: 0, z: 0}
+  hitboxSize: {x: 1, y: 1.63, z: 0.63}
+  hitboxOffset: {x: 0.00000008428098, y: 0.50938225, z: 0.9640617}
   useSphere: 0
   radius: 0.5
   colliderColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
@@ -694,8 +714,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitboxSize: {x: 1, y: 1, z: 1}
-  hitboxOffset: {x: 0, y: 0, z: 0}
+  hitboxSize: {x: 1, y: 0.64, z: 0.24}
+  hitboxOffset: {x: 0.00000012140168, y: -0.72826904, z: 1.3886724}
   useSphere: 0
   radius: 0.5
   colliderColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
@@ -705,6 +725,73 @@ MonoBehaviour:
   inactiveColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
   collisionOpenColor: {r: 0.6, g: 0.2, b: 0.2, a: 1}
   collidingColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!1 &3314964036598748333
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5241485810297183044}
+  - component: {fileID: 5461737694716770916}
+  - component: {fileID: 3348286127322004639}
+  m_Layer: 0
+  m_Name: Attack1Hurtbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5241485810297183044
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3314964036598748333}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6777744847908263755}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5461737694716770916
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3314964036598748333}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.3262413, z: 0.6110044}
+  m_Center: {x: -6.9349e-41, y: -0.82137793, z: 1.4016627}
+--- !u!114 &3348286127322004639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3314964036598748333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e125bfafca3cd7b4ca474ca6bdbdf4a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxColor: {r: 0, g: 1, b: 0, a: 0.5}
 --- !u!1 &3494760087419222270
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,6 +823,12 @@ Transform:
   m_Children:
   - {fileID: 2445130190840244109}
   - {fileID: 2571759838262376140}
+  - {fileID: 5241485810297183044}
+  - {fileID: 6222362047460662017}
+  - {fileID: 3631182749761696316}
+  - {fileID: 7621922053959938025}
+  - {fileID: 7462623506325176207}
+  - {fileID: 8093142005531244437}
   m_Father: {fileID: 4151272167361904623}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4247045747504878643
@@ -849,8 +942,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitboxSize: {x: 1, y: 1, z: 1}
-  hitboxOffset: {x: 0, y: 0, z: 0}
+  hitboxSize: {x: 1, y: 0.75, z: 1}
+  hitboxOffset: {x: 0.00000010062169, y: -0.97933346, z: 1.150978}
   useSphere: 0
   radius: 0.5
   colliderColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
@@ -860,6 +953,73 @@ MonoBehaviour:
   inactiveColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
   collisionOpenColor: {r: 0.6, g: 0.2, b: 0.2, a: 1}
   collidingColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!1 &5057929514019138459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8093142005531244437}
+  - component: {fileID: 1839699154643665914}
+  - component: {fileID: 4203364036833531474}
+  m_Layer: 0
+  m_Name: SpecialAirHurtbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8093142005531244437
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5057929514019138459}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6777744847908263755}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1839699154643665914
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5057929514019138459}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1.7573767, y: 1.4467367, z: 2.0680883}
+  m_Center: {x: -0.386878, y: -0.31140685, z: 1.1996387}
+--- !u!114 &4203364036833531474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5057929514019138459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e125bfafca3cd7b4ca474ca6bdbdf4a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxColor: {r: 0, g: 1, b: 0, a: 0.5}
 --- !u!1 &6357000562390056713
 GameObject:
   m_ObjectHideFlags: 0
@@ -904,8 +1064,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitboxSize: {x: 1, y: 1, z: 1}
-  hitboxOffset: {x: 0, y: 0, z: 0}
+  hitboxSize: {x: 1, y: 0.33, z: 0.51}
+  hitboxOffset: {x: 0.00000012690685, y: -0.91830045, z: 1.451645}
   useSphere: 0
   radius: 0.5
   colliderColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
@@ -990,8 +1150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitboxSize: {x: 1, y: 1, z: 1}
-  hitboxOffset: {x: 0, y: 0, z: 0}
+  hitboxSize: {x: 1, y: 0.62, z: 0.44}
+  hitboxOffset: {x: 0.000000084667924, y: -0.31751233, z: 0.96848804}
   useSphere: 0
   radius: 0.5
   colliderColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
@@ -1039,6 +1199,140 @@ Transform:
   - {fileID: 1312151834217415007}
   m_Father: {fileID: 4151272167361904623}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7278813182057110671
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7621922053959938025}
+  - component: {fileID: 5392374640829544539}
+  - component: {fileID: 3453896857315841751}
+  m_Layer: 0
+  m_Name: Attack2AirHurtbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7621922053959938025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7278813182057110671}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6777744847908263755}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5392374640829544539
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7278813182057110671}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.9836186, y: 1.5193502, z: 2.445395}
+  m_Center: {x: -9.5273e-40, y: -0.92729044, z: 1.0109793}
+--- !u!114 &3453896857315841751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7278813182057110671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e125bfafca3cd7b4ca474ca6bdbdf4a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxColor: {r: 0, g: 1, b: 0, a: 0.5}
+--- !u!1 &7362742364840412409
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7462623506325176207}
+  - component: {fileID: 6476895431842477661}
+  - component: {fileID: 2676803791010490481}
+  m_Layer: 0
+  m_Name: SpecialNHurtbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7462623506325176207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7362742364840412409}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6777744847908263755}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6476895431842477661
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7362742364840412409}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.9836186, y: 1.8292415, z: 1.4383835}
+  m_Center: {x: 1.48895e-40, y: 0.21290554, z: 1.1712786}
+--- !u!114 &2676803791010490481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7362742364840412409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e125bfafca3cd7b4ca474ca6bdbdf4a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxColor: {r: 0, g: 1, b: 0, a: 0.5}
 --- !u!1 &8023960016208970394
 GameObject:
   m_ObjectHideFlags: 0
@@ -1083,8 +1377,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1553d25db4bc21d468338db1df34d538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitboxSize: {x: 1, y: 1, z: 1}
-  hitboxOffset: {x: 0, y: 0, z: 0}
+  hitboxSize: {x: 1, y: 0.41, z: 0.34}
+  hitboxOffset: {x: 0.000000065406525, y: -1.0140877, z: 0.74}
   useSphere: 0
   radius: 0.5
   colliderColor: {r: 0.6, g: 0.2, b: 0.2, a: 0.2}
@@ -1202,6 +1496,140 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &8837513347792555567
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6222362047460662017}
+  - component: {fileID: 6740196390087738063}
+  - component: {fileID: 6915396161099775750}
+  m_Layer: 0
+  m_Name: Attack1AirHurtbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6222362047460662017
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8837513347792555567}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6777744847908263755}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6740196390087738063
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8837513347792555567}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.88586056, z: 0.7932303}
+  m_Center: {x: -9.453e-40, y: -1.0415899, z: 0.7357644}
+--- !u!114 &6915396161099775750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8837513347792555567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e125bfafca3cd7b4ca474ca6bdbdf4a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxColor: {r: 0, g: 1, b: 0, a: 0.5}
+--- !u!1 &9194378088103666080
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3631182749761696316}
+  - component: {fileID: 7116741741124539377}
+  - component: {fileID: 6590200540158694073}
+  m_Layer: 0
+  m_Name: Attack2Hurtbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3631182749761696316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9194378088103666080}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6777744847908263755}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7116741741124539377
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9194378088103666080}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.9836186, y: 1.1298636, z: 0.83585536}
+  m_Center: {x: -9.11402e-40, y: -0.73252505, z: 1.1896416}
+--- !u!114 &6590200540158694073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9194378088103666080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e125bfafca3cd7b4ca474ca6bdbdf4a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxColor: {r: 0, g: 1, b: 0, a: 0.5}
 --- !u!1001 &3162228512324297722
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -101,6 +101,11 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
         {
             currentMove.hitbox[i].StartCheckingCollision();
         }
+        
+        for (int i = 0; i < currentMove.hurtbox.Length; i++)
+        {
+            currentMove.hurtbox[i].enabled = true;
+        }
     }
 
     public void OnHitFrameEnd()
@@ -108,6 +113,11 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
         for (int i = 0; i < currentMove.hitbox.Length; i++)
         {
             currentMove.hitbox[i].StopCheckingCollision();
+        }
+        
+        for (int i = 0; i < currentMove.hurtbox.Length; i++)
+        {
+            currentMove.hurtbox[i].enabled = false;
         }
     }
 
@@ -135,6 +145,11 @@ public class PlayerAttackState : PlayerBaseState, IHitboxResponder, IFrameCheckH
         for (int i = 0; i < currentMove.hitbox.Length; i++)
         {
             currentMove.hitbox[i].StopCheckingCollision();
+        }
+        
+        for (int i = 0; i < currentMove.hurtbox.Length; i++)
+        {
+            currentMove.hurtbox[i].enabled = false;
         }
 
         if (Ctx.IsGrabbing)

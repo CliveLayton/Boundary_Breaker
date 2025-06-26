@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class GameReferee : MonoBehaviour
@@ -10,6 +12,11 @@ public class GameReferee : MonoBehaviour
     {
         UIManager.Instance.onTimerExpired += RestartMatch;
         GameStateManager.Instance.onStateChanged += GetPlayers;
+    }
+
+    private void Start()
+    {
+        UIManager.Instance.CmTargetGroup = FindAnyObjectByType<CinemachineTargetGroup>();
     }
 
     private void OnDisable()
@@ -69,7 +76,7 @@ public class GameReferee : MonoBehaviour
         
         if (playerIndex != -1 && PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].Wins == 2)
         {
-            UIManager.Instance.EnterWinningScreen(playerIndex);
+            _ = UIManager.Instance.EnterWinningScreen(playerIndex);
         }
         else
         {

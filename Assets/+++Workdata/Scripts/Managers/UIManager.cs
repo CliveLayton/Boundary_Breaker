@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Globalization;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -8,6 +9,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class UIManager : MonoBehaviour
@@ -50,6 +52,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject winningSelectP1;
     [SerializeField] private GameObject winningSelectP2;
 
+    [Header("Buttons to assign Methods")] 
+    [SerializeField] private Button versusButtonAssign;
+    [SerializeField] private Button characterSelectAssignP1;
+    [SerializeField] private Button characterSelectAssignP2;
+    [SerializeField] private Button backToPauseAssignP1;
+    [SerializeField] private Button backToPauseAssignP2;
+
     [Header("In Game UI")]
     [SerializeField] private TextMeshProUGUI player1Percentage;
     [SerializeField] private TextMeshProUGUI player2Percentage;
@@ -69,22 +78,23 @@ public class UIManager : MonoBehaviour
     public PlayerStateMachine Player1 { get; set; }
     public PlayerStateMachine Player2 { get; set; }
     
-    private CinemachineTargetGroup cmTargetGroup;
+    public CinemachineTargetGroup CmTargetGroup { get; set; }
     private Animator startAnim;
 
     private void Awake()
     {
         Instance = this;
         startAnim = startScreen.GetComponent<Animator>();
+        
+        versusButtonAssign.onClick.AddListener(() => _ = EnterCharacterSelection(false));
+        characterSelectAssignP1.onClick.AddListener(() => _ = EnterCharacterSelection(true));
+        characterSelectAssignP2.onClick.AddListener(() => _ = EnterCharacterSelection(true));
+        backToPauseAssignP1.onClick.AddListener(() => _ = EnterPauseMenu(0));
+        backToPauseAssignP2.onClick.AddListener(() => _ = EnterPauseMenu(1));
 
         EventSystem.current.SetSelectedGameObject(versusButton);
 
         GameStateManager.Instance.onStateChanged += ActivateInGameUI;
-    }
-
-    private void Start()
-    {
-        cmTargetGroup = FindAnyObjectByType<CinemachineTargetGroup>();
     }
 
     private void Update()
@@ -124,10 +134,10 @@ public class UIManager : MonoBehaviour
         switch (newState)
         {
             case GameStateManager.GameState.InGame:
-                cmTargetGroup = FindAnyObjectByType<CinemachineTargetGroup>();
-                cmTargetGroup.Targets.Clear();
-                cmTargetGroup.AddMember(Player1.CameraPoint, 1f, 1f);
-                cmTargetGroup.AddMember(Player2.CameraPoint, 1f, 1f);
+                CmTargetGroup = FindAnyObjectByType<CinemachineTargetGroup>();
+                CmTargetGroup.Targets.Clear();
+                CmTargetGroup.AddMember(Player1.CameraPoint, 1f, 1f);
+                CmTargetGroup.AddMember(Player2.CameraPoint, 1f, 1f);
                 Time.timeScale = 1f;
                 winScoreGame.text = PlayerConfigurationManager.Instance.PlayerConfigs[0].Wins + " - " +
                                PlayerConfigurationManager.Instance.PlayerConfigs[1].Wins;
@@ -137,9 +147,9 @@ public class UIManager : MonoBehaviour
                 countdownActive = true;
                 break;
             case GameStateManager.GameState.InMainMenu:
-                cmTargetGroup.Targets.Clear();
-                cmTargetGroup.AddMember(GameObject.Find("CameraPoint1").transform, 1f, 1f);
-                cmTargetGroup.AddMember(GameObject.Find("CameraPoint2").transform, 1f, 1f);
+                CmTargetGroup.Targets.Clear();
+                CmTargetGroup.AddMember(GameObject.Find("CameraPoint1").transform, 1f, 1f);
+                CmTargetGroup.AddMember(GameObject.Find("CameraPoint2").transform, 1f, 1f);
                 Time.timeScale = 1f;
                 inGame.HideCanvasGroup();
                 if (Player1 != null && Player2 != null)
@@ -172,7 +182,7 @@ public class UIManager : MonoBehaviour
         quitMenu.HideCanvasGroup();
         if (PlayerConfigurationManager.Instance.PlayerConfigs.Count == 2)
         {
-            StartCoroutine(SwitchToSingleEventSystem(versusButton)); 
+            _ = SwitchToSingleEventSystem(versusButton);
         }
 
         if (fromGame)
@@ -185,14 +195,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void EnterCharacterSelection(bool fromGame)
+    public async Task EnterCharacterSelection(bool fromGame)
     {
         if (fromGame && PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.isActiveAndEnabled)
         {
             PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.SetSelectedGameObject(charSelectP1);
             PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.enabled = true;
             PlayerConfigurationManager.Instance.PlayerConfigs[1].UIInputModule.enabled = true;
-            PlayerConfigurationManager.Instance.PlayerConfigs[1].ReassignUIActions();
+            await PlayerConfigurationManager.Instance.PlayerConfigs[1].ReassignUIActions();
             PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.SetSelectedGameObject(charSelectP2);
         }
         else if (fromGame && PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.isActiveAndEnabled)
@@ -200,7 +210,7 @@ public class UIManager : MonoBehaviour
             PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.SetSelectedGameObject(charSelectP2);
             PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.enabled = true;
             PlayerConfigurationManager.Instance.PlayerConfigs[0].UIInputModule.enabled = true;
-            PlayerConfigurationManager.Instance.PlayerConfigs[0].ReassignUIActions();
+            await PlayerConfigurationManager.Instance.PlayerConfigs[0].ReassignUIActions();
             PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.SetSelectedGameObject(charSelectP1);
         }
         else
@@ -214,13 +224,13 @@ public class UIManager : MonoBehaviour
 
                 if (i == 0)
                 {
-                    PlayerConfigurationManager.Instance.PlayerConfigs[i].ReassignUIActions();
+                    await PlayerConfigurationManager.Instance.PlayerConfigs[i].ReassignUIActions();
                     PlayerConfigurationManager.Instance.PlayerConfigs[i].PlayerEvent.SetSelectedGameObject(charSelectP1);
                 }
 
                 if (i == 1)
                 {
-                    PlayerConfigurationManager.Instance.PlayerConfigs[i].ReassignUIActions();
+                    await PlayerConfigurationManager.Instance.PlayerConfigs[i].ReassignUIActions();
                     PlayerConfigurationManager.Instance.PlayerConfigs[i].PlayerEvent.SetSelectedGameObject(charSelectP2);
                 }
             }
@@ -251,7 +261,7 @@ public class UIManager : MonoBehaviour
         }
     }
     
-    public void EnterPauseMenu(int index)
+    public async Task EnterPauseMenu(int index)
     {
         GameStateManager.Instance.SwitchGameState(GameStateManager.GameState.InGameMenus);
         switch (index)
@@ -261,7 +271,7 @@ public class UIManager : MonoBehaviour
                 optionMenuP1.HideCanvasGroup();
                 PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.enabled = true;
                 PlayerConfigurationManager.Instance.PlayerConfigs[0].UIInputModule.enabled = true;
-                PlayerConfigurationManager.Instance.PlayerConfigs[0].ReassignUIActions();
+                await PlayerConfigurationManager.Instance.PlayerConfigs[0].ReassignUIActions();
                 PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.SetSelectedGameObject(pauseSelectP1);
                 break;
             case 1:
@@ -269,7 +279,7 @@ public class UIManager : MonoBehaviour
                 optionMenuP2.HideCanvasGroup();
                 PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.enabled = true;
                 PlayerConfigurationManager.Instance.PlayerConfigs[1].UIInputModule.enabled = true;
-                PlayerConfigurationManager.Instance.PlayerConfigs[1].ReassignUIActions();
+                await PlayerConfigurationManager.Instance.PlayerConfigs[1].ReassignUIActions();
                 PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.SetSelectedGameObject(pauseSelectP2);
                 break;
         }
@@ -285,12 +295,12 @@ public class UIManager : MonoBehaviour
                 break;
             case 1:
                 pauseMenuP2.HideCanvasGroup();
-                StartCoroutine(SwitchToSingleEventSystem(null));
+                _ = SwitchToSingleEventSystem(null);
                 break;
         }
     }
 
-    public void EnterWinningScreen(int index)
+    public async Task EnterWinningScreen(int index)
     {
         GameStateManager.Instance.SwitchGameState(GameStateManager.GameState.InGameMenus);
         inGame.HideCanvasGroup();
@@ -302,7 +312,7 @@ public class UIManager : MonoBehaviour
                 winningScreenP1.ShowCanvasGroup();
                 PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.enabled = true;
                 PlayerConfigurationManager.Instance.PlayerConfigs[0].UIInputModule.enabled = true;
-                PlayerConfigurationManager.Instance.PlayerConfigs[0].ReassignUIActions();
+                await PlayerConfigurationManager.Instance.PlayerConfigs[0].ReassignUIActions();
                 PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.SetSelectedGameObject(winningSelectP1);
                 break;
             case 1:
@@ -311,7 +321,7 @@ public class UIManager : MonoBehaviour
                 winningScreenP2.ShowCanvasGroup();
                 PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.enabled = true;
                 PlayerConfigurationManager.Instance.PlayerConfigs[1].UIInputModule.enabled = true;
-                PlayerConfigurationManager.Instance.PlayerConfigs[1].ReassignUIActions();
+                await PlayerConfigurationManager.Instance.PlayerConfigs[1].ReassignUIActions();
                 PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.SetSelectedGameObject(winningSelectP2);
                 break;
         }
@@ -370,17 +380,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void CharactersSelected()
+    private void CharactersSelected()
     {
         characterSelectionP1.HideCanvasGroup();
         characterSelectionP2.HideCanvasGroup();
         characterSelection.ShowCanvasGroup();
         startMatchButton.SetActive(true);
         //use coroutine to wait for frames to let unity intern system correctly handle the eventsystem 
-        StartCoroutine(SwitchToSingleEventSystem(startMatchButton));
+        _ = SwitchToSingleEventSystem(startMatchButton);
     }
 
-    public void PlayerSelectionUI(int index, bool hasSelected)
+    public async Task PlayerSelectionUI(int index, bool hasSelected)
     {
         if (index == 0 && hasSelected)
         {
@@ -411,13 +421,13 @@ public class UIManager : MonoBehaviour
 
                 if (i == 0)
                 {
-                    PlayerConfigurationManager.Instance.PlayerConfigs[i].ReassignUIActions();
+                    await PlayerConfigurationManager.Instance.PlayerConfigs[i].ReassignUIActions();
                     PlayerConfigurationManager.Instance.PlayerConfigs[i].PlayerEvent.SetSelectedGameObject(charSelectP1);
                 }
 
                 if (i == 1)
                 {
-                    PlayerConfigurationManager.Instance.PlayerConfigs[i].ReassignUIActions();
+                    await PlayerConfigurationManager.Instance.PlayerConfigs[i].ReassignUIActions();
                     PlayerConfigurationManager.Instance.PlayerConfigs[i].PlayerEvent.SetSelectedGameObject(charSelectP2);
                 }
             }
@@ -454,9 +464,9 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        cmTargetGroup.Targets.Clear();
-        cmTargetGroup.AddMember(Player1.CameraPoint, 1f, 1f);
-        cmTargetGroup.AddMember(Player2.CameraPoint, 1f, 1f);
+        CmTargetGroup.Targets.Clear();
+        CmTargetGroup.AddMember(Player1.CameraPoint, 1f, 1f);
+        CmTargetGroup.AddMember(Player2.CameraPoint, 1f, 1f);
         
         Player1.Opponent = Player2;
         Player2.Opponent = Player1;
@@ -488,7 +498,7 @@ public class UIManager : MonoBehaviour
             case 1:
                 pauseMenuP2.HideCanvasGroup();
                 winningScreenP2.HideCanvasGroup();
-                StartCoroutine(SwitchToSingleEventSystem(null));
+                _ = SwitchToSingleEventSystem(null);
                 break;
         }
         Time.timeScale = 1f;
@@ -508,7 +518,7 @@ public class UIManager : MonoBehaviour
         Application.Quit();
     }
     
-    public void ReassignUIActions()
+    public async Task ReassignUIActions()
     {
         GameInput input = PlayerConfigurationManager.Instance.PlayerConfigs[0].GameInputMap;
         mainInputModule.actionsAsset = input.asset;
@@ -517,27 +527,44 @@ public class UIManager : MonoBehaviour
         mainInputModule.submit = InputActionReference.Create(input.UI.Submit);
         mainInputModule.cancel = InputActionReference.Create(input.UI.Cancel);
         PlayerConfigurationManager.Instance.PlayerConfigs[0].Input.uiInputModule = mainInputModule;
+
+        await Task.Yield();
     }
     
-    private IEnumerator SwitchToSingleEventSystem(GameObject buttonToSelect)
+    private async Task SwitchToSingleEventSystem(GameObject buttonToSelect)
     {
+        Debug.Log(EventSystem.current);
         PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.SetSelectedGameObject(null);
         PlayerConfigurationManager.Instance.PlayerConfigs[1].UIInputModule.enabled = false;
         PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.enabled = false;
 
-        yield return null;
+        await Task.Yield();
         
+        Debug.Log("before enable system: " + EventSystem.current);
         eventSystem.enabled = true;
         mainInputModule.enabled = true;
-        ReassignUIActions();
-
-        yield return null;
+        Debug.Log("after enable system: " + EventSystem.current);
+        await ReassignUIActions();
+        
+        eventSystem.SetSelectedGameObject(null);
+        
+        Debug.Log("after assigning actions: " + EventSystem.current);
 
         PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.SetSelectedGameObject(null);
         PlayerConfigurationManager.Instance.PlayerConfigs[0].UIInputModule.enabled = false;
         PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.enabled = false;
+        Debug.Log("after disable player1: " + EventSystem.current);
+
+        await Task.Yield();
+        
+        Debug.Log(EventSystem.current);
+        Debug.Log(EventSystem.current.currentSelectedGameObject);
         EventSystem.current.SetSelectedGameObject(null);
+
+        await Task.Yield();
+        
         EventSystem.current.SetSelectedGameObject(buttonToSelect);
+        Debug.Log(EventSystem.current.currentSelectedGameObject);
     }
 
     private void Player1Percentage(float percentage)

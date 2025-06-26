@@ -56,7 +56,7 @@ public class PlayerInputManager : MonoBehaviour
 
         if (index == 0)
         {
-            UIManager.Instance.ReassignUIActions();
+            _ = UIManager.Instance.ReassignUIActions();
         }
         GameStateManager.Instance.onStateChanged += HandleInputActivation;
 

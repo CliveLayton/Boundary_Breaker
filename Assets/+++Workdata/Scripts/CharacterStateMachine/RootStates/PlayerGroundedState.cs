@@ -44,13 +44,13 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsJumpedPressed && !Ctx.RequireNewJumpPress && !Ctx.InHitStun && !Ctx.InGrab && !Ctx.IsAttacking && Ctx.CanDash)
+        if (Ctx.IsJumpedPressed && !Ctx.RequireNewJumpPress && !Ctx.InHitStun && !Ctx.InGrab && !Ctx.IsAttacking && Ctx.CanDash && !Ctx.InBlock)
         {
             //unfreeze the rb if currently in attack state
             Ctx.HandleRbFreeze(false);
             SwitchState(Factory.InAir());
         }
-        else if(Ctx.InHitStun || Ctx.InGrab)
+        else if(Ctx.InHitStun || Ctx.InGrab && !Ctx.InBlock)
         {
             //reset dash if you got hit while dashing
             Ctx.CanDash = true;

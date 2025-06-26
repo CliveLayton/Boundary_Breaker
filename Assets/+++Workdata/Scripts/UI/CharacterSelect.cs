@@ -121,7 +121,7 @@ public class CharacterSelect : MonoBehaviour
         }
         player.PlayerIndex = playerIndex;
         PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].IsReady = true;
-        UIManager.Instance.PlayerSelectionUI(playerIndex, true);
+        _ = UIManager.Instance.PlayerSelectionUI(playerIndex, true);
         UIManager.Instance.CheckAllPlayerReady();
     }
 
@@ -130,7 +130,7 @@ public class CharacterSelect : MonoBehaviour
         if (context.performed && chosedPlayer != null)
         {
             PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].IsReady = false;
-            UIManager.Instance.PlayerSelectionUI(playerIndex, false); 
+            _ = UIManager.Instance.PlayerSelectionUI(playerIndex, false); 
         }
     }
     

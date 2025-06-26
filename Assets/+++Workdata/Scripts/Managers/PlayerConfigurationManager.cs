@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -107,7 +108,7 @@ public class PlayerConfiguration
     
     public int Wins { get; set; }
 
-    public void ReassignUIActions()
+    public async Task ReassignUIActions()
     {
         UIInputModule.actionsAsset = GameInputMap.asset;
         UIInputModule.point = InputActionReference.Create(GameInputMap.UI.Point);
@@ -115,5 +116,7 @@ public class PlayerConfiguration
         UIInputModule.submit = InputActionReference.Create(GameInputMap.UI.Submit);
         UIInputModule.cancel = InputActionReference.Create(GameInputMap.UI.Cancel);
         Input.uiInputModule = UIInputModule;
+        
+        await Task.Yield();
     }
 }

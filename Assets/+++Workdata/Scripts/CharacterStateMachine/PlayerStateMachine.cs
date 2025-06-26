@@ -335,7 +335,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     {
         if (context.performed)
         {
-            UIManager.Instance.EnterPauseMenu(PlayerIndex);
+            _ = UIManager.Instance.EnterPauseMenu(PlayerIndex);
         }
     }
 

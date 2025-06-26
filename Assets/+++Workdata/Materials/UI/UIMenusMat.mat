@@ -12,7 +12,6 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _IN_EDIT_MODE
   - _USE_BIG_SCANLINE
   - _USE_HEXAGON_GLOW
   - _USE_SCANLINES
@@ -33,7 +32,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Hexagon_Texture:
-        m_Texture: {fileID: 2800000, guid: 62f1efbf400a5d144940af4e9898d150, type: 3}
+        m_Texture: {fileID: 2800000, guid: e7a4963640d869f478018d6cf87558df, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Scanline_Texture:
@@ -64,7 +63,7 @@ Material:
     - _Glow_Noise_Scale: 1
     - _Glow_Speed: 0.3
     - _Heightmap_Strength: 0.05
-    - _IN_EDIT_MODE: 1
+    - _IN_EDIT_MODE: 0
     - _Intersection_Strength: 0.5
     - _Intersection_Thickness: 1
     - _Metallic: 0

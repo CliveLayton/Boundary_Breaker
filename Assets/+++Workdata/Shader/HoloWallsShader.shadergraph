@@ -1731,6 +1731,20 @@
             },
             "m_InputSlot": {
                 "m_Node": {
+                    "m_Id": "035dea2392ef4f0ea68adc9a8559f535"
+                },
+                "m_SlotId": 1
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "62a25f2856a945ceab710bc21ba9e2f3"
+                },
+                "m_SlotId": 3
+            },
+            "m_InputSlot": {
+                "m_Node": {
                     "m_Id": "8d008c955e74493eabe477fb20a78531"
                 },
                 "m_SlotId": 0
@@ -4423,8 +4437,8 @@
     "m_ObjectId": "0b5be7521a184d9d98ffb08999509d7a",
     "m_Title": "Combine Ripples and Glowing with Hexagons",
     "m_Position": {
-        "x": -4474.0,
-        "y": 1333.999755859375
+        "x": -4474.6669921875,
+        "y": 1334.0001220703125
     }
 }
 
@@ -7467,8 +7481,8 @@
     "m_ObjectId": "34547359429e49a8aa9de037688640a1",
     "m_Title": "Intersections with Other Objects",
     "m_Position": {
-        "x": -2762.0,
-        "y": 1297.999755859375
+        "x": -2762.66650390625,
+        "y": 1298.6666259765625
     }
 }
 
@@ -7716,8 +7730,8 @@
     "m_ObjectId": "37aa221102944895bab59ca1421981b2",
     "m_Title": "Use hexagon texture as heightmap to provide a bit more 3D-ness",
     "m_Position": {
-        "x": -1207.00048828125,
-        "y": 489.999755859375
+        "x": -1207.3330078125,
+        "y": 490.00006103515627
     }
 }
 
@@ -8038,8 +8052,8 @@
     "m_ObjectId": "3a1e85e7580c4e2ea9d36687cc6bfae6",
     "m_Title": "Edge Glow",
     "m_Position": {
-        "x": -5680.0,
-        "y": -1102.0
+        "x": -5680.6669921875,
+        "y": -1101.333251953125
     }
 }
 
@@ -10416,8 +10430,8 @@
     "m_ObjectId": "5cf1119efaf840b991281c176e7fb721",
     "m_Title": "Combine Ripples and Glowing with Hexagons",
     "m_Position": {
-        "x": -4179.0,
-        "y": 94.99976348876953
+        "x": -4179.3330078125,
+        "y": 95.3333740234375
     }
 }
 
@@ -14513,7 +14527,7 @@
     "m_Title": "Collision Ripples for a reactive shield",
     "m_Position": {
         "x": -7724.0,
-        "y": 1200.999755859375
+        "y": 1201.3333740234375
     }
 }
 
@@ -17462,8 +17476,8 @@
     "m_ObjectId": "b16285976a364584b15e313fabfd87ae",
     "m_Title": "Scanlines for a bit of detail",
     "m_Position": {
-        "x": -2839.000244140625,
-        "y": 563.999755859375
+        "x": -2839.33349609375,
+        "y": 564.0000610351563
     }
 }
 
@@ -19341,8 +19355,8 @@
     "m_ObjectId": "c4f450da65b34b5ea2a0bc451930b0a2",
     "m_Title": "Big Scanline for lots of idle movement",
     "m_Position": {
-        "x": -3016.0,
-        "y": -818.000244140625
+        "x": -3016.66650390625,
+        "y": -817.3333129882813
     }
 }
 
@@ -24080,8 +24094,8 @@
     "m_ObjectId": "ffe76a3918be4c9dbf294e6513a56cc3",
     "m_Title": "Glowing noise for a bit of idle movement",
     "m_Position": {
-        "x": -6063.0,
-        "y": 189.999755859375
+        "x": -6063.3330078125,
+        "y": 190.0
     }
 }
 

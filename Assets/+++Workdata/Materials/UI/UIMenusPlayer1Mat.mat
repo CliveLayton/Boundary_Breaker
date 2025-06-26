@@ -84,11 +84,11 @@ Material:
     - _USE_INTERSECTION: 0
     - _USE_SCANLINES: 1
     m_Colors:
-    - _Base_Color: {r: 0.35686275, g: 0.020121006, b: 0, a: 0.5882353}
+    - _Base_Color: {r: 0, g: 0.060149223, b: 0.35686275, a: 0.5882353}
     - _Edge_Color: {r: 0, g: 0, b: 0, a: 0}
     - _Edge_Glow_Thickness: {r: 0.05, g: 0.05, b: 0, a: 0}
     - _Emblem_Scroll_Velocity: {r: 0, g: 0.4, b: 0, a: 0}
-    - _Emission_Color: {r: 0.8352941, g: 0, b: 0.033043705, a: 1}
+    - _Emission_Color: {r: 0, g: 0.27861392, b: 0.8352941, a: 1}
     - _Glow_Strength_MinMax: {r: 0.05, g: 0.3, b: 0, a: 0}
     - _Ripple_Origin: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _Scroll_Velocity: {r: 0, g: 0.01, b: 0, a: 0}

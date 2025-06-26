@@ -39,6 +39,7 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     private Quaternion targetRotation;
     private PlayerStateFactory states;
     private bool isReloading;
+    private int hurtboxScalingNumber;
 
     //getters and setters
     [field: SerializeField] public float PercentageCount { get; set; }
@@ -592,6 +593,26 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
                 }
                 break;
         }
+    }
+
+    public void AdjustCollisionBoxes(int xScale)
+    {
+        bool hasRotated = hurtboxScalingNumber != xScale;
+        
+        foreach (var hurtbox in hurtboxes)
+        {
+            hurtbox.gameObject.transform.localScale = new Vector3(xScale, 1, 1);
+        }
+
+        if (hasRotated)
+        {
+            foreach (var hitbox in hitboxes)
+            {
+                hitbox.hitboxOffset.x *= -1;
+            }
+        }
+
+        hurtboxScalingNumber = xScale;
     }
 
     public void ResetCharacter()

@@ -60,7 +60,7 @@ public class Hitbox : MonoBehaviour
             {
                 Collider acollider = colliders[i];
                 responder?.CollisionedWith(acollider);
-                Debug.Log("got a hit");
+                //Debug.Log("got a hit");
             }
         }
         

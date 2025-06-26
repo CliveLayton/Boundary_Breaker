@@ -37,7 +37,7 @@ public class PlayerConfigurationManager : MonoBehaviour
         {
             return;
         }
-        Debug.Log("Player Joined: " + pi.playerIndex);
+        //Debug.Log("Player Joined: " + pi.playerIndex);
         pi.transform.SetParent(transform);
 
         MultiplayerEventSystem multiplayerEventSystem = pi.gameObject.AddComponent<MultiplayerEventSystem>();

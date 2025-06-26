@@ -184,6 +184,10 @@ public class UIManager : MonoBehaviour
         {
             _ = SwitchToSingleEventSystem(versusButton);
         }
+        else
+        {
+            EventSystem.current.SetSelectedGameObject(versusButton);
+        }
 
         if (fromGame)
         {
@@ -333,12 +337,12 @@ public class UIManager : MonoBehaviour
         {
             case 0:
                 optionMenuP1.ShowCanvasGroup();
-                pauseMenuP1.DisableInteraction();
+                pauseMenuP1.HideCanvasGroup();
                 PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.SetSelectedGameObject(optionSelectP1);
                 break;
             case 1:
                 optionMenuP2.ShowCanvasGroup();
-                pauseMenuP2.DisableInteraction();
+                pauseMenuP2.HideCanvasGroup();
                 PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.SetSelectedGameObject(optionSelectP2);
                 break;
             default:
@@ -533,38 +537,29 @@ public class UIManager : MonoBehaviour
     
     private async Task SwitchToSingleEventSystem(GameObject buttonToSelect)
     {
-        Debug.Log(EventSystem.current);
         PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.SetSelectedGameObject(null);
         PlayerConfigurationManager.Instance.PlayerConfigs[1].UIInputModule.enabled = false;
         PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.enabled = false;
 
         await Task.Yield();
         
-        Debug.Log("before enable system: " + EventSystem.current);
         eventSystem.enabled = true;
         mainInputModule.enabled = true;
-        Debug.Log("after enable system: " + EventSystem.current);
         await ReassignUIActions();
         
         eventSystem.SetSelectedGameObject(null);
-        
-        Debug.Log("after assigning actions: " + EventSystem.current);
 
         PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.SetSelectedGameObject(null);
         PlayerConfigurationManager.Instance.PlayerConfigs[0].UIInputModule.enabled = false;
         PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.enabled = false;
-        Debug.Log("after disable player1: " + EventSystem.current);
 
         await Task.Yield();
         
-        Debug.Log(EventSystem.current);
-        Debug.Log(EventSystem.current.currentSelectedGameObject);
         EventSystem.current.SetSelectedGameObject(null);
 
         await Task.Yield();
         
         EventSystem.current.SetSelectedGameObject(buttonToSelect);
-        Debug.Log(EventSystem.current.currentSelectedGameObject);
     }
 
     private void Player1Percentage(float percentage)

@@ -560,7 +560,7 @@ MonoBehaviour:
   <MaxShieldDurability>k__BackingField: 0
   <ShieldRefreshRate>k__BackingField: 0
   <ShieldRefreshTime>k__BackingField: 0
-  <Shield>k__BackingField: {fileID: 0}
+  <Shield>k__BackingField: {fileID: 1373064290080696558}
   <InputForce>k__BackingField: {x: 1, y: 0.5}
   <KnockBackForceCurve>k__BackingField:
     serializedVersion: 2

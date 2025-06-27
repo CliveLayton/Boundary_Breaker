@@ -5,6 +5,8 @@ using Random = UnityEngine.Random;
 
 public class HoloWall : MonoBehaviour
 {
+    #region Variables
+
     [SerializeField] private GameReferee referee;
     [SerializeField] private float damage;
     [SerializeField] private float stunDuration = 0.5f;
@@ -35,6 +37,10 @@ public class HoloWall : MonoBehaviour
     
     private MeshCollider col;
     private bool isOnWall1, isOnWall2;
+
+    #endregion
+
+    #region Unity Methods
 
     private void Awake()
     {
@@ -86,6 +92,14 @@ public class HoloWall : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region HoloWall Methods
+
+    /// <summary>
+    /// get the impact point of the player on the wall and start animate ripples on the material
+    /// </summary>
+    /// <param name="hit"></param>
     public void GetImpact(RaycastHit hit)
     {
         if (rippleTime < rippleCooldown)
@@ -113,6 +127,11 @@ public class HoloWall : MonoBehaviour
         shakeRoutine = StartCoroutine(Shake(hit));
     }
 
+    /// <summary>
+    /// shake the wall
+    /// </summary>
+    /// <param name="hit"></param>
+    /// <returns></returns>
     private IEnumerator Shake(RaycastHit hit)
     {
         for (float t = 0f; t < shakeDuration; t += Time.deltaTime)
@@ -124,6 +143,10 @@ public class HoloWall : MonoBehaviour
         transform.position = originalPosition;
     }
 
+    /// <summary>
+    /// lerp the desolve value to desolve the wall within the hitstop and hitstun duration
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator LerpDesolve()
     {
         float elapsed = 0f;
@@ -153,6 +176,9 @@ public class HoloWall : MonoBehaviour
         desolveValue = 0.4f;
     }
 
+    /// <summary>
+    /// Handles if player 1 hits the wall
+    /// </summary>
     private void Player1OnWall()
     {
         if (player1.InHitStun)
@@ -177,6 +203,9 @@ public class HoloWall : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// handles if player 2 hits the wall
+    /// </summary>
     private void Player2OnWall()
     {
         if (player2.InHitStun)
@@ -201,6 +230,9 @@ public class HoloWall : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// set up the wall on the correct position after loading the scene
+    /// </summary>
     private void SetupWall()
     {
         if (isRightWall)
@@ -235,6 +267,10 @@ public class HoloWall : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// gets the current players in the scene
+    /// </summary>
+    /// <param name="newState"></param>
     private void GetPlayers(GameStateManager.GameState newState)
     {
         if (newState == GameStateManager.GameState.InGame)
@@ -255,6 +291,10 @@ public class HoloWall : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// handles the values for the next match and calls restart game if the wall breaks
+    /// </summary>
+    /// <param name="index"></param>
     private void WallBreak(int index)
     {
         if (isRightWall)
@@ -268,4 +308,7 @@ public class HoloWall : MonoBehaviour
 
         StartCoroutine(referee.RestartGame(index));
     }
+
+    #endregion
+    
 }

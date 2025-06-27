@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 
@@ -108,6 +106,9 @@ public class PlayerConfiguration
     
     public int Wins { get; set; }
 
+    /// <summary>
+    /// async Task to reassign the UI Actions of the inputmodule
+    /// </summary>
     public async Task ReassignUIActions()
     {
         UIInputModule.actionsAsset = GameInputMap.asset;

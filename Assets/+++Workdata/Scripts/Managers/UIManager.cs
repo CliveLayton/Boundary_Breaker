@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Globalization;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Cinemachine;
@@ -8,12 +6,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class UIManager : MonoBehaviour
 {
+    #region Variables
+
     public static UIManager Instance;
 
     [Header("Main Canvases")]
@@ -81,6 +80,10 @@ public class UIManager : MonoBehaviour
     public CinemachineTargetGroup CmTargetGroup { get; set; }
     private Animator startAnim;
 
+    #endregion
+
+    #region Unity Methods
+
     private void Awake()
     {
         Instance = this;
@@ -129,6 +132,14 @@ public class UIManager : MonoBehaviour
         GameStateManager.Instance.onStateChanged -= ActivateInGameUI;
     }
 
+    #endregion
+
+    #region UIManager Methods
+
+    /// <summary>
+    /// handle the activation of the ingame UI 
+    /// </summary>
+    /// <param name="newState"></param>
     private void ActivateInGameUI(GameStateManager.GameState newState)
     {
         switch (newState)
@@ -167,6 +178,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// enters the main menu
+    /// </summary>
+    /// <param name="fromGame"></param>
     public void EnterMainMenu(bool fromGame)
     {
         mainMenu.ShowCanvasGroup();
@@ -199,6 +214,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// async Task to enter the character selection screen
+    /// </summary>
+    /// <param name="fromGame"></param>
     public async Task EnterCharacterSelection(bool fromGame)
     {
         if (fromGame && PlayerConfigurationManager.Instance.PlayerConfigs[0].PlayerEvent.isActiveAndEnabled)
@@ -265,6 +284,10 @@ public class UIManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// async Task to enter pause menu
+    /// </summary>
+    /// <param name="index"></param>
     public async Task EnterPauseMenu(int index)
     {
         GameStateManager.Instance.SwitchGameState(GameStateManager.GameState.InGameMenus);
@@ -289,6 +312,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// resume the game and hide all pause menus
+    /// </summary>
+    /// <param name="index"></param>
     public void ResumeGame(int index)
     {
         GameStateManager.Instance.SwitchGameState(GameStateManager.GameState.InGame);
@@ -304,6 +331,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// async task to enter the winning screen of the player that wons
+    /// </summary>
+    /// <param name="index"></param>
     public async Task EnterWinningScreen(int index)
     {
         GameStateManager.Instance.SwitchGameState(GameStateManager.GameState.InGameMenus);
@@ -331,6 +362,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// enters the option menu
+    /// </summary>
+    /// <param name="index"></param>
     public void EnterOptionMenu(int index)
     {
         switch (index)
@@ -360,6 +395,9 @@ public class UIManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(quitSelect);
     }
     
+    /// <summary>
+    /// check if all player has selected their characters to show the start button
+    /// </summary>
     public void CheckAllPlayerReady()
     {
         bool player1Ready = false;
@@ -384,6 +422,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// set the start button active
+    /// </summary>
     private void CharactersSelected()
     {
         characterSelectionP1.HideCanvasGroup();
@@ -394,6 +435,11 @@ public class UIManager : MonoBehaviour
         _ = SwitchToSingleEventSystem(startMatchButton);
     }
 
+    /// <summary>
+    /// async Task to handle the playerselection for both players if they confirm or cancel their selection
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="hasSelected"></param>
     public async Task PlayerSelectionUI(int index, bool hasSelected)
     {
         if (index == 0 && hasSelected)
@@ -438,6 +484,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// sets all important variables and UI to enter the game
+    /// </summary>
     public void EnterGame()
     {
         GameObject parent1 = GameObject.Find("Player1");
@@ -491,6 +540,10 @@ public class UIManager : MonoBehaviour
         MusicManager.Instance.PlayMusic(MusicManager.Instance.fightingMusic[Random.Range(0,MusicManager.Instance.fightingMusic.Length)], 0.1f, true);
     }
 
+    /// <summary>
+    /// resets all UI for a reload of the scene
+    /// </summary>
+    /// <param name="index"></param>
     public void ReloadGameplayScene(int index)
     {
         switch (index)
@@ -516,12 +569,15 @@ public class UIManager : MonoBehaviour
         GameStateManager.Instance.wallBreakCountL = 0;
         GameStateManager.Instance.LoadGameplayScene(GameStateManager.fightingScene1);
     }
-
+    
     public void QuitGame()
     {
         Application.Quit();
     }
     
+    /// <summary>
+    /// async Task to reassign the ui action of the single inputmodule
+    /// </summary>
     public async Task ReassignUIActions()
     {
         GameInput input = PlayerConfigurationManager.Instance.PlayerConfigs[0].GameInputMap;
@@ -535,6 +591,10 @@ public class UIManager : MonoBehaviour
         await Task.Yield();
     }
     
+    /// <summary>
+    /// async Task to Switch back to the single event system
+    /// </summary>
+    /// <param name="buttonToSelect"></param>
     private async Task SwitchToSingleEventSystem(GameObject buttonToSelect)
     {
         PlayerConfigurationManager.Instance.PlayerConfigs[1].PlayerEvent.SetSelectedGameObject(null);
@@ -595,4 +655,6 @@ public class UIManager : MonoBehaviour
             player2Percentage.color = Color.red;
         }
     }
+
+    #endregion
 }

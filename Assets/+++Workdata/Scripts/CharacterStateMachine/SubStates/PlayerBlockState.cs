@@ -58,6 +58,10 @@ public class PlayerBlockState : PlayerBaseState
         
     }
 
+    /// <summary>
+    /// Lerps the desolve value to let the shield desolve completely over the time of the hitstop and hitstun
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator LerpDesolve()
     {
         float elapsed = 0f;

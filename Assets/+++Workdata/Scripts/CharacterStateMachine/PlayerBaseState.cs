@@ -2,11 +2,17 @@ using UnityEngine;
 
 public abstract class PlayerBaseState
 {
+    #region Variables
+
     protected PlayerStateMachine Ctx { get; private set; }
     protected PlayerStateFactory Factory { get; private set; }
     private PlayerBaseState currentSubState;
     private PlayerBaseState currentSuperState;
     protected bool IsRootState { get; set; }
+
+    #endregion
+
+    #region PLayerBaseState Methods
 
     public PlayerBaseState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
     {
@@ -84,4 +90,6 @@ public abstract class PlayerBaseState
         currentSubState = newSubState;
         newSubState.SetSuperState(this);
     }
+
+    #endregion
 }

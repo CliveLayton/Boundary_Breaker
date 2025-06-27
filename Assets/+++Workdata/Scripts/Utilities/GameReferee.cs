@@ -5,9 +5,15 @@ using UnityEngine;
 
 public class GameReferee : MonoBehaviour
 {
+    #region Variables
+
     private PlayerStateMachine player1;
     private PlayerStateMachine player2;
-    
+
+    #endregion
+
+    #region Unity Methods
+
     private void Awake()
     {
         UIManager.Instance.onTimerExpired += RestartMatch;
@@ -24,7 +30,14 @@ public class GameReferee : MonoBehaviour
         UIManager.Instance.onTimerExpired -= RestartMatch;
         GameStateManager.Instance.onStateChanged -= GetPlayers;
     }
-    
+
+    #endregion
+
+    #region GameReferee Methods
+
+    /// <summary>
+    /// restarts the match
+    /// </summary>
     private void RestartMatch()
     {
         if (Mathf.Approximately(player1.PercentageCount, player2.PercentageCount))
@@ -41,6 +54,10 @@ public class GameReferee : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// gets the player in the current scene
+    /// </summary>
+    /// <param name="newState"></param>
     private void GetPlayers(GameStateManager.GameState newState)
     {
         if (newState == GameStateManager.GameState.InGame)
@@ -61,6 +78,12 @@ public class GameReferee : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// restarts the game and counts up or show winning screen for the player that won the game
+    /// </summary>
+    /// <param name="playerIndex"></param>
+    /// <param name="restartDelay"></param>
+    /// <returns></returns>
     public IEnumerator RestartGame(int playerIndex, float restartDelay = 1.5f)
     {
         if (playerIndex != -1 && PlayerConfigurationManager.Instance.PlayerConfigs[playerIndex].Wins < 2)
@@ -83,4 +106,8 @@ public class GameReferee : MonoBehaviour
             GameStateManager.Instance.LoadGameplayScene(GameStateManager.fightingScene1);
         }
     }
+
+    #endregion
+    
+    
 }

@@ -46,8 +46,6 @@ public class PlayerHitStunState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        //Debug.Log("Check States");
-        //Debug.Log(Ctx.InHitStun + " ; " + Ctx.InGrab + " ; " + Ctx.InComboHit);
         if (!Ctx.InHitStun && !Ctx.InGrab)
         {
             SwitchState(Factory.KnockBack());
@@ -106,6 +104,10 @@ public class PlayerHitStunState : PlayerBaseState
         Ctx.InHitStun = false;
     }
 
+    /// <summary>
+    /// checks if the attacker pressed the jump button in the hitstoptime so correctly cancled the attack into a jump
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator CheckForJumpCancel()
     {
         float timer = 0f;

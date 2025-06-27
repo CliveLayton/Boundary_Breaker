@@ -1,16 +1,11 @@
 using System;
-using Unity.Cinemachine;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using Random = UnityEngine.Random;
 
 /// <summary>
 /// The GameStateManager lies at the heart of our code.
-/// Most importantly for this demonstration, it contains the GameData
-/// and manages the loading and saving of our save files.
-/// Additionally, it manages the loading and unloading of levels, as well as going back to the main menu.
+/// It manages the loading and unloading of levels, as well as going back to the main menu.
 /// </summary>
 public class GameStateManager : MonoBehaviour
 {
@@ -101,10 +96,12 @@ public class GameStateManager : MonoBehaviour
         }
         LoadSceneManager.instance.SwitchScene(fightingScene1,showLoadingScreen);
         MusicManager.Instance.PlayMusic(MusicManager.Instance.mainMenuMusic, 0.1f);
-        //Cursor.lockState = CursorLockMode.None;
     }
-
-    //called to start a new game. Also changes the game state.
+    
+    /// <summary>
+    /// calles to start a new game. Also changes the game state.
+    /// resets the wins of all players
+    /// </summary>
     public void StartNewGame()
     {
         foreach (var player in PlayerConfigurationManager.Instance.PlayerConfigs)
@@ -117,12 +114,14 @@ public class GameStateManager : MonoBehaviour
         {
             onStateChanged(currentState);
         }
-
-        //LoadSceneManager.instance.SwitchScene(fightingScene1, false);
+        
         MusicManager.Instance.SetMusicVolume(1f);
-        //Cursor.lockState = CursorLockMode.Locked;
     }
 
+    /// <summary>
+    /// Just switches the Gamestate to fire the event
+    /// </summary>
+    /// <param name="state"></param>
     public void SwitchGameState(GameState state)
     {
         currentState = state;
@@ -131,7 +130,30 @@ public class GameStateManager : MonoBehaviour
             onStateChanged(currentState);
         }
     }
-
+    
+    /// <summary>
+    /// only works if not in main menu.
+    /// Resets the player to the pool and loads the scene
+    /// </summary>
+    /// <param name="sceneName"></param>
+    public void LoadGameplayScene(string sceneName)
+    {
+        if (currentState == GameState.InMainMenu)
+        {
+            return;
+        }
+        UIManager.Instance.Player1.ResetCharacter();
+        UIManager.Instance.Player2.ResetCharacter();
+        LoadSceneManager.instance.SwitchScene(sceneName, false);
+    }
+    
+    /// <summary>
+    /// only works if not in main menu
+    /// reacts to the scene loaded event and sets player back into the fighting scene
+    /// also resets the match timer
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="loadSceneMode"></param>
     private void ReloadFightScene(Scene scene, LoadSceneMode loadSceneMode)
     {
         if (currentState != GameState.InMainMenu)
@@ -155,17 +177,6 @@ public class GameStateManager : MonoBehaviour
                 }
             } 
         }
-    }
-
-    public void LoadGameplayScene(string sceneName)
-    {
-        if (currentState == GameState.InMainMenu)
-        {
-            return;
-        }
-        UIManager.Instance.Player1.ResetCharacter();
-        UIManager.Instance.Player2.ResetCharacter();
-        LoadSceneManager.instance.SwitchScene(sceneName, false);
     }
 
     #endregion

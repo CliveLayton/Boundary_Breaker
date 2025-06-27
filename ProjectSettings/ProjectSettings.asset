@@ -292,7 +292,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 2a95a18756a75944db53f44af087a78a, type: 3}
+      m_Icon: {fileID: 2800000, guid: 78ca8c15191a0d842b1ac50c403dd727, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -558,6 +558,9 @@ PlayerSettings:
   - serializedVersion: 3
     m_BuildTarget: Android
     m_Formats: 03000000
+  - serializedVersion: 3
+    m_BuildTarget: WebGL
+    m_Formats: 05000000
   playModeTestRunnerEnabled: 0
   runPlayModeTestAsEditModeTest: 0
   actionOnDotNetUnhandledException: 1

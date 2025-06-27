@@ -1,7 +1,5 @@
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class CharacterSelect : MonoBehaviour
@@ -14,10 +12,10 @@ public class CharacterSelect : MonoBehaviour
     [SerializeField] private Image characterIconSelection;
     [SerializeField] private Image characterIconVS;
     [SerializeField] private Image characterIconInGame;
+    [SerializeField] private Image characterWinningIcon;
     [SerializeField] private int playerIndex;
 
     private GameObject chosedPlayer;
-    private int currentSelectedCharIndex;
 
     #endregion
 
@@ -25,10 +23,10 @@ public class CharacterSelect : MonoBehaviour
 
     private void Awake()
     {
-        currentSelectedCharIndex = 0;
         characterIconSelection.sprite = charSprites[0];
         characterIconVS.sprite = charSprites[0];
         characterIconInGame.sprite = charSprites[0];
+        characterWinningIcon.sprite = charSprites[0];
         for (int i = 0; i < charButtons.Length; i++)
         {
             int index = i;
@@ -43,10 +41,13 @@ public class CharacterSelect : MonoBehaviour
 
     #region CharacterSelect Methods
 
+    /// <summary>
+    /// changes sprites of the UI and the player prefab to spawn in the scene for the player
+    /// </summary>
+    /// <param name="index"></param>
     private void ChangePlayer(int index)
     {
         characterIconSelection.sprite = charSprites[index];
-        currentSelectedCharIndex = index;
 
         if (chosedPlayer != null)
         {
@@ -82,12 +83,14 @@ public class CharacterSelect : MonoBehaviour
                 chosedPlayer = CharacterPool.Instance.GetP1PooledObject(randomCharNumber);
                 characterIconVS.sprite = charSprites[randomCharNumber];
                 characterIconInGame.sprite = charSprites[randomCharNumber];
+                characterWinningIcon.sprite = charSprites[randomCharNumber];
             }
             else
             {
                 chosedPlayer = CharacterPool.Instance.GetP1PooledObject(index);
                 characterIconVS.sprite = charSprites[index];
                 characterIconInGame.sprite = charSprites[index];
+                characterWinningIcon.sprite = charSprites[index];
             }
         }
 
@@ -98,16 +101,21 @@ public class CharacterSelect : MonoBehaviour
                 chosedPlayer = CharacterPool.Instance.GetP2PooledObject(randomCharNumber);
                 characterIconVS.sprite = charSprites[randomCharNumber];
                 characterIconInGame.sprite = charSprites[randomCharNumber];
+                characterWinningIcon.sprite = charSprites[randomCharNumber];
             }
             else
             {
                 chosedPlayer = CharacterPool.Instance.GetP2PooledObject(index);
                 characterIconVS.sprite = charSprites[index];
                 characterIconInGame.sprite = charSprites[index];
+                characterWinningIcon.sprite = charSprites[index];
             }
         }
     }
 
+    /// <summary>
+    /// confirm the selection of the player and sets the player to ready
+    /// </summary>
     private void OnConfirmSelection()
     {
         PlayerStateMachine player = chosedPlayer.GetComponent<PlayerStateMachine>();
@@ -125,6 +133,10 @@ public class CharacterSelect : MonoBehaviour
         UIManager.Instance.CheckAllPlayerReady();
     }
 
+    /// <summary>
+    /// deselect the current selection and sets the player to not ready. Resets the UI so the player can select again
+    /// </summary>
+    /// <param name="context"></param>
     public void OnDeselect(InputAction.CallbackContext context)
     {
         if (context.performed && chosedPlayer != null)

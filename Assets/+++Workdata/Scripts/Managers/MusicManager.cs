@@ -51,6 +51,10 @@ public class MusicManager : MonoBehaviour
         musicAudio.FadingInOut(clip, fadeDuration, lowerAudio);
     }
 
+    /// <summary>
+    /// sets the volume of the music audiosource
+    /// </summary>
+    /// <param name="volume"></param>
     public void SetMusicVolume(float volume)
     {
         musicAudio.volume = volume;

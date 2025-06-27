@@ -54,6 +54,8 @@ public class PlayerGroundedState : PlayerBaseState
         {
             //reset dash if you got hit while dashing
             Ctx.CanDash = true;
+            //sets attacking to false if gets hits while attacking
+            Ctx.IsAttacking = false;
             SwitchState(Factory.Stunned());
         }
     }

@@ -10,11 +10,10 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     #region Variables
 
     //Inspector Variables
-    [Header("SawFighter Behavior Variables")]
+    [Header("Player Setup Variables")]
     [SerializeField] private Quaternion lookDirectionToLeft;
     [SerializeField] private Quaternion lookDirectionToRight;
     [SerializeField] private float rotationSpeed = 60f;
-    //[SerializeField] private float knockbackPower = 10f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask pushboxLayer;
     [SerializeField] private LayerMask p1HurtboxLayer;
@@ -34,14 +33,16 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public event Action<float> onPercentageChanged; 
 
     //private Variables
-    // private float jumpCancelBufferTimer = -1f;
-    // private float jumpCancelBufferDuration = 0.5f;
     private Quaternion targetRotation;
     private PlayerStateFactory states;
     private bool isReloading;
-    private int hurtboxScalingNumber;
+    private int hurtboxScalingNumber = 1;
 
     //getters and setters
+
+    #region Adjustable in Inspector
+
+    [Header("SawFighter Behavior Variables")]
     [field: SerializeField] public float PercentageCount { get; set; }
     [field: SerializeField] public float ForwardSpeed { get; private set; }
     [field: SerializeField] public float BackwardSpeed { get; private set; }
@@ -59,7 +60,14 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     [field: SerializeField] public CapsuleCollider Pushbox { get; set; }
     [field: SerializeField] public Transform GrabPosition { get; private set; }
     [field: SerializeField] public Transform CameraPoint { get; private set; }
+    [field: SerializeField] public bool IsAttacking { get; set; }
+    [field: SerializeField] public bool IsGrabbing { get; set; }
+    
+    [Header("Attack Moves for the Character")]
+    [field: SerializeField] public CharacterMoves[] Moves { get; private set; }
 
+    #endregion
+    
     public PlayerBaseState CurrentState { get; set; }
     public int PlayerIndex { get; set; }
     public Rigidbody Rb { get; private set; }
@@ -73,14 +81,11 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public bool IsJumpedPressed { get; private set; }
     public bool RequireNewJumpPress { get; set; }
     public bool HasJumpCanceled { get; private set; }
-    //public bool BufferedJumpCancel => Time.unscaledTime <= jumpCancelBufferTimer;
     public bool IsDashing { get; set; }
     public bool InBlock { get; set; }
     public float ShieldDurability { get; set; }
     public float ShieldTimer { get; set; }
     public Material ShieldMaterial { get; set; }
-    [field: SerializeField] public bool IsAttacking { get; set; }
-    [field: SerializeField] public bool IsGrabbing { get; set; }
     public bool InGrab { get; set; }
     public bool IsThrowing { get; set; }
     public bool CanCombo { get; set; }
@@ -99,18 +104,22 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     public bool CanDash { get; set; } = true;
     public bool DidDI { get; set; }
     public Vector2 DefaultInputForce { get; private set; }
-    [field: SerializeField] public CharacterMoves[] Moves { get; private set; }
-
 
     #endregion
     
     public enum ECurrentMove
     {
         Attack1,
+        Attack1Lw,
+        Attack1S,
         Attack1Air,
         Attack2,
+        Attack2Lw,
+        Attack2S,
         Attack2Air,
         SpecialN,
+        SpecialLw,
+        SpecialS,
         SpecialAir,
         Grab,
         Throw
@@ -159,23 +168,12 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
     private void Update()
     {
         CurrentState.UpdateStates();
-        if (CurrentState != states.Block() && ShieldDurability < MaxShieldDurability)
-        {
-            ShieldTimer += Time.deltaTime;
-            if (ShieldTimer > ShieldRefreshTime && ShieldDurability < MaxShieldDurability)
-            {
-                ShieldDurability += ShieldRefreshRate * Time.deltaTime;
-            }
-            else if (ShieldTimer > ShieldRefreshTime && ShieldDurability >= MaxShieldDurability)
-            {
-                ShieldDurability = MaxShieldDurability;
-            }
-        }
+        HandleShieldRefresh();
     }
 
     private void FixedUpdate()
     {
-        if (!IsAttacking && GameStateManager.Instance.currentState == GameStateManager.GameState.InGame)
+        if (!IsAttacking && !IsBeingKnockedBack && GameStateManager.Instance.currentState == GameStateManager.GameState.InGame)
         {
             RotateToOpponent();
         }
@@ -232,21 +230,21 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
                 CurrentMove = ECurrentMove.Attack1;
                 IsAttacking = true;
             }
-            // else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
-            // {
-            //     CurrentMove = ECurrentMove.Attack1Lw;
-            //     IsAttacking = true;
-            // }
-            // else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
-            // {
-            //     CurrentMove = ECurrentMove.Attack1S;
-            //     IsAttacking = true;
-            // }
-            // else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
-            // {
-            //     CurrentMove = ECurrentMove.Attack1S;
-            //     IsAttacking = true;
-            // }
+            else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack1Lw;
+                IsAttacking = true;
+            }
+            else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack1S;
+                IsAttacking = true;
+            }
+            else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack1S;
+                IsAttacking = true;
+            }
         } else if (context.performed && !IsAttacking && !InBlock
                    && !InHitStun && !IsBeingKnockedBack && !IsGrounded())
         {
@@ -265,21 +263,21 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
                 CurrentMove = ECurrentMove.Attack2;
                 IsAttacking = true;
             }
-            // else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
-            // {
-            //     CurrentMove = ECurrentMove.Attack2Lw;
-            //     IsAttacking = true;
-            // }
-            // else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
-            // {
-            //     CurrentMove = ECurrentMove.Attack2S;
-            //     IsAttacking = true;
-            // }
-            // else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
-            // {
-            //     CurrentMove = ECurrentMove.Attack2S;
-            //     IsAttacking = true;
-            // }
+            else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack2Lw;
+                IsAttacking = true;
+            }
+            else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack2S;
+                IsAttacking = true;
+            }
+            else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
+            {
+                CurrentMove = ECurrentMove.Attack2S;
+                IsAttacking = true;
+            }
         } else if (context.performed && !IsAttacking && !InBlock
                   && !InHitStun && !IsBeingKnockedBack && !IsGrounded())
         {
@@ -298,21 +296,21 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
                 CurrentMove = ECurrentMove.SpecialN;
                 IsAttacking = true;
             }
-            // else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
-            // {
-            //     CurrentMove = ECurrentMove.SpecialLw;
-            //     IsAttacking = true;
-            // }
-            // else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
-            // {
-            //     CurrentMove = ECurrentMove.SpecialS;
-            //     IsAttacking = true;
-            // }
-            // else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
-            // {
-            //     CurrentMove = ECurrentMove.SpecialS;
-            //     IsAttacking = true;
-            // }
+            else if (MoveInput.y <= -0.5f && Mathf.Abs(MoveInput.x) < 0.5f)
+            {
+                CurrentMove = ECurrentMove.SpecialLw;
+                IsAttacking = true;
+            }
+            else if (IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x > 0.5f)
+            {
+                CurrentMove = ECurrentMove.SpecialS;
+                IsAttacking = true;
+            }
+            else if (!IsFacingRight() && Mathf.Abs(MoveInput.y) <= 0.3f && MoveInput.x < -0.5f)
+            {
+                CurrentMove = ECurrentMove.SpecialS;
+                IsAttacking = true;
+            }
         } else if (context.performed && !IsAttacking && !InBlock
                    && !InHitStun && !IsBeingKnockedBack && !IsGrounded())
         {
@@ -356,19 +354,11 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
             Anim.transform.rotation = Quaternion.Slerp(Anim.transform.rotation, lookDirectionToLeft,
                 rotationSpeed * Time.deltaTime);
         }
-        
-        // Vector3 direction = (Opponent.transform.position - transform.position).normalized;
-        //
-        // //ensure the rotation only happens on the Y-Axis
-        // direction.y = 0;
-        //
-        // targetRotation = Quaternion.LookRotation(direction);
-        //
-        // //rotate the visual of the player to opponent
-        // Anim.transform.rotation =
-        //     Quaternion.Slerp(Anim.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
+    /// <summary>
+    /// Sets the X speed of the rb. Lerps between the currentspeed and the targetSpeed and sets LastMovementX at the end
+    /// </summary>
     public void PlayerMovement()
     {
         float currentSpeed = LastMovementX;
@@ -459,6 +449,25 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         }
         MusicManager.Instance.PlayInGameSFX(MusicManager.Instance.onHitSounds[Random.Range(0, MusicManager.Instance.onHitSounds.Length)]);
     }
+
+    /// <summary>
+    /// Checks if the shield got damaged and let it refreshs after short time
+    /// </summary>
+    private void HandleShieldRefresh()
+    {
+        if (CurrentState != states.Block() && ShieldDurability < MaxShieldDurability)
+        {
+            ShieldTimer += Time.deltaTime;
+            if (ShieldTimer > ShieldRefreshTime && ShieldDurability < MaxShieldDurability)
+            {
+                ShieldDurability += ShieldRefreshRate * Time.deltaTime;
+            }
+            else if (ShieldTimer > ShieldRefreshTime && ShieldDurability >= MaxShieldDurability)
+            {
+                ShieldDurability = MaxShieldDurability;
+            }
+        }
+    }
     
     /// <summary>
     /// Set the player in grab state if possible and set his position to the new position
@@ -489,6 +498,12 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         }
         CanCombo = isComboTime;
     }
+    
+    private IEnumerator JumpCancelCooldown()
+    {
+        yield return new WaitForSeconds(0.05f);
+        HasJumpCanceled = false;
+    }
 
     /// <summary>
     /// Handle if the hurtboxes of the player should be active or not
@@ -518,12 +533,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         }
     }
 
-    private IEnumerator JumpCancelCooldown()
-    {
-        yield return new WaitForSeconds(0.05f);
-        HasJumpCanceled = false;
-    }
-
     /// <summary>
     /// check if player is on the ground
     /// </summary>
@@ -547,14 +556,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         return hitPlayer;
     }
 
-    // private void OnDrawGizmos()
-    // {
-    //     Vector3 startPos = transform.position + new Vector3(0, 0.5f, 0);
-    //     Gizmos.DrawWireSphere(startPos, 0.3f);
-    //     Gizmos.DrawLine(startPos, startPos + 0.6f * Vector3.down);
-    //     Gizmos.DrawWireSphere(startPos + (0.6f * Vector3.down), 0.3f);
-    // }
-
     /// <summary>
     /// check if player is facing right
     /// </summary>
@@ -564,6 +565,10 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         return Anim.transform.forward.x > 0;
     }
 
+    /// <summary>
+    /// Sets the layer for hit and hurtboxes corresponding to which player using this state machine
+    /// </summary>
+    /// <param name="index"></param>
     public void SetLayers(int index)
     {
         switch (index)
@@ -595,10 +600,15 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         }
     }
 
+    /// <summary>
+    /// Adjusts hitboxes and hurtboxes to work with the negative scale after mirroring the player
+    /// This is only a quick solution for a problem we want to solve later with animations
+    /// </summary>
+    /// <param name="xScale"></param>
     public void AdjustCollisionBoxes(int xScale)
     {
         bool hasRotated = hurtboxScalingNumber != xScale;
-        
+
         foreach (var hurtbox in hurtboxes)
         {
             hurtbox.gameObject.transform.localScale = new Vector3(xScale, 1, 1);
@@ -615,6 +625,9 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         hurtboxScalingNumber = xScale;
     }
 
+    /// <summary>
+    /// Resets the character pack to the character pool so it don't get destroyed on loading scenes
+    /// </summary>
     public void ResetCharacter()
     {
         LastMovementX = 0;
@@ -649,8 +662,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
 
     private void PlayerAnimations()
     {
-        //Anim.SetBool("isGrounded", IsGrounded());
-        
         if (IsFacingRight())
         {
             Anim.SetFloat("speed", Rb.linearVelocity.x);
@@ -659,18 +670,6 @@ public class PlayerStateMachine : MonoBehaviour, IDamageable, IGrabable
         {
             Anim.SetFloat("speed", -Rb.linearVelocity.x);
         }
-        
-        // Anim.SetBool("isJumping", false);
-        //
-        // if (Rb.linearVelocity.y < 0)
-        // {
-        //     //anim.SetBool("isFalling", true);
-        //     Anim.SetBool("isJumping", false);
-        // }
-        // else
-        // {
-        //     //anim.SetBool("isFalling", false);
-        // }
     }
     
     #endregion

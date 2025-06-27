@@ -22,6 +22,11 @@ public class PlayerStateFactory
     private PlayerStateMachine context;
     private Dictionary<PlayerStates, PlayerBaseState> states = new Dictionary<PlayerStates, PlayerBaseState>();
 
+    /// <summary>
+    /// Sets all possible states to the corresponding enum index one time so you don't need to make a new State
+    /// ever time you call or switch a state
+    /// </summary>
+    /// <param name="currentContext">the state machine that uses this factory</param>
     public PlayerStateFactory(PlayerStateMachine currentContext)
     {
         context = currentContext;
